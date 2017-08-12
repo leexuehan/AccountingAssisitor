@@ -1,7 +1,7 @@
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
-from dialog.calendarDialog import CalendarDialog
+from dialog.CalendarDialog import CalendarDialog
 from ui.account_results import Ui_Account_Dialog
 
 

@@ -2,7 +2,7 @@
 
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
-from dialog.calendarDialog import CalendarDialog
+from dialog.CalendarDialog import CalendarDialog
 from ui.ticket import Ui_Ticket_Dialog
 from utils.SqlUtils import SqlUtils
 

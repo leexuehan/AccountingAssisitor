@@ -220,7 +220,7 @@
      <string>销售单价</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="coal_sort_sell_price_2">
+   <widget class="QLineEdit" name="ticket_sort_sell_price">
     <property name="geometry">
      <rect>
       <x>320</x>
@@ -237,7 +237,7 @@
      <x>0</x>
      <y>0</y>
      <width>1343</width>
-     <height>23</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_acount">

@@ -1,6 +1,15 @@
-2017-08-12 17:55:47,218 - SqlUtils.py[line:108] - INFO: execute sql:SELECT COAL_NAME FROM coals
-2017-08-12 17:55:47,218 - SqlUtils.py[line:111] - INFO: [('ffaf',), ('tatataatat',), ('你不饿',), ('你的',), ('佳美',), ('戏中',), ('戏中二孩',), ('我饿',), ('西中',), ('面煤',)]
-2017-08-12 17:55:47,218 - SqlUtils.py[line:97] - INFO: execute sql:SELECT TICKET_NAME FROM tickets
-2017-08-12 17:55:47,218 - SqlUtils.py[line:100] - INFO: [('example1',), ('我我',), ('大票',), ('小票',), ('kkk',), ('中国',), ('黑哥们',), ('名称',)]
-2017-08-12 17:55:55,468 - App.py[line:90] - INFO: ready to add record to db
-2017-08-12 17:55:55,468 - SqlUtils.py[line:88] - INFO: execute sql:INSERT INTO record_by_car_detail VALUES(?,?,?,?,?,?)
+2017-08-13 00:07:32,038 - SqlUtils.py[line:108] - INFO: execute sql:SELECT COAL_NAME FROM coals
+2017-08-13 00:07:32,038 - SqlUtils.py[line:111] - INFO: [('洗三',), ('黑莓',)]
+2017-08-13 00:07:32,038 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "洗三"
+2017-08-13 00:07:32,038 - SqlUtils.py[line:122] - INFO: [(321.0, '元/吨')]
+2017-08-13 00:07:32,038 - SqlUtils.py[line:97] - INFO: execute sql:SELECT TICKET_NAME FROM tickets
+2017-08-13 00:07:32,038 - SqlUtils.py[line:100] - INFO: [('example1',), ('我我',), ('大票',), ('小票',), ('kkk',), ('中国',), ('黑哥们',), ('名称',)]
+2017-08-13 00:07:36,054 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "黑莓"
+2017-08-13 00:07:36,054 - SqlUtils.py[line:122] - INFO: [(33.0, '元/吨')]
+2017-08-13 00:07:37,976 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "洗三"
+2017-08-13 00:07:37,976 - SqlUtils.py[line:122] - INFO: [(321.0, '元/吨')]
+2017-08-13 00:07:39,054 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "黑莓"
+2017-08-13 00:07:39,054 - SqlUtils.py[line:122] - INFO: [(33.0, '元/吨')]
+2017-08-13 00:07:53,226 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "洗三"
+2017-08-13 00:07:53,226 - SqlUtils.py[line:122] - INFO: [(321.0, '元/吨')]
+2017-08-13 00:07:56,897 - App.py[line:112] - INFO: ready to add record to db

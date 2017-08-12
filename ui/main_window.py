@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main_window.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.5
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -55,15 +55,24 @@ class Ui_MainWindow(object):
         self.weight_value = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.weight_value.setGeometry(QtCore.QRect(110, 170, 62, 22))
         self.weight_value.setObjectName("weight_value")
-        self.ticket_price_display = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.ticket_price_display.setGeometry(QtCore.QRect(260, 200, 151, 21))
-        self.ticket_price_display.setObjectName("ticket_price_display")
         self.date_value_content = QtWidgets.QLineEdit(self.centralwidget)
         self.date_value_content.setGeometry(QtCore.QRect(110, 20, 151, 20))
         self.date_value_content.setObjectName("date_value_content")
+        self.coal_sort_sell_price = QtWidgets.QLineEdit(self.centralwidget)
+        self.coal_sort_sell_price.setGeometry(QtCore.QRect(320, 130, 151, 20))
+        self.coal_sort_sell_price.setObjectName("coal_sort_sell_price")
+        self.label_coal_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_coal_2.setGeometry(QtCore.QRect(260, 130, 59, 16))
+        self.label_coal_2.setObjectName("label_coal_2")
+        self.label_coal_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_coal_3.setGeometry(QtCore.QRect(260, 200, 59, 16))
+        self.label_coal_3.setObjectName("label_coal_3")
+        self.coal_sort_sell_price_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.coal_sort_sell_price_2.setGeometry(QtCore.QRect(320, 200, 151, 20))
+        self.coal_sort_sell_price_2.setObjectName("coal_sort_sell_price_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1343, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1343, 19))
         self.menubar.setObjectName("menubar")
         self.menu_acount = QtWidgets.QMenu(self.menubar)
         self.menu_acount.setObjectName("menu_acount")
@@ -139,7 +148,6 @@ class Ui_MainWindow(object):
         self.ticket_sorts.currentIndexChanged['int'].connect(MainWindow.on_ticket_selected)
         self.add_new_coal.triggered.connect(MainWindow.on_add_new_coal)
         self.compute_account.triggered.connect(MainWindow.on_compute_account)
-        self.date_value_content.selectionChanged.connect(MainWindow.on_date_selected)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -153,6 +161,8 @@ class Ui_MainWindow(object):
         self.user_name_label.setText(_translate("MainWindow", "客户姓名"))
         self.car_id_label.setText(_translate("MainWindow", "车号"))
         self.select_date_btn.setText(_translate("MainWindow", "选择日期"))
+        self.label_coal_2.setText(_translate("MainWindow", "销售单价"))
+        self.label_coal_3.setText(_translate("MainWindow", "销售单价"))
         self.menu_acount.setTitle(_translate("MainWindow", "账单"))
         self.coal.setTitle(_translate("MainWindow", "煤种管理"))
         self.menu_5.setTitle(_translate("MainWindow", "煤价管理"))

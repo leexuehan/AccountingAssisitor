@@ -4,7 +4,7 @@ import logging
 
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
-from dialog.calendarDialog import CalendarDialog
+from dialog.CalendarDialog import CalendarDialog
 from ui.coal import Ui_Coal_Dialog
 from utils.SqlUtils import SqlUtils
 

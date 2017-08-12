@@ -66,8 +66,8 @@ class SqlUtils(object):
         conn.close()
         # 原子性???
 
-    def add_coal_record(self, add_date, coal_name, purchase_compute_way, purchase_price,
-                        sell_compute_way, sell_price):
+    def add_coal_record(self, add_date, coal_name, purchase_price, purchase_compute_way,
+                        sell_price, sell_compute_way):
         conn = self.get_connection()
         cursor = conn.cursor()
         record = (add_date, coal_name, purchase_price, purchase_compute_way, sell_price, sell_compute_way)
@@ -83,7 +83,7 @@ class SqlUtils(object):
         conn = self.get_connection()
         cursor = conn.cursor()
         record_by_car = (date, person_name, car_id, coal_name, weight_value, ticket_name)
-        logging.info("record info is " + record_by_car)
+        logging.info("record info is " + str(record_by_car))
         sql = 'INSERT INTO %s VALUES(?,?,?,?,?,?)' % self.record_by_car_table_name
         logging.info("execute sql:" + sql)
         cursor.execute(sql, record_by_car)
@@ -112,11 +112,22 @@ class SqlUtils(object):
         conn.close()
         return results
 
+    def query_coal_sell_price_by_name(self, coal_name):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        sql = 'SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM %s WHERE COAL_NAME IS "%s"' % (self.coal_table_name, coal_name)
+        logging.info("execute sql:" + sql)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        logging.info(results)
+        conn.close()
+        return results
+
 
 if __name__ == '__main__':
     sqlUtils = SqlUtils()
     # sqlUtils.delete_table('coals')
-    sqlUtils.add_coal_record('2017/08/05', '面煤', 'bytons', '324', 'bytons', '336')
+    # sqlUtils.add_coal_record('2017/08/05', '面煤', 'bytons', '324', 'bytons', '336')
     # sqlUtils.add_record_by_car_detail('2017/08/05', 'fff', 'fff', '面煤', '2.00', '北线')
     # sqlUtils.query_all_tickets_name()
     print(sqlUtils.query_all_coal_names())

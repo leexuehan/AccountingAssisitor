@@ -4,7 +4,7 @@ import logging
 from dialog.AccountDialog import AccountDialog
 from dialog.CoalDialog import CoalDialog
 from dialog.TicketDialog import TicketDialog
-from dialog.calendarDialog import CalendarDialog
+from dialog.CalendarDialog import CalendarDialog
 from ui.main_window import Ui_MainWindow
 from utils.LogUtils import LogUtils
 from utils.SqlUtils import SqlUtils
@@ -24,25 +24,41 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # init input params
+        self.select_date = None
+        self.person_name = None
+        self.car_id = None
+        self.coal_sorts_selected = None
+        self.weight_value = None
+        self.ticket_selected = None
+
         # init comboBox
         self.coal_sorts = []
         self.init_coal_sorts_from_db()
         self.ticket_sorts = []
         self.init_ticket_sorts_from_db()
 
-        # init param table
-        # self.excelOps = ExcelOps()
-        # self.excelOps.generate_param_table()
-
-        # init input
-        self.select_date = None
-        self.beginDate = None
-        self.endDate = None
-        self.price = None
-        self.coal_sorts_selected = None
-
-    def test_cursor_1(self):
-        print("!!!!!!!!!!!!!!!!!!!!11")
+    def check_parmas_valid(self):
+        if self.select_date is None:
+            QMessageBox.critical(self, "Critical", self.tr("输入日期没有选择!"))
+            return False
+        elif self.person_name is None:
+            QMessageBox.critical(self, "Critical", self.tr("没有输入人名"))
+            return False
+        elif self.car_id is None:
+            QMessageBox.critical(self, "Critical", self.tr("没有输入车牌号!"))
+            return False
+        elif self.coal_sorts_selected is None:
+            QMessageBox.critical(self, "Critical", self.tr("没有选择煤种!"))
+            return False
+        elif self.weight_value is None:
+            QMessageBox.critical(self, "Critical", self.tr("没有输入吨位!"))
+            return False
+        elif self.ticket_selected is None:
+            QMessageBox.critical(self, "Critical", self.tr("没有选择票种!"))
+            return False
+        else:
+            return True
 
     def refresh_coal_sorts_combox(self):
         self.ui.coal_sorts.clear()
@@ -58,6 +74,9 @@ class MainWindow(QMainWindow):
             coal_list = []
         for coal in coal_list:
             self.coal_sorts.append(coal[0])
+        'default coal sorts is the first'
+        if len(coal_list) is not 0:
+            self.coal_sorts_selected = coal_list[0][0]
         self.ui.coal_sorts.addItems(self.coal_sorts)
 
     def refresh_ticket_sorts_combox(self):
@@ -80,6 +99,9 @@ class MainWindow(QMainWindow):
         # 获得条目
         coalSorts = self.coal_sorts[item]
         self.coal_sorts_selected = coalSorts
+        query_result = SqlUtils().query_coal_sell_price_by_name(coalSorts)
+        price_info = str(query_result[0][0]) + str(query_result[0][1])
+        self.ui.coal_sort_sell_price.setText(price_info)
 
     def on_ticket_selected(self, item):
         ticket_name = self.ticket_sorts[item]
@@ -89,6 +111,8 @@ class MainWindow(QMainWindow):
     def on_record_add(self):
         logging.info("ready to add record to db")
         # 校验输入是否完整
+        if self.check_parmas_valid() is False:
+            return
         # 数据库存一份，excel 存一份
         SqlUtils().add_record_by_car_detail(self.select_date, self.person_name, self.car_id,
                                             self.coal_sorts_selected,
@@ -140,14 +164,6 @@ class MainWindow(QMainWindow):
         coalDialog.set_main_window_handler(self)
         coalDialog.show()
         coalDialog.exec_()
-
-    def exportTable(self, beginDate, endDate, price):
-        # 导出每一次添加
-        with open('添加备份.txt', 'a') as file:
-            addtime = time.strftime('%Y-%m-%d-%H:%M', time.localtime(time.time()))
-            content = str(self.beginDate) + '~' + str(
-                self.endDate) + ',' + self.coal_sorts_selected + ',' + self.price + '\n'
-            file.write(str(addtime) + '添加了:' + content)
 
 
 if __name__ == '__main__':
