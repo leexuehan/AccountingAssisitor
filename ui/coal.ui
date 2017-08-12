@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Coal_Dialog</class>
+ <widget class="QDialog" name="Coal_Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>583</width>
+    <height>290</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="ticket_price_label_3">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>130</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>选择计价方式</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="coal_sell_price_content">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>170</y>
+     <width>71</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="coal_name_label">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>90</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>输入煤种名称</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="coal_name_content">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>90</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="sell_compute_way">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>170</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="purchase_compute_way">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>130</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="ticket_price_label_4">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>170</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>选择计价方式</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="select_date_btn">
+   <property name="geometry">
+    <rect>
+     <x>74</x>
+     <y>50</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>选择添加日期</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="coal_purchase_price_content">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>130</y>
+     <width>71</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="ticket_price_label">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>130</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>输入煤种进价</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="ticket_price_label_2">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>170</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>输入煤种售价</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="date_value_display">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>50</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="confirm">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>250</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>确定</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancel">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>250</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>取消</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>purchase_compute_way</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>Coal_Dialog</receiver>
+   <slot>on_purchase_compute_way_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>416</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sell_compute_way</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>Coal_Dialog</receiver>
+   <slot>on_sell_compute_way_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>438</x>
+     <y>181</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>470</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>select_date_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>Coal_Dialog</receiver>
+   <slot>on_add_new_coal_date_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>19</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>confirm</sender>
+   <signal>clicked()</signal>
+   <receiver>Coal_Dialog</receiver>
+   <slot>add_new_coal()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>305</x>
+     <y>251</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>244</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancel</sender>
+   <signal>clicked()</signal>
+   <receiver>Coal_Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>392</x>
+     <y>258</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>360</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>on_purchase_compute_way_selected()</slot>
+  <slot>on_sell_compute_way_selected()</slot>
+  <slot>on_add_new_coal_date_selected()</slot>
+  <slot>add_new_coal()</slot>
+ </slots>
+</ui>
