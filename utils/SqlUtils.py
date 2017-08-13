@@ -54,8 +54,8 @@ class SqlUtils(object):
         sql = 'DROP TABLE ' + table_name
         cursor.execute(sql)
 
-    def add_ticket_record(self, add_date, ticket_name, purchase_compute_way, purchase_price,
-                          sell_compute_way, sell_price):
+    def add_ticket_record(self, add_date, ticket_name, purchase_price, purchase_compute_way,
+                          sell_price, sell_compute_way):
         conn = self.get_connection()
         cursor = conn.cursor()
         record = (add_date, ticket_name, purchase_price, purchase_compute_way, sell_price, sell_compute_way)
