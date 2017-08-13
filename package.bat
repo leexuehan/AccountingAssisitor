@@ -1,1 +1,1 @@
-pyinstaller --paths G:\Python34\Lib\site-packages\PyQt5 -F -w --onefile D:\AccountAssistor\dialog\app.py
+pyinstaller --paths G:\Python34\Lib\site-packages\PyQt5 -F -w --onefile D:\AccountingAssisitor\dialog\app.py

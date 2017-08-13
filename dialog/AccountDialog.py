@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.account_results import Ui_Account_Dialog
+from utils.SqlUtils import SqlUtils
 
 
 class AccountDialog(QDialog):
@@ -11,9 +12,6 @@ class AccountDialog(QDialog):
         # init ui
         self.ui = Ui_Account_Dialog()
         self.ui.setupUi(self)
-
-        # init list view
-        # self.load_all_persons()
 
         # init combox
         self.model = QStandardItemModel()
@@ -27,9 +25,13 @@ class AccountDialog(QDialog):
         calendarDialog.show()
         if calendarDialog.exec_():
             date = calendarDialog.date_time
-            print("value get from calendar window is:" + date.strftime('%Y/%m/%d'))
-            self.ui.start_date.setPlainText(date.strftime('%Y/%m/%d'))
-            self.compute_begin_date = date.strftime('%Y/%m/%d')
+            format_date_str = date.strftime('%Y/%m/%d')
+            print("value get from calendar window is:" + format_date_str)
+            self.ui.start_date.setPlainText(format_date_str)
+            self.compute_begin_date = format_date_str
+            # if 'compute_end_date' in locals().keys() and format_date_str > self.compute_end_date:
+            #     QMessageBox.critical(self, "Critical", self.tr('截止日期不能小于起始日期，请重新选择起始日期'))
+            #     return
         calendarDialog.destroy()
 
     def on_select_end_date(self):
@@ -37,9 +39,13 @@ class AccountDialog(QDialog):
         calendarDialog.show()
         if calendarDialog.exec_():
             date = calendarDialog.date_time
-            print("value get from calendar window is:" + date.strftime('%Y/%m/%d'))
-            self.ui.end_date.setPlainText(date.strftime('%Y/%m/%d'))
-            self.compute_end_date = date.strftime('%Y/%m/%d')
+            format_date_str = date.strftime('%Y/%m/%d')
+            print("value get from calendar window is:" + format_date_str)
+            if format_date_str < self.compute_begin_date:
+                QMessageBox.critical(self, "Critical", self.tr('截止日期不能小于起始日期，请重新选择'))
+                return
+            self.ui.end_date.setPlainText(format_date_str)
+            self.compute_end_date = format_date_str
         calendarDialog.destroy()
 
     def on_person_name_select_finished(self, item):
@@ -54,20 +60,18 @@ class AccountDialog(QDialog):
         print("input name is", self.selected_name, "selected persons", self.selected_persons)
         if self.selected_name not in self.selected_persons:
             self.selected_persons.append(self.selected_name)
-            item = QStandardItem(self.selected_name)
+            item = QStandardItem("添加人名：" + self.selected_name)
             self.__add_item_to_list_view(item)
-            # self.person_name = self.ui.person_name.text()
 
     def delete_person_name_from_list_view(self):
         row_index = self.ui.listView.currentIndex().row()
         if row_index is -1:
-            QMessageBox.information(self, '请选择删除项', '请选择删除项', QMessageBox.Yes)
+            QMessageBox.critical(self, "Critical", self.tr('请选择删除项'))
         else:
             name = self.model.itemData(self.ui.listView.currentIndex())[0]
             self.selected_persons.remove(name)
             self.model.removeRow(self.row_index_selected)
         self.ui.listView.reset()  # 重置当前 listview 的游标
-        # self.ui.listView.setUpdatesEnabled(True)
 
     def __add_item_to_list_view(self, item):
         row_count = self.model.rowCount()
@@ -75,21 +79,18 @@ class AccountDialog(QDialog):
         self.model.appendRow(item)
         self.ui.listView.setModel(self.model)
 
+    'accounting cmd begin....'
     def on_start_compute_cmd(self):
         print("begin to compute account......")
         info = str(self.selected_persons) + ',' + str(self.compute_begin_date) + ',' \
                + str(self.compute_end_date)
         print(info)
+
         self.ui.output_result.setText(info)
 
     def load_all_persons(self):
-        self.people_names_collection = ["erha", "erya", "xxxx"]
+        result = SqlUtils().query_all_person_names()
+        self.people_names_collection = []
+        for name in result:
+            self.people_names_collection.append(name[0])
         self.ui.people_names.addItems(self.people_names_collection)
-        # model = QStandardItemModel(4, 1)
-        # model.setHorizontalHeaderLabels(['标题'])
-        # for row in range(4):
-        #     item = QStandardItem("row %s, column %s" % (row, 0))
-        #     model.setItem(row, 0, item)
-        # item = QStandardItem("I am new here")
-        # model.setItem(4,item)
-        # self.ui.listView.setModel(model)

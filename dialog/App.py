@@ -8,6 +8,7 @@ from dialog.CalendarDialog import CalendarDialog
 from ui.main_window import Ui_MainWindow
 from utils.LogUtils import LogUtils
 from utils.SqlUtils import SqlUtils
+from utils.VerifyUtils import VerifyUtils
 
 __author__ = 'leexuehan@github.com'
 
@@ -39,23 +40,18 @@ class MainWindow(QMainWindow):
         self.init_ticket_sorts_from_db()
 
     def check_parmas_valid(self):
-        if self.select_date is None:
-            QMessageBox.critical(self, "Critical", self.tr("输入日期没有选择!"))
+        utils = VerifyUtils()
+        if utils.verify_input(self.select_date, "输入日期没有选择!") is False:
             return False
-        elif self.person_name is None:
-            QMessageBox.critical(self, "Critical", self.tr("没有输入人名"))
+        if utils.verify_input(self.person_name, "没有输入人名") is False:
             return False
-        elif self.car_id is None:
-            QMessageBox.critical(self, "Critical", self.tr("没有输入车牌号!"))
+        if utils.verify_input(self.car_id, "没有输入车牌号") is False:
             return False
-        elif self.coal_sorts_selected is None:
-            QMessageBox.critical(self, "Critical", self.tr("没有选择煤种!"))
+        if utils.verify_input(self.coal_sorts_selected, "没有选择煤种") is False:
             return False
-        elif self.weight_value is None:
-            QMessageBox.critical(self, "Critical", self.tr("没有输入吨位!"))
+        if utils.verify_input(self.weight_value, "没有输入吨位") is False:
             return False
-        elif self.ticket_selected is None:
-            QMessageBox.critical(self, "Critical", self.tr("没有选择票种!"))
+        if utils.verify_input(self.ticket_selected, "没有选择票种") is False:
             return False
         else:
             return True

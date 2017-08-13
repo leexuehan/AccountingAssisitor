@@ -112,6 +112,17 @@ class SqlUtils(object):
         conn.close()
         return results
 
+    def query_all_person_names(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        sql = 'SELECT DISTINCT PERSON_NAME FROM %s' % self.record_by_car_table_name
+        logging.info("execute sql:" + sql)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        logging.info(results)
+        conn.close()
+        return results
+
     def query_coal_sell_price_by_name(self, coal_name):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -123,6 +134,13 @@ class SqlUtils(object):
         conn.close()
         return results
 
+    def execute_sql_without_close_connection(self, sql, cursor):
+        logging.info("execute sql:" + sql)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        logging.info(results)
+        return results
+
 
 if __name__ == '__main__':
     sqlUtils = SqlUtils()
@@ -130,7 +148,8 @@ if __name__ == '__main__':
     # sqlUtils.add_coal_record('2017/08/05', '面煤', 'bytons', '324', 'bytons', '336')
     # sqlUtils.add_record_by_car_detail('2017/08/05', 'fff', 'fff', '面煤', '2.00', '北线')
     # sqlUtils.query_all_tickets_name()
-    print(sqlUtils.query_all_coal_names())
+    # print(sqlUtils.query_all_coal_names())
+    print(sqlUtils.query_all_person_names())
     # date = time.strftime('%Y/%m/%d', time.localtime(time.time()))  # 当前时间
     # print(date, type(date))
     # sqlUtils.delete_table('tickets')
