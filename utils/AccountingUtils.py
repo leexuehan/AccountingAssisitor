@@ -7,7 +7,7 @@ class AccountingUtils(object):
     # 煤款合计（主要是售价煤款）
     # 利润
     # 按客户分类所有煤款进价
-    def all_coals_purchase_cost_by_person(self, name):
+    def all_coals_purchase_cost_by_person(self, name, is_accurate):
         dbUtils = SqlUtils()
         conn = dbUtils.get_connection()
         cursor = conn.cursor()
@@ -23,7 +23,7 @@ class AccountingUtils(object):
         return price_by_tons + price_by_cars
 
     # 按客户分类所有煤款售价
-    def all_coals_sell_perice_by_person(self, name):
+    def all_coals_sell_perice_by_person(self, name, is_accurate):
         dbUtils = SqlUtils()
         conn = dbUtils.get_connection()
         cursor = conn.cursor()
@@ -39,7 +39,7 @@ class AccountingUtils(object):
         return price_by_tons + price_by_cars
 
     # 按客户分类所有票款售价
-    def all_ticket_sell_price_by_person(self, name):
+    def all_ticket_sell_price_by_person(self, name, is_accurate):
         dbUtils = SqlUtils()
         conn = dbUtils.get_connection()
         cursor = conn.cursor()
@@ -55,7 +55,7 @@ class AccountingUtils(object):
         return price_by_tons + price_by_cars
 
     # 按客户分类所有票款进价
-    def all_ticket_purchase_price_by_person(self, name):
+    def all_ticket_purchase_price_by_person(self, name, is_accurate):
         dbUtils = SqlUtils()
         conn = dbUtils.get_connection()
         cursor = conn.cursor()

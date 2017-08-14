@@ -98,10 +98,10 @@ class AccountDialog(QDialog):
         utils = AccountingUtils()
         account_title = '账目明细:' + self.compute_begin_date + '~' + self.compute_end_date + '\n'
         for name in self.selected_persons:
-            coal_total_sell_price = utils.all_coals_sell_perice_by_person(name)
-            coal_total_purchase_price = utils.all_coals_purchase_cost_by_person(name)
-            ticket_total_sell_price = utils.all_ticket_sell_price_by_person(name)
-            ticket_total_purchase_price = utils.all_ticket_purchase_price_by_person(name)
+            coal_total_sell_price = utils.all_coals_sell_perice_by_person(name, self.count_small_change)
+            coal_total_purchase_price = utils.all_coals_purchase_cost_by_person(name, self.count_small_change)
+            ticket_total_sell_price = utils.all_ticket_sell_price_by_person(name, self.count_small_change)
+            ticket_total_purchase_price = utils.all_ticket_purchase_price_by_person(name, self.count_small_change)
             total_profit = (coal_total_sell_price + ticket_total_sell_price) - (
                 coal_total_purchase_price + ticket_total_purchase_price)
             show_text_line = name + account_title + '\n总共煤款售价：' + str(coal_total_sell_price) + '元\n' + '总共煤款进价:' \
