@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
@@ -20,6 +21,9 @@ class AccountDialog(QDialog):
 
         # init collections
         self.selected_persons = []
+
+        # init compute account settings
+        self.count_small_change = True
 
     def on_select_begin_date(self):
         calendarDialog = CalendarDialog()
@@ -79,6 +83,12 @@ class AccountDialog(QDialog):
         print("already have items num", row_count)
         self.model.appendRow(item)
         self.ui.listView.setModel(self.model)
+
+    def count_small_change(self, state):
+        if state == Qt.Checked:
+            self.count_small_change = False
+        else:
+            self.count_small_change = True
 
     'accounting cmd begin....'
 

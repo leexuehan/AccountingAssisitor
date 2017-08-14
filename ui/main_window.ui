@@ -288,7 +288,7 @@
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
-     <string>导入文件</string>
+     <string>导出文件</string>
     </property>
    </widget>
    <addaction name="coal"/>
@@ -385,8 +385,8 @@
    <slot>onCoalSortSelected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>134</x>
-     <y>173</y>
+     <x>146</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
      <x>316</x>
@@ -402,7 +402,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>232</x>
-     <y>473</y>
+     <y>469</y>
     </hint>
     <hint type="destinationlabel">
      <x>655</x>
@@ -418,7 +418,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>222</x>
-     <y>293</y>
+     <y>289</y>
     </hint>
     <hint type="destinationlabel">
      <x>651</x>
@@ -449,8 +449,8 @@
    <slot>on_date_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>65</y>
+     <x>92</x>
+     <y>61</y>
     </hint>
     <hint type="destinationlabel">
      <x>142</x>
@@ -465,8 +465,8 @@
    <slot>on_name_input()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>180</x>
-     <y>102</y>
+     <x>192</x>
+     <y>98</y>
     </hint>
     <hint type="destinationlabel">
      <x>404</x>
@@ -481,8 +481,8 @@
    <slot>on_input_car_id()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>132</y>
+     <x>249</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>638</x>
@@ -497,8 +497,8 @@
    <slot>on_weight_value_input()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>155</x>
-     <y>214</y>
+     <x>167</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>513</x>
@@ -513,8 +513,8 @@
    <slot>on_ticket_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>146</x>
-     <y>243</y>
+     <x>158</x>
+     <y>239</y>
     </hint>
     <hint type="destinationlabel">
      <x>136</x>
