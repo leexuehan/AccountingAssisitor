@@ -4,10 +4,10 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.account_results import Ui_Account_Dialog
-from utils.SqlUtils import SqlUtils
 from utils.account.AccurateAccountingStrategy import AccurateAccountingStrategy
 from utils.account.RoughAccountingStrategy import RoughAccountingStrategy
 from utils.html_model import HTML_MODEL
+from utils.sql.SqlUtils import SqlUtils
 
 
 class AccountDialog(QDialog):
@@ -16,6 +16,8 @@ class AccountDialog(QDialog):
         # init ui
         self.ui = Ui_Account_Dialog()
         self.ui.setupUi(self)
+
+        self.ui.people_names.hide()
 
         # init combox
         self.model = QStandardItemModel()
@@ -26,6 +28,12 @@ class AccountDialog(QDialog):
 
         # init compute account settings
         self.count_small_change = True
+
+    def show_person_combox(self, state):
+        if state == Qt.Checked:
+            self.ui.people_names.setVisible(True)
+        else:
+            self.ui.people_names.hide()
 
     def on_select_begin_date(self):
         calendarDialog = CalendarDialog()
@@ -117,7 +125,6 @@ class AccountDialog(QDialog):
             data += line_data
         context = context % (account_title, data)
         print("context is :\n" + context)
-        self.ui.output_result.setHtml(context)
 
     def load_all_persons(self):
         result = SqlUtils().query_all_person_names()

@@ -92,7 +92,7 @@ SQL_dict = {
         'coal_total_purchase_price_by_cars':
             'select name, sum(cost) from ('
             'select t1.person_name name, t1.coal_name coal_name, t1.weight_value weight_value,'
-            't2.purchase_price purchase_price,(1*t2.purchase_price - 1*t2.purchase_price%10) cost from('
+            't2.purchase_price purchase_price,(1*t2.purchase_price - 1*t2.purchase_price%%10) cost from('
             'select person_name,coal_name,weight_value from record_by_car_detail) t1, ('
             'select coal_name,purchase_price from coals where purchase_compute_way == "元/车") t2'
             ' where t1.coal_name == t2.coal_name) where name is "%s"',
@@ -105,20 +105,20 @@ SQL_dict = {
             'where t1.coal_name == t2.coal_name) where name is "%s"',
         'coal_total_sell_price_by_cars':
             'select name, sum(cost) from (select t1.person_name name, t1.coal_name coal_name, t1.weight_value weight_value,'
-            't2.sell_price sell_price,(1*t2.sell_price - 1*t2.sell_price%10) cost '
+            't2.sell_price sell_price,(1*t2.sell_price - 1*t2.sell_price%%10) cost '
             'from (select person_name, coal_name, weight_value from record_by_car_detail) t1, '
             '(select coal_name, sell_price from coals where purchase_compute_way == "元/车") t2 '
             'where t1.coal_name == t2.coal_name) where name is "%s"',
         ###票的进价
         'ticket_total_purchase_price_by_tons':
             'select name, sum(cost) from (select t1.person_name name, t1.ticket_name ticket_name, t1.weight_value weight_value,'
-            't2.sell_price sell_price,(t1.weight_value*t2.sell_price - t1.weight_value*t2.sell_price%10) cost '
+            't2.sell_price sell_price,(t1.weight_value*t2.sell_price - t1.weight_value*t2.sell_price%%10) cost '
             'from (select person_name, ticket_name, weight_value from record_by_car_detail) t1, '
             '(select ticket_name, sell_price from tickets where sell_compute_way == "元/吨") t2 '
             'where t1.ticket_name == t2.ticket_name) where name is "%s"',
         'ticket_total_purchase_price_by_cars':
             'select name, sum(cost) from (select t1.person_name name, t1.ticket_name ticket_name, t1.weight_value weight_value,'
-            't2.sell_price sell_price,(1*t2.sell_price - 1*t2.sell_price%10) cost '
+            't2.sell_price sell_price,(1*t2.sell_price - 1*t2.sell_price%%10) cost '
             'from (select person_name, ticket_name, weight_value from record_by_car_detail) t1, '
             '(select ticket_name, sell_price from tickets where sell_compute_way == "元/车") t2 '
             'where t1.ticket_name == t2.ticket_name) where name is "%s"',

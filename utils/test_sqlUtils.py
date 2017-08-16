@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from utils.SqlUtils import SqlUtils
+from utils.sql.SqlUtils import SqlUtils
 
 
 class TestSqlUtils(TestCase):

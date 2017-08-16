@@ -1,12 +1,10 @@
-from utils.SQL_dict import SQL_dict
-from utils.SqlUtils import SqlUtils
 from utils.account.BaseAccountingStrategy import BaseAccountingStrategy
+from utils.account.RoughAccountingStrategy import RoughAccountingStrategy
+from utils.sql.SQL_dict import SQL_dict
+from utils.sql.SqlUtils import SqlUtils
 
 
 ## 精确计算策略，精确到小数点后两位
-from utils.account.RoughAccountingStrategy import RoughAccountingStrategy
-
-
 class AccurateAccountingStrategy(BaseAccountingStrategy):
     # 吨位合计（按照煤种统计出来）
     # 煤款合计（主要是售价煤款）

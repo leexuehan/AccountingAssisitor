@@ -1,9 +1,7 @@
-from threading import Thread
-
 import logging
 
-from utils.LogUtils import LogUtils
 from utils.VerifyUtils import VerifyUtils
+from utils.log.LogUtils import LogUtils
 
 
 class TimerUtils():

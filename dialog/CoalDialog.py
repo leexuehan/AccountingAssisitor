@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.coal import Ui_Coal_Dialog
-from utils.SqlUtils import SqlUtils
+from utils.sql.SqlUtils import SqlUtils
 
 
 class CoalDialog(QDialog):
