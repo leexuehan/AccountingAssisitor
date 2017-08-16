@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Account_Dialog(object):
     def setupUi(self, Account_Dialog):
         Account_Dialog.setObjectName("Account_Dialog")
-        Account_Dialog.resize(708, 692)
+        Account_Dialog.resize(948, 671)
         self.account = QtWidgets.QTabWidget(Account_Dialog)
         self.account.setGeometry(QtCore.QRect(60, 10, 571, 291))
         self.account.setObjectName("account")
@@ -68,14 +68,8 @@ class Ui_Account_Dialog(object):
         self.return_to_main_window.setGeometry(QtCore.QRect(470, 620, 75, 23))
         self.return_to_main_window.setObjectName("return_to_main_window")
         self.output_result = QtWidgets.QTextBrowser(Account_Dialog)
-        self.output_result.setGeometry(QtCore.QRect(355, 310, 281, 261))
+        self.output_result.setGeometry(QtCore.QRect(355, 310, 561, 261))
         self.output_result.setStyleSheet("\n"
-"Header 1\n"
-"Header 2\n"
-"row 1, cell 1\n"
-"row 1, cell 2\n"
-"row 2, cell 1\n"
-"row 2, cell 2\n"
 "")
         self.output_result.setObjectName("output_result")
         self.compute_cmd_btn = QtWidgets.QPushButton(Account_Dialog)
@@ -128,22 +122,7 @@ class Ui_Account_Dialog(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'宋体\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<table border=\"1\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\">\n"
-"<tr>\n"
-"<td>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Header 1</span></p></td>\n"
-"<td>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Header 2</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">row 1, cell 1</p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">row 1, cell 2</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">row 2, cell 1</p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">row 2, cell 2</p></td></tr></table></body></html>"))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.compute_cmd_btn.setText(_translate("Account_Dialog", "开始计算"))
         self.select_start_date_btn.setText(_translate("Account_Dialog", "选择起始日期"))
         self.select_end_date_btn.setText(_translate("Account_Dialog", "选择截止日期"))

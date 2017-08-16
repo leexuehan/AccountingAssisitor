@@ -4,8 +4,10 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.account_results import Ui_Account_Dialog
-from utils.AccountingUtils import AccountingUtils
 from utils.SqlUtils import SqlUtils
+from utils.account.AccurateAccountingStrategy import AccurateAccountingStrategy
+from utils.account.RoughAccountingStrategy import RoughAccountingStrategy
+from utils.html_model import HTML_MODEL
 
 
 class AccountDialog(QDialog):
@@ -94,21 +96,27 @@ class AccountDialog(QDialog):
 
     def on_start_compute_cmd(self):
         print("begin to compute account......")
-        context = ''
-        utils = AccountingUtils()
-        account_title = '账目明细:' + self.compute_begin_date + '~' + self.compute_end_date + '\n'
+        if self.count_small_change is True:
+            strategy = AccurateAccountingStrategy()
+        else:
+            strategy = RoughAccountingStrategy()
+        context = HTML_MODEL['account_result_show']
+        account_title = '账目明细(%s~%s)' % (self.compute_begin_date, self.compute_end_date)
+        data = ''
         for name in self.selected_persons:
-            coal_total_sell_price = utils.all_coals_sell_perice_by_person(name, self.count_small_change)
-            coal_total_purchase_price = utils.all_coals_purchase_cost_by_person(name, self.count_small_change)
-            ticket_total_sell_price = utils.all_ticket_sell_price_by_person(name, self.count_small_change)
-            ticket_total_purchase_price = utils.all_ticket_purchase_price_by_person(name, self.count_small_change)
+            coal_total_sell_price = strategy.all_coals_sell_perice_by_person(name)
+            coal_total_purchase_price = strategy.all_coals_purchase_cost_by_person(name)
+            ticket_total_sell_price = strategy.all_ticket_sell_price_by_person(name)
+            ticket_total_purchase_price = strategy.all_ticket_purchase_price_by_person(name)
             total_profit = (coal_total_sell_price + ticket_total_sell_price) - (
                 coal_total_purchase_price + ticket_total_purchase_price)
-            show_text_line = name + account_title + '\n总共煤款售价：' + str(coal_total_sell_price) + '元\n' + '总共煤款进价:' \
-                             + str(coal_total_purchase_price) + '元\n总共票款售价：' + str(ticket_total_sell_price) \
-                             + '元\n总共票款进价：' + str(ticket_total_purchase_price) + '元\n利润合计：' \
-                             + str(total_profit) + '元\n'
-            context += show_text_line + '\n'
+            line_data = '<tr><td>' + name + '</td><td>' + str(coal_total_sell_price) + '</td><td>' + str(
+                coal_total_purchase_price) \
+                        + '</td><td>' + str(ticket_total_sell_price) + '</td><td>' + str(ticket_total_purchase_price) \
+                        + '</td><td>' + str(total_profit) + '</td></tr>'
+            data += line_data
+        context = context % (account_title, data)
+        print("context is :\n" + context)
         self.ui.output_result.setHtml(context)
 
     def load_all_persons(self):

@@ -1,13 +1,12 @@
 from utils.SQL_dict import SQL_dict
 from utils.SqlUtils import SqlUtils
+from utils.account.BaseAccountingStrategy import BaseAccountingStrategy
 
 
-class AccountingUtils(object):
-    # 吨位合计（按照煤种统计出来）
-    # 煤款合计（主要是售价煤款）
-    # 利润
+## 粗略计算策略，精确到十位数
+class RoughAccountingStrategy(BaseAccountingStrategy):
     # 按客户分类所有煤款进价
-    def all_coals_purchase_cost_by_person(self, name, is_accurate):
+    def all_coals_purchase_cost_by_person(self, name):
         dbUtils = SqlUtils()
         conn = dbUtils.get_connection()
         cursor = conn.cursor()
@@ -23,7 +22,7 @@ class AccountingUtils(object):
         return price_by_tons + price_by_cars
 
     # 按客户分类所有煤款售价
-    def all_coals_sell_perice_by_person(self, name, is_accurate):
+    def all_coals_sell_perice_by_person(self, name):
         dbUtils = SqlUtils()
         conn = dbUtils.get_connection()
         cursor = conn.cursor()
@@ -39,7 +38,7 @@ class AccountingUtils(object):
         return price_by_tons + price_by_cars
 
     # 按客户分类所有票款售价
-    def all_ticket_sell_price_by_person(self, name, is_accurate):
+    def all_ticket_sell_price_by_person(self, name):
         dbUtils = SqlUtils()
         conn = dbUtils.get_connection()
         cursor = conn.cursor()
@@ -55,7 +54,7 @@ class AccountingUtils(object):
         return price_by_tons + price_by_cars
 
     # 按客户分类所有票款进价
-    def all_ticket_purchase_price_by_person(self, name, is_accurate):
+    def all_ticket_purchase_price_by_person(self, name):
         dbUtils = SqlUtils()
         conn = dbUtils.get_connection()
         cursor = conn.cursor()
@@ -71,63 +70,58 @@ class AccountingUtils(object):
         print('price by car:' + str(price_by_cars) + ',price by tons' + str(price_by_tons))
         return price_by_tons + price_by_cars
 
-    # 以元/吨计价的煤款进价总数
-    def __all_coals_cost_compute_by_tons_purchase_price(self, db_utils, cursor, name):
-        sql = SQL_dict['accounting_sqls_accurate']['coal_total_purchase_price_by_tons'] % name
-        print("execute sql:" + sql)
-        result = db_utils.execute_sql_without_close_connection(sql, cursor)
-        return result
-
-    # 以元/车计价的煤款进价总数
-    def __all_coals_cost_compute_by_cars_purchase_price(self, db_utils, cursor, name):
-        sql = SQL_dict['accounting_sqls_accurate']['coal_total_purchase_price_by_cars'] % name
-        print("execute sql:" + sql)
-        result = db_utils.execute_sql_without_close_connection(sql, cursor)
-        return result
-
-    # 以元/车计价的煤款售价总数
-    def __all_coals_cost_compute_by_tons_sell_price(self, dbUtils, cursor, name):
-        sql = SQL_dict['accounting_sqls_accurate']['coal_total_sell_price_by_cars'] % name
-        print("execute sql:" + sql)
+    def __all_coals_cost_compute_by_tons_purchase_price(self, dbUtils, cursor, name):
+        sql = SQL_dict['accounting_sqls_rough']['coal_total_purchase_price_by_tons'] % name
+        print("execute sql:\n" + sql)
         result = dbUtils.execute_sql_without_close_connection(sql, cursor)
         return result
 
-    # 以元/吨计价的煤款售价总数
+    def __all_coals_cost_compute_by_cars_purchase_price(self, dbUtils, cursor, name):
+        sql = SQL_dict['accounting_sqls_rough']['coal_total_purchase_price_by_cars'] % name
+        print("execute sql:\n" + sql)
+        result = dbUtils.execute_sql_without_close_connection(sql, cursor)
+        return result
+
+    def __all_coals_cost_compute_by_tons_sell_price(self, dbUtils, cursor, name):
+        sql = SQL_dict['accounting_sqls_rough']['coal_total_sell_price_by_cars'] % name
+        print("execute sql:\n" + sql)
+        result = dbUtils.execute_sql_without_close_connection(sql, cursor)
+        return result
+
     def __all_coals_cost_compute_by_cars_sell_price(self, dbUtils, cursor, name):
-        sql = SQL_dict['accounting_sqls_accurate']['coal_total_sell_price_by_tons'] % name
-        print("execute sql:" + sql)
+        sql = SQL_dict['accounting_sqls_rough']['coal_total_sell_price_by_tons'] % name
+        print("execute sql:\n" + sql)
         result = dbUtils.execute_sql_without_close_connection(sql, cursor)
         return result
 
     def all_tickets_cost_compute_by_tons_sell_price(self, dbUtils, cursor, name):
-        sql = SQL_dict['accounting_sqls_accurate']['ticket_total_sell_price_by_tons'] % name
+        tons_ = SQL_dict['accounting_sqls_rough']['ticket_total_sell_price_by_tons']
+        sql = tons_ % name
         print("execute sql:\n" + sql)
         result = dbUtils.execute_sql_without_close_connection(sql, cursor)
         return result
 
     def all_tickets_cost_compute_by_cars_sell_price(self, dbUtils, cursor, name):
-        sql = SQL_dict['accounting_sqls_accurate']['ticket_total_sell_price_by_cars'] % name
+        cars_ = SQL_dict['accounting_sqls_rough']['ticket_total_sell_price_by_cars']
+        print(cars_), type(cars_)
+        sql = cars_ % name
         print("execute sql:\n" + sql)
         result = dbUtils.execute_sql_without_close_connection(sql, cursor)
         return result
 
     def __all_tickets_cost_compute_by_tons_purchase_price(self, dbUtils, cursor, name):
-        sql = SQL_dict['accounting_sqls_accurate']['ticket_total_purchase_price_by_tons'] % name
+        sql = SQL_dict['accounting_sqls_rough']['ticket_total_purchase_price_by_tons'] % name
         print("execute sql:\n" + sql)
         result = dbUtils.execute_sql_without_close_connection(sql, cursor)
         return result
 
     def __all_tickets_cost_compute_by_cars_purchase_price(self, dbUtils, cursor, name):
-        sql = SQL_dict['accounting_sqls_accurate']['ticket_total_purchase_price_by_cars'] % name
+        sql = SQL_dict['accounting_sqls_rough']['ticket_total_purchase_price_by_cars'] % name
         print("execute sql:\n" + sql)
         result = dbUtils.execute_sql_without_close_connection(sql, cursor)
         return result
 
 
 if __name__ == '__main__':
-    # result1 = AccountingUtils().all_coals_purchase_cost_by_person('刘帅')
-    # print(result1)
-    # result2 = AccountingUtils().all_coals_sell_perice_by_person('刘帅')
-    # print(result2)
-    result = AccountingUtils().all_coals_sell_perice_by_person('李雪寒')
-    print(result)
+    # RoughAccountingStrategy().all_ticket_sell_price_by_person('李雪寒')
+    RoughAccountingStrategy().all_ticket_sell_price_by_person('li')
