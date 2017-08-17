@@ -2,18 +2,16 @@
 import logging
 
 from dialog.AccountDialog import AccountDialog
+from dialog.CalendarDialog import CalendarDialog
 from dialog.CoalDialog import CoalDialog
 from dialog.TicketDialog import TicketDialog
-from dialog.CalendarDialog import CalendarDialog
 from ui.main_window import Ui_MainWindow
-from utils.LogUtils import LogUtils
-from utils.SqlUtils import SqlUtils
-from utils.VerifyUtils import VerifyUtils
+from utils.log.LogUtils import LogUtils
+from utils.sql.SqlUtils import SqlUtils
 
 __author__ = 'leexuehan@github.com'
 
 import sys
-import time
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 
@@ -24,6 +22,14 @@ class MainWindow(QMainWindow):
         # init ui
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        # set hide components
+        self.ui.date_hint.hide()
+        self.ui.car_id_hint.hide()
+        self.ui.person_name_hint.hide()
+        self.ui.coal_sell_price_display.hide()
+        self.ui.ticket_sell_price_display.hide()
+        self.ui.weight_hint.hide()
 
         # init input params
         self.select_date = None
@@ -40,21 +46,31 @@ class MainWindow(QMainWindow):
         self.init_ticket_sorts_from_db()
 
     def check_parmas_valid(self):
-        utils = VerifyUtils()
-        if utils.verify_input(self.select_date, "输入日期没有选择!") is False:
-            return False
-        if utils.verify_input(self.person_name, "没有输入人名") is False:
-            return False
-        if utils.verify_input(self.car_id, "没有输入车牌号") is False:
-            return False
-        if utils.verify_input(self.coal_sorts_selected, "没有选择煤种") is False:
-            return False
-        if utils.verify_input(self.weight_value, "没有输入吨位") is False:
-            return False
-        if utils.verify_input(self.ticket_selected, "没有选择票种") is False:
+        if self.select_date is None:
+            self.ui.date_hint.setVisible(True)
+            self.ui.date_hint.setStyleSheet('color:red;')
             return False
         else:
-            return True
+            self.ui.date_hint.hide()
+        if self.person_name is None:
+            self.ui.person_name_hint.setVisible(True)
+            self.ui.person_name_hint.setStyleSheet('color:red;')
+            return False
+        else:
+            self.ui.person_name_hint.hide()
+        if self.car_id is None:
+            self.ui.car_id_hint.setVisible(True)
+            self.ui.car_id_hint.setStyleSheet('color:red;')
+            return False
+        else:
+            self.ui.car_id_hint.hide()
+        if self.weight_value is None:
+            self.ui.weight_hint.setVisible(True)
+            self.ui.weight_hint.setStyleSheet('color:red;')
+            return False
+        else:
+            self.ui.weight_hint.hide()
+        return True
 
     def refresh_coal_sorts_combox(self):
         self.ui.coal_sorts.clear()
@@ -97,11 +113,16 @@ class MainWindow(QMainWindow):
         self.coal_sorts_selected = coalSorts
         query_result = SqlUtils().query_coal_sell_price_by_name(coalSorts)
         price_info = str(query_result[0][0]) + str(query_result[0][1])
-        self.ui.coal_sort_sell_price.setText(price_info)
+        self.ui.coal_sell_price_display.setVisible(True)
+        self.ui.coal_sell_price_display.setText(price_info)
 
     def on_ticket_selected(self, item):
         ticket_name = self.ticket_sorts[item]
         self.ticket_selected = ticket_name
+        query_result = SqlUtils().query_ticket_sell_price_by_name(ticket_name)
+        price_info = str(query_result[0][0]) + str(query_result[0][1])
+        self.ui.ticket_sell_price_display.setVisible(True)
+        self.ui.ticket_sell_price_display.setText(price_info)
 
     # 添加记录“逐车明细”
     def on_record_add(self):

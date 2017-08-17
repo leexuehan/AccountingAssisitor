@@ -184,50 +184,108 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="coal_sort_sell_price">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>130</y>
-      <width>151</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_coal_2">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>250</x>
       <y>130</y>
-      <width>59</width>
-      <height>16</height>
+      <width>31</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>销售单价</string>
+     <string>售价</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_coal_3">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>250</x>
       <y>200</y>
-      <width>59</width>
+      <width>31</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>销售单价</string>
+     <string>售价</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="ticket_sort_sell_price">
+   <widget class="QLabel" name="date_hint">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>200</y>
-      <width>151</width>
+      <x>270</x>
+      <y>20</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>没有选择日期</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="person_name_hint">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>60</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>没有输入客户姓名</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="car_id_hint">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>90</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>没有输入车号</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="coal_sell_price_display">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>130</y>
+      <width>101</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>这里动态显示售价</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ticket_sell_price_display">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>200</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>这里动态显示售价</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="weight_hint">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>170</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>没有输入吨位</string>
     </property>
    </widget>
   </widget>
@@ -287,9 +345,14 @@
     </property>
    </widget>
    <widget class="QMenu" name="menu_4">
-    <property name="title">
-     <string>导出文件</string>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="import_record_detail_file"/>
+    <addaction name="export_2"/>
    </widget>
    <addaction name="coal"/>
    <addaction name="ticket"/>
@@ -373,6 +436,16 @@
   <action name="coal_sell_price_management">
    <property name="text">
     <string>售价管理</string>
+   </property>
+  </action>
+  <action name="import_record_detail_file">
+   <property name="text">
+    <string>导入明细文件</string>
+   </property>
+  </action>
+  <action name="export_2">
+   <property name="text">
+    <string>导出记录</string>
    </property>
   </action>
  </widget>
