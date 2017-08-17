@@ -300,7 +300,7 @@
    </property>
    <widget class="QMenu" name="menu_acount">
     <property name="title">
-     <string>账单</string>
+     <string>账单操作</string>
     </property>
     <addaction name="compute_account"/>
     <addaction name="history_acount"/>
@@ -309,15 +309,8 @@
     <property name="title">
      <string>煤种管理</string>
     </property>
-    <widget class="QMenu" name="menu_5">
-     <property name="title">
-      <string>煤价管理</string>
-     </property>
-     <addaction name="coal_purchase_price_manag"/>
-     <addaction name="coal_sell_price_management"/>
-    </widget>
-    <addaction name="menu_5"/>
     <addaction name="add_new_coal"/>
+    <addaction name="coal_price_management"/>
    </widget>
    <widget class="QMenu" name="ticket">
     <property name="title">
@@ -327,8 +320,6 @@
      <property name="title">
       <string>票价管理</string>
      </property>
-     <addaction name="ticket_purchase_price_management"/>
-     <addaction name="sell_price_management"/>
     </widget>
     <addaction name="menu_2"/>
     <addaction name="add_new_ticket"/>
@@ -337,11 +328,6 @@
    <widget class="QMenu" name="menu">
     <property name="title">
      <string>关于</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menu_3">
-    <property name="title">
-     <string>操作明细</string>
     </property>
    </widget>
    <widget class="QMenu" name="menu_4">
@@ -354,12 +340,17 @@
     <addaction name="import_record_detail_file"/>
     <addaction name="export_2"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>激活软件</string>
+    </property>
+   </widget>
    <addaction name="coal"/>
    <addaction name="ticket"/>
    <addaction name="menu_acount"/>
    <addaction name="menu_4"/>
-   <addaction name="menu"/>
    <addaction name="menu_3"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -418,26 +409,6 @@
     <string>支持按照票种类进行计算</string>
    </property>
   </action>
-  <action name="ticket_purchase_price_management">
-   <property name="text">
-    <string>进价管理</string>
-   </property>
-  </action>
-  <action name="sell_price_management">
-   <property name="text">
-    <string>售价管理</string>
-   </property>
-  </action>
-  <action name="coal_purchase_price_manag">
-   <property name="text">
-    <string>进价管理</string>
-   </property>
-  </action>
-  <action name="coal_sell_price_management">
-   <property name="text">
-    <string>售价管理</string>
-   </property>
-  </action>
   <action name="import_record_detail_file">
    <property name="text">
     <string>导入明细文件</string>
@@ -446,6 +417,11 @@
   <action name="export_2">
    <property name="text">
     <string>导出记录</string>
+   </property>
+  </action>
+  <action name="coal_price_management">
+   <property name="text">
+    <string>煤价管理</string>
    </property>
   </action>
  </widget>
@@ -627,6 +603,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>coal_price_management</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open_coal_price_manage_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>671</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>signal1()</signal>
@@ -648,5 +640,6 @@
   <slot>on_ticket_selected()</slot>
   <slot>on_add_new_coal()</slot>
   <slot>on_compute_account()</slot>
+  <slot>open_coal_price_manage_dialog()</slot>
  </slots>
 </ui>
