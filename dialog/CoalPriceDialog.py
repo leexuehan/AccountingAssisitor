@@ -54,6 +54,8 @@ class CoalPriceDialog(QDialog):
         purchase_price = str(query_purchase_price_result[0][0]) + str(query_purchase_price_result[0][1])
         self.coal_sell_price = sell_price
         self.coal_purchase_price = purchase_price
+        self.ui.coal_sell_price_display.setText(self.coal_sell_price)
+        self.ui.coal_purchase_price_display.setText(self.coal_purchase_price)
 
     def init_compute_unit(self):
         compute_ways = ['元/吨', '元/车']
