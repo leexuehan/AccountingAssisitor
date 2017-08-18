@@ -4,6 +4,7 @@ import logging
 from dialog.AccountDialog import AccountDialog
 from dialog.CalendarDialog import CalendarDialog
 from dialog.CoalDialog import CoalDialog
+from dialog.CoalPriceDialog import CoalPriceDialog
 from dialog.TicketDialog import TicketDialog
 from ui.main_window import Ui_MainWindow
 from utils.log.LogUtils import LogUtils
@@ -181,6 +182,11 @@ class MainWindow(QMainWindow):
         coalDialog.set_main_window_handler(self)
         coalDialog.show()
         coalDialog.exec_()
+
+    def open_coal_price_manage_dialog(self):
+        coalPriceDialog = CoalPriceDialog()
+        coalPriceDialog.show()
+        coalPriceDialog.exec_()
 
 
 if __name__ == '__main__':

@@ -127,7 +127,30 @@ class SqlUtils(object):
         conn = self.get_connection()
         cursor = conn.cursor()
         sql = 'SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM %s WHERE COAL_NAME IS "%s"' % (self.coal_table_name, coal_name)
-        logging.info("execute sql:" + sql)
+        logging.info("execute sql:\n" + sql)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        logging.info(results)
+        conn.close()
+        return results
+
+    def query_coal_purchase_price_by_name(self, coal_name):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        sql = 'SELECT PURCHASE_PRICE,PURCHASE_COMPUTE_WAY FROM %s WHERE COAL_NAME IS "%s"' % (self.coal_table_name, coal_name)
+        logging.info("execute sql:\n" + sql)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        logging.info(results)
+        conn.close()
+        return results
+
+    def query_ticket_sell_price_by_name(self, ticket_name):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        sql = 'SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM %s WHERE TICKET_NAME IS "%s"' % (
+        self.ticket_table_name, ticket_name)
+        logging.info("execute sql:\n" + sql)
         cursor.execute(sql)
         results = cursor.fetchall()
         logging.info(results)
