@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 from dialog.CalendarDialog import CalendarDialog
 from ui.ticket import Ui_Ticket_Dialog
 from utils.sql.SqlUtils import SqlUtils
+from utils.sql.TickeDbtUtils import TicketDbUtils
 
 
 class TicketDialog(QDialog):
@@ -58,7 +59,7 @@ class TicketDialog(QDialog):
         if ticket_name in ticket_name_set:
             QMessageBox.information(self, 'already add', '您已经添加过该票种', QMessageBox.Yes)
         else:
-            utils = SqlUtils()
+            utils = TicketDbUtils()
             utils.add_ticket_record(self.ticket_add_date, ticket_name, ticket_purchase_price,
                                     self.purchase_price_compute_way_selected, ticket_sell_price,
                                     self.sell_price_compute_way_selected)

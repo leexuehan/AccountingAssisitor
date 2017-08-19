@@ -7,6 +7,7 @@ from ui.account_results import Ui_Account_Dialog
 from utils.account.AccurateAccountingStrategy import AccurateAccountingStrategy
 from utils.account.RoughAccountingStrategy import RoughAccountingStrategy
 from utils.html_model import HTML_MODEL
+from utils.sql.RecordDetailDbUtils import RecordDetailDbUtils
 from utils.sql.SqlUtils import SqlUtils
 
 
@@ -127,7 +128,7 @@ class AccountDialog(QDialog):
         print("context is :\n" + context)
 
     def load_all_persons(self):
-        result = SqlUtils().query_all_person_names()
+        result = RecordDetailDbUtils().query_all_person_names()
         self.people_names_collection = []
         for name in result:
             self.people_names_collection.append(name[0])

@@ -8,7 +8,10 @@ from dialog.CoalPriceDialog import CoalPriceDialog
 from dialog.TicketDialog import TicketDialog
 from ui.main_window import Ui_MainWindow
 from utils.log.LogUtils import LogUtils
+from utils.sql.CoalDbUitls import CoalDbUtils
+from utils.sql.RecordDetailDbUtils import RecordDetailDbUtils
 from utils.sql.SqlUtils import SqlUtils
+from utils.sql.TickeDbtUtils import TicketDbUtils
 
 __author__ = 'leexuehan@github.com'
 
@@ -79,7 +82,7 @@ class MainWindow(QMainWindow):
 
     def init_coal_sorts_from_db(self):
         self.ui.coal_sorts.clear()
-        utils = SqlUtils()
+        utils = CoalDbUtils()
         try:
             coal_list = utils.query_all_coal_names()
         except:
@@ -98,7 +101,7 @@ class MainWindow(QMainWindow):
 
     def init_ticket_sorts_from_db(self):
         self.ui.ticket_sorts.clear()
-        utils = SqlUtils()
+        utils = TicketDbUtils()
         try:
             ticket_list = utils.query_all_tickets_name()
         except:
@@ -112,16 +115,16 @@ class MainWindow(QMainWindow):
         # 获得条目
         coalSorts = self.coal_sorts[item]
         self.coal_sorts_selected = coalSorts
-        query_result = SqlUtils().query_coal_sell_price_by_name(coalSorts)
-        price_info = str(query_result[0][0]) + str(query_result[0][1])
+        query_result = CoalDbUtils().query_coal_latest_sell_price_by_name(coalSorts)
+        price_info = str(query_result[0][1]) + str(query_result[0][2])
         self.ui.coal_sell_price_display.setVisible(True)
         self.ui.coal_sell_price_display.setText(price_info)
 
     def on_ticket_selected(self, item):
         ticket_name = self.ticket_sorts[item]
         self.ticket_selected = ticket_name
-        query_result = SqlUtils().query_ticket_sell_price_by_name(ticket_name)
-        price_info = str(query_result[0][0]) + str(query_result[0][1])
+        query_result = TicketDbUtils().query_latest_ticket_sell_price_by_name(ticket_name)
+        price_info = str(query_result[0][1]) + str(query_result[0][2])
         self.ui.ticket_sell_price_display.setVisible(True)
         self.ui.ticket_sell_price_display.setText(price_info)
 
@@ -132,7 +135,7 @@ class MainWindow(QMainWindow):
         if self.check_parmas_valid() is False:
             return
         # 数据库存一份，excel 存一份
-        SqlUtils().add_record_by_car_detail(self.select_date, self.person_name, self.car_id,
+        RecordDetailDbUtils().add_record_by_car_detail(self.select_date, self.person_name, self.car_id,
                                             self.coal_sorts_selected,
                                             self.weight_value, self.ticket_selected)
         QMessageBox.information(self, 'Success', '添加成功!', QMessageBox.Yes)
@@ -191,6 +194,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     LogUtils.init_logger()
+    SqlUtils().init_tables()
     app = QApplication(sys.argv)
     mainWindow = MainWindow()
     mainWindow.show()
