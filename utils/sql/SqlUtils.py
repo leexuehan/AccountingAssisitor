@@ -17,10 +17,18 @@ class SqlUtils(object):
         if conn is not None:
             conn.close()
 
+    def init_tables(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        self.create_coal_table_if_necessary(cursor)
+        self.create_ticket_table_if_necessary(cursor)
+        self.create_record_by_car_detail_table_if_necessary(cursor)
+        self.close_connection(conn)
+
     def create_ticket_table_if_necessary(self, cursor):
         create_table_sql = '''CREATE TABLE IF NOT EXISTS %s
                      (DATE TEXT NOT NULL,
-                      TICKET_NAME TEXT PRIMARY KEY,
+                      TICKET_NAME TEXT NOT NULL,
                       PURCHASE_PRICE REAL, 
                       PURCHASE_COMPUTE_WAY TEXT,
                       SELL_PRICE REAL,
@@ -31,7 +39,7 @@ class SqlUtils(object):
     def create_coal_table_if_necessary(self, cursor):
         create_coal_table_sql = '''CREATE TABLE IF NOT EXISTS %s 
                                 (DATE TEXT NOT NULL,
-                                 COAL_NAME TEXT PRIMARY KEY,
+                                 COAL_NAME TEXT NOT NULL,
                                  PURCHASE_PRICE REAL,
                                  PURCHASE_COMPUTE_WAY TEXT,
                                  SELL_PRICE REAL,
@@ -66,19 +74,6 @@ class SqlUtils(object):
         conn.close()
         # 原子性???
 
-    def add_coal_record(self, add_date, coal_name, purchase_price, purchase_compute_way,
-                        sell_price, sell_compute_way):
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        record = (add_date, coal_name, purchase_price, purchase_compute_way, sell_price, sell_compute_way)
-        sql = 'INSERT INTO %s VALUES(?,?,?,?,?,?)' % self.coal_table_name
-        logging.info("execute sql:" + str(sql))
-        cursor.execute(sql, record)
-        conn.commit()
-        conn.close()
-
-        # 原子性???
-
     def add_record_by_car_detail(self, date, person_name, car_id, coal_name, weight_value, ticket_name):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -101,17 +96,6 @@ class SqlUtils(object):
         conn.close()
         return fetch_result
 
-    def query_all_coal_names(self):
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        sql = 'SELECT COAL_NAME FROM %s' % self.coal_table_name
-        logging.info("execute sql:" + sql)
-        cursor.execute(sql)
-        results = cursor.fetchall()
-        logging.info(results)
-        conn.close()
-        return results
-
     def query_all_person_names(self):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -123,33 +107,11 @@ class SqlUtils(object):
         conn.close()
         return results
 
-    def query_coal_sell_price_by_name(self, coal_name):
+    def query_latest_ticket_sell_price_by_name(self, ticket_name):
         conn = self.get_connection()
         cursor = conn.cursor()
-        sql = 'SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM %s WHERE COAL_NAME IS "%s"' % (self.coal_table_name, coal_name)
-        logging.info("execute sql:\n" + sql)
-        cursor.execute(sql)
-        results = cursor.fetchall()
-        logging.info(results)
-        conn.close()
-        return results
-
-    def query_coal_purchase_price_by_name(self, coal_name):
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        sql = 'SELECT PURCHASE_PRICE,PURCHASE_COMPUTE_WAY FROM %s WHERE COAL_NAME IS "%s"' % (self.coal_table_name, coal_name)
-        logging.info("execute sql:\n" + sql)
-        cursor.execute(sql)
-        results = cursor.fetchall()
-        logging.info(results)
-        conn.close()
-        return results
-
-    def query_ticket_sell_price_by_name(self, ticket_name):
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        sql = 'SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM %s WHERE TICKET_NAME IS "%s"' % (
-        self.ticket_table_name, ticket_name)
+        sql = 'SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY FROM %s WHERE TICKET_NAME IS "%s"' % (
+            self.ticket_table_name, ticket_name)
         logging.info("execute sql:\n" + sql)
         cursor.execute(sql)
         results = cursor.fetchall()

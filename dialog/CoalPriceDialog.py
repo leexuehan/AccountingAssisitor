@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QDialog
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.coal_price_manage import Ui_CoalPrice
+from utils.sql.CoalDbUitls import CoalDbUtils
 from utils.sql.SqlUtils import SqlUtils
 
 
@@ -20,6 +21,7 @@ class CoalPriceDialog(QDialog):
         self.hide_purchase_price_related()
 
         # init combox
+        self.compute_ways = ['元/吨', '元/车']
         self.coal_sorts = []
         self.coal_sorts_selected = None
         self.init_coal_sorts_from_db()
@@ -30,7 +32,7 @@ class CoalPriceDialog(QDialog):
 
     def init_coal_sorts_from_db(self):
         self.ui.coal_sorts.clear()
-        utils = SqlUtils()
+        utils = CoalDbUtils()
         try:
             coal_list = utils.query_all_coal_names()
         except:
@@ -47,10 +49,10 @@ class CoalPriceDialog(QDialog):
         # 获得条目
         coalSorts = self.coal_sorts[item]
         self.coal_sorts_selected = coalSorts
-        utils = SqlUtils()
-        query_sell_price_result = utils.query_coal_sell_price_by_name(coalSorts)
+        utils = CoalDbUtils()
+        query_sell_price_result = utils.query_coal_latest_sell_price_by_name(coalSorts)
         query_purchase_price_result = utils.query_coal_purchase_price_by_name(coalSorts)
-        sell_price = str(query_sell_price_result[0][0]) + str(query_sell_price_result[0][1])
+        sell_price = str(query_sell_price_result[0][1]) + str(query_sell_price_result[0][2])
         purchase_price = str(query_purchase_price_result[0][0]) + str(query_purchase_price_result[0][1])
         self.coal_sell_price = sell_price
         self.coal_purchase_price = purchase_price
@@ -58,11 +60,11 @@ class CoalPriceDialog(QDialog):
         self.ui.coal_purchase_price_display.setText(self.coal_purchase_price)
 
     def init_compute_unit(self):
-        compute_ways = ['元/吨', '元/车']
+
         self.ui.purchase_compute_unit.clear()
         self.ui.sell_compute_unit.clear()
-        self.ui.purchase_compute_unit.addItems(compute_ways)
-        self.ui.sell_compute_unit.addItems(compute_ways)
+        self.ui.purchase_compute_unit.addItems(self.compute_ways)
+        self.ui.sell_compute_unit.addItems(self.compute_ways)
 
     def hide_purchase_price_related(self):
         self.ui.coal_purchase_price_display.hide()
@@ -115,3 +117,31 @@ class CoalPriceDialog(QDialog):
             self.show_sell_price_related()
         else:
             self.hide_sell_price_related()
+
+    def input_purchase_price(self):
+        print("new_purchase_price is", self.ui.purchase_price_input.text())
+        self.new_purchase_price = self.ui.purchase_price_input.text()
+
+    def input_sell_price(self):
+        print("new_sell_price is", self.ui.sell_price_input.text())
+        self.new_sell_price = self.ui.sell_price_input.text()
+
+    def on_purchase_compute_way_selected(self, item):
+        self.purchase_compute_way_selected = self.compute_ways[item]
+
+    def on_sell_compute_way_selected(self, item):
+        self.sell_compute_way_selected = self.compute_ways[item]
+
+    def update_price(self):
+        date = self.coal_price_change_date
+        selected = self.coal_sorts_selected
+        new_purchase_price = self.new_purchase_price
+        purchase_compute_way_selected = self.purchase_compute_way_selected
+        new_sell_price = self.new_sell_price
+        sell_compute_way_selected = self.purchase_compute_way_selected
+        info = "update price info:%s,%s,%s,%s,%s,%s" % (
+            date, selected, new_purchase_price, purchase_compute_way_selected,
+            new_sell_price, sell_compute_way_selected)
+        print(info)
+        CoalDbUtils().add_coal_record(date, selected, new_purchase_price, purchase_compute_way_selected,
+                                      new_sell_price, sell_compute_way_selected)

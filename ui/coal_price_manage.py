@@ -75,6 +75,11 @@ class Ui_CoalPrice(object):
         self.ok.clicked.connect(CoalPrice.accept)
         self.cancel.clicked.connect(CoalPrice.reject)
         self.coal_sorts.currentIndexChanged['int'].connect(CoalPrice.on_coal_sort_selected)
+        self.ok.clicked.connect(CoalPrice.update_price)
+        self.purchase_price_input.editingFinished.connect(CoalPrice.input_purchase_price)
+        self.sell_price_input.editingFinished.connect(CoalPrice.input_sell_price)
+        self.purchase_compute_unit.currentIndexChanged['int'].connect(CoalPrice.on_purchase_compute_way_selected)
+        self.sell_compute_unit.currentIndexChanged['int'].connect(CoalPrice.on_sell_compute_way_selected)
         QtCore.QMetaObject.connectSlotsByName(CoalPrice)
 
     def retranslateUi(self, CoalPrice):

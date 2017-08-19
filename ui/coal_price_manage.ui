@@ -331,11 +331,96 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ok</sender>
+   <signal>clicked()</signal>
+   <receiver>CoalPrice</receiver>
+   <slot>update_price()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>358</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>392</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>purchase_price_input</sender>
+   <signal>editingFinished()</signal>
+   <receiver>CoalPrice</receiver>
+   <slot>input_purchase_price()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>336</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>160</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sell_price_input</sender>
+   <signal>editingFinished()</signal>
+   <receiver>CoalPrice</receiver>
+   <slot>input_sell_price()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>361</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>585</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>purchase_compute_unit</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>CoalPrice</receiver>
+   <slot>on_purchase_compute_way_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>439</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sell_compute_unit</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>CoalPrice</receiver>
+   <slot>on_sell_compute_way_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>282</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>open_calendar()</slot>
   <slot>on_purchase_price_check_box_selected()</slot>
   <slot>on_sell_price_check_box_selected()</slot>
   <slot>on_coal_sort_selected()</slot>
+  <slot>update_price()</slot>
+  <slot>input_purchase_price()</slot>
+  <slot>input_sell_price()</slot>
+  <slot>on_purchase_compute_way_selected()</slot>
+  <slot>on_sell_compute_way_selected()</slot>
  </slots>
 </ui>

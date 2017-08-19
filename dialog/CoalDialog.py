@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.coal import Ui_Coal_Dialog
-from utils.sql.SqlUtils import SqlUtils
+from utils.sql.CoalDbUitls import CoalDbUtils
 
 
 class CoalDialog(QDialog):
@@ -62,7 +62,7 @@ class CoalDialog(QDialog):
         if coal_name in coal_name_set:
             QMessageBox.information(self, 'already add', '您已经添加过该煤种', QMessageBox.Yes)
         else:
-            utils = SqlUtils()
+            utils = CoalDbUtils()
             utils.add_coal_record(str(self.coal_add_date), coal_name, coal_purchase_price,
                                   self.purchase_price_compute_way_selected, coal_sell_price,
                                   self.sell_price_compute_way_selected)
