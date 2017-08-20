@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>记账宝</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="exit">
@@ -272,7 +272,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>这里动态显示售价</string>
+     <string>动态显示票售价</string>
     </property>
    </widget>
    <widget class="QLabel" name="weight_hint">
@@ -291,11 +291,50 @@
    <widget class="QListView" name="listView">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>30</y>
+      <x>420</x>
+      <y>40</y>
       <width>256</width>
       <height>231</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="date_hint_2">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>20</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>最近添加明细</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="no_coal_name_selected_hint">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>130</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>没有选择煤种</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="no_ticket_name_selected_hint">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>200</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>没有选择煤种</string>
     </property>
    </widget>
   </widget>
@@ -331,8 +370,8 @@
       <string>票价管理</string>
      </property>
     </widget>
-    <addaction name="menu_2"/>
     <addaction name="add_new_ticket"/>
+    <addaction name="menu_2"/>
     <addaction name="query_ticket_info"/>
    </widget>
    <widget class="QMenu" name="menu">
@@ -460,8 +499,8 @@
    <slot>exit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>232</x>
-     <y>469</y>
+     <x>352</x>
+     <y>289</y>
     </hint>
     <hint type="destinationlabel">
      <x>655</x>
@@ -497,7 +536,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>155</x>
-     <y>539</y>
+     <y>446</y>
     </hint>
    </hints>
   </connection>

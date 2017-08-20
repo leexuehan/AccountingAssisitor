@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+
 from dialog.AccountDialog import AccountDialog
 from dialog.CalendarDialog import CalendarDialog
 from dialog.CoalSortDialog import CoalSortDialog
@@ -32,7 +34,8 @@ class MainWindow(QMainWindow):
         self.ui.car_id_hint.hide()
         self.ui.person_name_hint.hide()
         self.ui.coal_sell_price_display.hide()
-        self.ui.ticket_sell_price_display.hide()
+        self.ui.no_coal_name_selected_hint.hide()
+        self.ui.no_ticket_name_selected_hint.hide()
         self.ui.weight_hint.hide()
 
         # init input params
@@ -49,6 +52,9 @@ class MainWindow(QMainWindow):
         self.ticket_sorts = []
         self.init_ticket_sorts_from_db()
 
+        # init list view
+        self.model = QStandardItemModel()
+
     def check_parmas_valid(self):
         if self.select_date is None:
             self.ui.date_hint.setVisible(True)
@@ -56,7 +62,7 @@ class MainWindow(QMainWindow):
             return False
         else:
             self.ui.date_hint.hide()
-        if self.person_name is None:
+        if self.person_name is None or self.person_name is '':
             self.ui.person_name_hint.setVisible(True)
             self.ui.person_name_hint.setStyleSheet('color:red;')
             return False
@@ -68,12 +74,25 @@ class MainWindow(QMainWindow):
             return False
         else:
             self.ui.car_id_hint.hide()
-        if self.weight_value is None:
+        if self.weight_value is None or self.weight_value is '':
             self.ui.weight_hint.setVisible(True)
             self.ui.weight_hint.setStyleSheet('color:red;')
             return False
         else:
             self.ui.weight_hint.hide()
+
+        if self.coal_sorts_selected is None:
+            self.ui.no_coal_name_selected_hint.setVisible(True)
+            self.ui.no_coal_name_selected_hint.setStyleSheet('color:red;')
+            return False
+        else:
+            self.ui.no_coal_name_selected_hint.hide()
+        if self.ticket_selected is None:
+            self.ui.no_ticket_name_selected_hint.setVisible(True)
+            self.ui.no_ticket_name_selected_hint.setStyleSheet('color:red;')
+            return False
+        else:
+            self.ui.no_ticket_name_selected_hint.hide()
         return True
 
     def refresh_coal_sorts_combox(self):
@@ -138,7 +157,18 @@ class MainWindow(QMainWindow):
         RecordDetailDbUtils().add_record_by_car_detail(self.select_date, self.person_name, self.car_id,
                                                        self.coal_sorts_selected,
                                                        self.weight_value, self.ticket_selected)
+        add_info = '添加日期：' + str(self.select_date) + '，客户名称：' + self.person_name + \
+                   '，车牌号：' + self.car_id + '，煤种：' + self.coal_sorts_selected \
+                   + '，吨位：' + str(self.weight_value) + '，票种：' + self.ticket_selected
+        self.add_item_to_list_view(add_info)
         QMessageBox.information(self, 'Success', '添加成功!', QMessageBox.Yes)
+
+    def add_item_to_list_view(self, add_info):
+        item = QStandardItem()
+        item.setText(add_info)
+        item.setEditable(False)
+        self.model.appendRow(item)
+        self.ui.listView.setModel(self.model)
 
     def on_date_selected(self):
         calendarDialog = CalendarDialog()
@@ -169,6 +199,7 @@ class MainWindow(QMainWindow):
     # menu actions below
     def on_compute_account(self):
         accountDialog = AccountDialog()
+        accountDialog.setModal(True)
         accountDialog.show()
         accountDialog.exec_()
 

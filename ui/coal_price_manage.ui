@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>741</width>
-    <height>443</height>
+    <width>932</width>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>煤价管理窗口</string>
+   <string>煤价管理</string>
   </property>
   <widget class="QPushButton" name="selectDate">
    <property name="geometry">
@@ -42,8 +42,8 @@
   <widget class="QLabel" name="coal_sell_price_display">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>220</y>
+     <x>190</x>
+     <y>260</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -68,8 +68,8 @@
   <widget class="QLabel" name="coal_purchase_price_display">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>160</y>
+     <x>190</x>
+     <y>150</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -81,8 +81,8 @@
   <widget class="QComboBox" name="purchase_compute_unit">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>160</y>
+     <x>290</x>
+     <y>180</y>
      <width>69</width>
      <height>22</height>
     </rect>
@@ -91,8 +91,8 @@
   <widget class="QLabel" name="coal_purchase_price_label">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>160</y>
+     <x>260</x>
+     <y>180</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -140,34 +140,34 @@
   <widget class="QCheckBox" name="purchase_price_check_box">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>160</y>
-     <width>71</width>
+     <x>60</x>
+     <y>150</y>
+     <width>121</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>进价</string>
+    <string>勾选修改进价</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="sell_price_check_box">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>220</y>
-     <width>71</width>
+     <x>60</x>
+     <y>260</y>
+     <width>101</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>售价</string>
+    <string>勾选修改售价</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="purchase_price_input">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>160</y>
+     <x>190</x>
+     <y>180</y>
      <width>71</width>
      <height>20</height>
     </rect>
@@ -176,8 +176,8 @@
   <widget class="QLineEdit" name="sell_price_input">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>220</y>
+     <x>190</x>
+     <y>280</y>
      <width>71</width>
      <height>20</height>
     </rect>
@@ -186,8 +186,8 @@
   <widget class="QLabel" name="coal_sell_price_label">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>220</y>
+     <x>260</x>
+     <y>280</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -199,8 +199,8 @@
   <widget class="QComboBox" name="sell_compute_unit">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>220</y>
+     <x>290</x>
+     <y>280</y>
      <width>69</width>
      <height>22</height>
     </rect>
@@ -209,35 +209,35 @@
   <widget class="QLabel" name="purchase_price_change_label">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>160</y>
-     <width>41</width>
-     <height>20</height>
+     <x>80</x>
+     <y>180</y>
+     <width>71</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>变更为</string>
+    <string>输入新价格</string>
    </property>
   </widget>
   <widget class="QLabel" name="sell_price_change_label">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>220</y>
-     <width>40</width>
+     <x>80</x>
+     <y>280</y>
+     <width>101</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>变更为</string>
+    <string>输入新价格</string>
    </property>
   </widget>
   <widget class="QListView" name="modify_detail_list">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>560</x>
      <y>40</y>
-     <width>256</width>
+     <width>361</width>
      <height>271</height>
     </rect>
    </property>
@@ -245,7 +245,7 @@
   <widget class="QLabel" name="modify_label">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>560</x>
      <y>20</y>
      <width>191</width>
      <height>20</height>
@@ -265,8 +265,8 @@
    <slot>open_calendar()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>127</x>
-     <y>107</y>
+     <x>77</x>
+     <y>57</y>
     </hint>
     <hint type="destinationlabel">
      <x>194</x>
@@ -281,8 +281,8 @@
    <slot>on_purchase_price_check_box_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>82</x>
-     <y>216</y>
+     <x>32</x>
+     <y>166</y>
     </hint>
     <hint type="destinationlabel">
      <x>235</x>
@@ -297,8 +297,8 @@
    <slot>on_sell_price_check_box_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>105</x>
-     <y>258</y>
+     <x>55</x>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>148</x>
@@ -313,8 +313,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>429</x>
-     <y>347</y>
+     <x>379</x>
+     <y>377</y>
     </hint>
     <hint type="destinationlabel">
      <x>466</x>
@@ -329,8 +329,8 @@
    <slot>on_coal_sort_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>225</x>
-     <y>146</y>
+     <x>175</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
      <x>461</x>
@@ -345,8 +345,8 @@
    <slot>update_price()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>345</y>
+     <x>308</x>
+     <y>375</y>
     </hint>
     <hint type="destinationlabel">
      <x>392</x>
@@ -361,8 +361,8 @@
    <slot>input_purchase_price()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>336</x>
-     <y>214</y>
+     <x>291</x>
+     <y>164</y>
     </hint>
     <hint type="destinationlabel">
      <x>388</x>
@@ -377,8 +377,8 @@
    <slot>input_sell_price()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>361</x>
-     <y>259</y>
+     <x>311</x>
+     <y>229</y>
     </hint>
     <hint type="destinationlabel">
      <x>585</x>
@@ -393,8 +393,8 @@
    <slot>on_purchase_compute_way_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>439</x>
-     <y>210</y>
+     <x>394</x>
+     <y>160</y>
     </hint>
     <hint type="destinationlabel">
      <x>549</x>
@@ -409,8 +409,8 @@
    <slot>on_sell_compute_way_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>259</y>
+     <x>409</x>
+     <y>229</y>
     </hint>
     <hint type="destinationlabel">
      <x>565</x>

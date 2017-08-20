@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
-from ui.ticket import Ui_Ticket_Dialog
+from ui.ticket_sort_manage import Ui_Ticket_Sort_Manage
 from utils.sql.TickeDbtUtils import TicketDbUtils
 
 
@@ -11,11 +11,15 @@ class TicketSortDialog(QDialog):
     def __init__(self, parent=None):
         super(TicketSortDialog, self).__init__(parent)
         # init ui
-        self.ui = Ui_Ticket_Dialog()
+        self.ui = Ui_Ticket_Sort_Manage()
         self.ui.setupUi(self)
 
         # init compute ways
         self.load_compute_ways()
+        # init list view
+        self.model = QStandardItemModel()
+        # init vars
+        self.ticket_add_date = None
 
     # 用此句柄来通知主界面相关内容更新
     def set_main_window_handler(self, main_window_handler):
@@ -37,32 +41,65 @@ class TicketSortDialog(QDialog):
 
     def on_ticket_add_date_selected(self):
         calendarDialog = CalendarDialog()
+        calendarDialog.setModal(True)
         calendarDialog.show()
         if calendarDialog.exec_():
             date = calendarDialog.date_time
             print("value get from calendar window is:" + date.strftime('%Y/%m/%d'))
-            self.ui.date_value_display.setPlainText(date.strftime('%Y/%m/%d'))
+            self.ui.select_date.setText(date.strftime('%Y/%m/%d'))
             self.ticket_add_date = date.strftime('%Y/%m/%d')
         calendarDialog.destroy()
 
     def on_ok(self):
-        ticket_name = self.ui.ticket_name_content.toPlainText()
-        ticket_purchase_price = self.ui.ticket_purchase_price_content.toPlainText()
-        ticket_sell_price = self.ui.ticket_sell_price_content.toPlainText()
-        print("add new ticket info (添加日期，票名，进价，进价计费方式，售价，售价计费方式):",
-              (self.ticket_add_date, ticket_name, ticket_purchase_price, self.purchase_price_compute_way_selected
-               , ticket_sell_price, self.sell_price_compute_way_selected))
         handler = self.main_window_handler
-        ticket_name_set = handler.ticket_sorts
-        # todo 检验输入是否缺少
+        ticket_info = self.valid_params(handler)
+        if ticket_info is False:
+            return
+        add_ticket_info = '添加日期：' + ticket_info[0] + '，票种名称：' + ticket_info[1] + \
+                          '，进价：' + ticket_info[2] + '，进价计费方式：' + ticket_info[3] + '，售价：' + ticket_info[4] \
+                          + '，售价计费方式：' + ticket_info[5]
+        utils = TicketDbUtils()
+        utils.add_ticket_record(ticket_info[0], ticket_info[1], ticket_info[2],
+                                ticket_info[3], ticket_info[4], ticket_info[5])
+        handler.ticket_sorts.append(ticket_info[1])
+        handler.refresh_ticket_sorts_combox()
+        self.add_item_to_list_view(add_ticket_info)
+        QMessageBox.information(self, 'add success', '添加票种成功', QMessageBox.Yes)
+
+    def valid_params(self, main_window_handler):
+        date = self.ticket_add_date
+        ticket_name = self.ui.ticket_name.text()
+        ticket_purchase_price = self.ui.purchase_price.text()
+        purchase_compute_way = self.purchase_price_compute_way_selected
+        ticket_sell_price = self.ui.sell_price.text()
+        sell_compute_way = self.sell_price_compute_way_selected
+        if date is None or date is '':
+            QMessageBox.critical(self, 'Warning', '没有输入日期', QMessageBox.Yes)
+            return False
+        if ticket_name is '':
+            QMessageBox.critical(self, 'Warning', '没有输入票种名称', QMessageBox.Yes)
+            return False
+        ticket_name_set = main_window_handler.ticket_sorts
         if ticket_name in ticket_name_set:
-            QMessageBox.information(self, 'already add', '您已经添加过该票种', QMessageBox.Yes)
-        else:
-            utils = TicketDbUtils()
-            utils.add_ticket_record(self.ticket_add_date, ticket_name, ticket_purchase_price,
-                                    self.purchase_price_compute_way_selected, ticket_sell_price,
-                                    self.sell_price_compute_way_selected)
-            handler.ticket_sorts.append(ticket_name)
-            handler.refresh_ticket_sorts_combox()
-            QMessageBox.information(self, 'add success', '添加票种成功', QMessageBox.Yes)
-        self.accept()
+            QMessageBox.warning(self, 'already add', '您已经添加过该票种', QMessageBox.Yes)
+            return False
+        if ticket_purchase_price is '':
+            QMessageBox.critical(self, 'Warning', '没有输入票种进价', QMessageBox.Yes)
+            return False
+        if purchase_compute_way is '':
+            QMessageBox.critical(self, 'Warning', '没有选择票种进价计价方式', QMessageBox.Yes)
+            return False
+        if ticket_sell_price is '':
+            QMessageBox.critical(self, 'Warning', '没有输入票种售价', QMessageBox.Yes)
+            return False
+        if sell_compute_way is '':
+            QMessageBox.critical(self, 'Warning', '没有选择票种售价计价方式', QMessageBox.Yes)
+            return False
+        return (date, ticket_name, ticket_purchase_price, purchase_compute_way, ticket_sell_price, sell_compute_way)
+
+    def add_item_to_list_view(self, info):
+        item = QStandardItem()
+        item.setText(info)
+        item.setEditable(False)
+        self.model.appendRow(item)
+        self.ui.add_detail_list.setModel(self.model)
