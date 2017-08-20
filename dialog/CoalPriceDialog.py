@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.coal_price_manage import Ui_CoalPrice
@@ -17,6 +17,12 @@ class CoalPriceDialog(QDialog):
         self.ui.setupUi(self)
 
         # init hide component
+        self.ui.select_date_empty_hint.hide()
+        self.ui.no_price_change_hint.hide()
+        self.ui.change_price_success_tip.hide()
+        self.ui.select_date_error_tip.hide()
+        self.ui.new_sell_price_empty_hint.hide()
+        self.ui.new_purchase_price_empty_hint.hide()
         self.hide_sell_price_related()
         self.hide_purchase_price_related()
 
@@ -27,8 +33,12 @@ class CoalPriceDialog(QDialog):
         self.init_coal_sorts_from_db()
         self.init_compute_unit()
 
-
         # init value of var
+        self.change_purchase_price = False
+        self.change_sell_price = False
+        self.coal_price_change_date = None
+        self.new_purchase_price = None
+        self.new_sell_price = None
 
     def init_coal_sorts_from_db(self):
         self.ui.coal_sorts.clear()
@@ -49,18 +59,19 @@ class CoalPriceDialog(QDialog):
         # 获得条目
         coalSorts = self.coal_sorts[item]
         self.coal_sorts_selected = coalSorts
+        self.refresh_coal_information_from_db(coalSorts)
+
+    def refresh_coal_information_from_db(self, coalSorts):
         utils = CoalDbUtils()
-        query_sell_price_result = utils.query_coal_latest_sell_price_by_name(coalSorts)
-        query_purchase_price_result = utils.query_coal_purchase_price_by_name(coalSorts)
-        sell_price = str(query_sell_price_result[0][1]) + str(query_sell_price_result[0][2])
-        purchase_price = str(query_purchase_price_result[0][0]) + str(query_purchase_price_result[0][1])
+        self.latest_price_info = utils.query_coal_latest_price_info_by_name(coalSorts)
+        self.latest_date = str(self.latest_price_info[0][0])
+        sell_price = str(self.latest_price_info[0][1]) + str(self.latest_price_info[0][2])
         self.coal_sell_price = sell_price
-        self.coal_purchase_price = purchase_price
+        self.coal_purchase_price = str(self.latest_price_info[0][3]) + str(self.latest_price_info[0][4])
         self.ui.coal_sell_price_display.setText(self.coal_sell_price)
         self.ui.coal_purchase_price_display.setText(self.coal_purchase_price)
 
     def init_compute_unit(self):
-
         self.ui.purchase_compute_unit.clear()
         self.ui.sell_compute_unit.clear()
         self.ui.purchase_compute_unit.addItems(self.compute_ways)
@@ -109,14 +120,18 @@ class CoalPriceDialog(QDialog):
     def on_purchase_price_check_box_selected(self, state):
         if state == Qt.Checked:
             self.show_purchase_price_related()
+            self.change_purchase_price = True
         else:
             self.hide_purchase_price_related()
+            self.change_purchase_price = False
 
     def on_sell_price_check_box_selected(self, state):
         if state == Qt.Checked:
             self.show_sell_price_related()
+            self.change_sell_price = True
         else:
             self.hide_sell_price_related()
+            self.change_sell_price = False
 
     def input_purchase_price(self):
         print("new_purchase_price is", self.ui.purchase_price_input.text())
@@ -132,16 +147,52 @@ class CoalPriceDialog(QDialog):
     def on_sell_compute_way_selected(self, item):
         self.sell_compute_way_selected = self.compute_ways[item]
 
+    # 判重：不能在一天之内变更价格
+    # 判小：只能往后更改价格
     def update_price(self):
         date = self.coal_price_change_date
+        if self.valid_date(date) is False:
+            return
         selected = self.coal_sorts_selected
-        new_purchase_price = self.new_purchase_price
-        purchase_compute_way_selected = self.purchase_compute_way_selected
-        new_sell_price = self.new_sell_price
-        sell_compute_way_selected = self.purchase_compute_way_selected
+        if self.change_sell_price is False and self.change_purchase_price is False:
+            self.ui.no_price_change_hint.setVisible(True)
+            return
+        if self.change_purchase_price is True:
+            if self.new_purchase_price is None:
+                self.ui.new_purchase_price_empty_hint.setVisible(True)
+                return
+            new_purchase_price = self.new_purchase_price
+            new_purchase_compute_way = self.purchase_compute_way_selected
+        else:
+            new_purchase_price = self.latest_price_info[0][3]
+            new_purchase_compute_way = self.latest_price_info[0][4]
+
+        if self.change_sell_price is True:
+            if self.new_sell_price is None:
+                self.ui.new_sell_price_empty_hint.setVisible(True)
+                return
+            new_sell_price = self.new_sell_price
+            new_sell_compute_way = self.sell_compute_way_selected
+        else:
+            new_sell_price = self.latest_price_info[0][1]
+            new_sell_compute_way = self.latest_price_info[0][2]
         info = "update price info:%s,%s,%s,%s,%s,%s" % (
-            date, selected, new_purchase_price, purchase_compute_way_selected,
-            new_sell_price, sell_compute_way_selected)
+            date, selected, new_purchase_price, new_purchase_compute_way,
+            new_sell_price, new_sell_compute_way)
         print(info)
-        CoalDbUtils().add_coal_record(date, selected, new_purchase_price, purchase_compute_way_selected,
-                                      new_sell_price, sell_compute_way_selected)
+        CoalDbUtils().add_coal_record(date, selected, new_purchase_price, new_purchase_compute_way,
+                                      new_sell_price, new_sell_compute_way)
+        self.refresh_coal_information_from_db(self.coal_sorts_selected)
+        QMessageBox.information(self, 'Success', '更改成功!', QMessageBox.Yes)
+        # self.ui.change_price_success_tip.setVisible(True)
+
+    def valid_date(self, date):
+        if date is None:
+            self.ui.select_date_empty_hint.setStyleSheet('color:red;')
+            self.ui.select_date_empty_hint.setVisible(True)
+            return False
+        if self.latest_date >= date:
+            self.ui.select_date_error_tip.setText('只能更改' + self.latest_date + '之后的价格')
+            self.ui.select_date_error_tip.setStyleSheet('color:red;')
+            self.ui.select_date_error_tip.setVisible(True)
+            return False

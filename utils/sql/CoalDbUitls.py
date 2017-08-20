@@ -4,10 +4,10 @@ from utils.sql.SqlUtils import SqlUtils
 
 
 class CoalDbUtils(SqlUtils):
-    def query_coal_latest_sell_price_by_name(self, coal_name):
+    def query_coal_latest_price_info_by_name(self, coal_name):
         conn = self.get_connection()
         cursor = conn.cursor()
-        sql = 'SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY FROM %s WHERE COAL_NAME IS "%s"' % (
+        sql = 'SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY,PURCHASE_PRICE,PURCHASE_COMPUTE_WAY FROM %s WHERE COAL_NAME IS "%s"' % (
             self.coal_table_name, coal_name)
         logging.info("execute sql:\n" + sql)
         cursor.execute(sql)

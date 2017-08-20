@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1343</width>
-    <height>732</height>
+    <width>730</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="exit">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>430</y>
+      <x>240</x>
+      <y>250</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -288,13 +288,23 @@
      <string>没有输入吨位</string>
     </property>
    </widget>
+   <widget class="QListView" name="listView">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>30</y>
+      <width>256</width>
+      <height>231</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1343</width>
+     <width>730</width>
      <height>19</height>
     </rect>
    </property>

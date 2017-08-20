@@ -115,7 +115,7 @@ class MainWindow(QMainWindow):
         # 获得条目
         coalSorts = self.coal_sorts[item]
         self.coal_sorts_selected = coalSorts
-        query_result = CoalDbUtils().query_coal_latest_sell_price_by_name(coalSorts)
+        query_result = CoalDbUtils().query_coal_latest_price_info_by_name(coalSorts)
         price_info = str(query_result[0][1]) + str(query_result[0][2])
         self.ui.coal_sell_price_display.setVisible(True)
         self.ui.coal_sell_price_display.setText(price_info)

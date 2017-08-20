@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
-    <height>425</height>
+    <width>741</width>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="selectDate">
    <property name="geometry">
     <rect>
-     <x>64</x>
-     <y>100</y>
+     <x>14</x>
+     <y>50</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QComboBox" name="coal_sorts">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>140</y>
+     <x>110</x>
+     <y>90</y>
      <width>131</width>
      <height>21</height>
     </rect>
@@ -42,8 +42,8 @@
   <widget class="QLabel" name="coal_sell_price_display">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>250</y>
+     <x>90</x>
+     <y>220</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -55,8 +55,8 @@
   <widget class="QLabel" name="coal_sort_label">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>140</y>
+     <x>40</x>
+     <y>90</y>
      <width>59</width>
      <height>16</height>
     </rect>
@@ -68,8 +68,8 @@
   <widget class="QLabel" name="coal_purchase_price_display">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>210</y>
+     <x>90</x>
+     <y>160</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -81,8 +81,8 @@
   <widget class="QComboBox" name="purchase_compute_unit">
    <property name="geometry">
     <rect>
-     <x>415</x>
-     <y>210</y>
+     <x>370</x>
+     <y>160</y>
      <width>69</width>
      <height>22</height>
     </rect>
@@ -91,8 +91,8 @@
   <widget class="QLabel" name="coal_purchase_price_label">
    <property name="geometry">
     <rect>
-     <x>385</x>
-     <y>210</y>
+     <x>340</x>
+     <y>160</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -104,8 +104,8 @@
   <widget class="QLineEdit" name="date_value_content">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>100</y>
+     <x>110</x>
+     <y>50</y>
      <width>151</width>
      <height>20</height>
     </rect>
@@ -114,8 +114,8 @@
   <widget class="QPushButton" name="ok">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>340</y>
+     <x>250</x>
+     <y>370</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -127,8 +127,8 @@
   <widget class="QPushButton" name="cancel">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>340</y>
+     <x>360</x>
+     <y>370</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -140,8 +140,8 @@
   <widget class="QCheckBox" name="purchase_price_check_box">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>210</y>
+     <x>30</x>
+     <y>160</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -153,8 +153,8 @@
   <widget class="QCheckBox" name="sell_price_check_box">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>250</y>
+     <x>30</x>
+     <y>220</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -166,8 +166,8 @@
   <widget class="QLineEdit" name="purchase_price_input">
    <property name="geometry">
     <rect>
-     <x>305</x>
-     <y>210</y>
+     <x>260</x>
+     <y>160</y>
      <width>71</width>
      <height>20</height>
     </rect>
@@ -176,8 +176,8 @@
   <widget class="QLineEdit" name="sell_price_input">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>250</y>
+     <x>260</x>
+     <y>220</y>
      <width>71</width>
      <height>20</height>
     </rect>
@@ -186,8 +186,8 @@
   <widget class="QLabel" name="coal_sell_price_label">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>250</y>
+     <x>340</x>
+     <y>220</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -199,8 +199,8 @@
   <widget class="QComboBox" name="sell_compute_unit">
    <property name="geometry">
     <rect>
-     <x>420</x>
-     <y>250</y>
+     <x>370</x>
+     <y>220</y>
      <width>69</width>
      <height>22</height>
     </rect>
@@ -209,8 +209,8 @@
   <widget class="QLabel" name="purchase_price_change_label">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>210</y>
+     <x>200</x>
+     <y>160</y>
      <width>41</width>
      <height>20</height>
     </rect>
@@ -222,14 +222,115 @@
   <widget class="QLabel" name="sell_price_change_label">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>250</y>
+     <x>200</x>
+     <y>220</y>
      <width>40</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>变更为</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="change_price_success_tip">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>340</y>
+     <width>281</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>更改煤价成功，可以继续更改，也可以点击返回退出</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="select_date_error_tip">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>50</y>
+     <width>191</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>只能更改2017/08/15以后的价格</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="select_date_empty_hint">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>30</y>
+     <width>191</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>请选择日期</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="no_price_change_hint">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>320</y>
+     <width>271</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>价格没有变化，请确认是否修改进价/售价</string>
+   </property>
+  </widget>
+  <widget class="QListView" name="modify_detail_list">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>40</y>
+     <width>256</width>
+     <height>271</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="modify_label">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>20</y>
+     <width>191</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改项</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="new_purchase_price_empty_hint">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>130</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>请输入新的进价</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="new_sell_price_empty_hint">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>190</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>请输入新的售价</string>
    </property>
   </widget>
  </widget>
@@ -280,22 +381,6 @@
     <hint type="destinationlabel">
      <x>148</x>
      <y>308</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ok</sender>
-   <signal>clicked()</signal>
-   <receiver>CoalPrice</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>332</x>
-     <y>353</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>220</x>
-     <y>360</y>
     </hint>
    </hints>
   </connection>

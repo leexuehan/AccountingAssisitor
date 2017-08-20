@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.ticket import Ui_Ticket_Dialog
-from utils.sql.SqlUtils import SqlUtils
 from utils.sql.TickeDbtUtils import TicketDbUtils
 
 
