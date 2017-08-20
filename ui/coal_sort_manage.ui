@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Coal_Dialog</class>
- <widget class="QDialog" name="Coal_Dialog">
+ <class>Coal_Sort_Manage</class>
+ <widget class="QDialog" name="Coal_Sort_Manage">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>583</width>
-    <height>290</height>
+    <width>743</width>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>煤种添加</string>
   </property>
   <widget class="QLabel" name="ticket_price_label_3">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>130</y>
+     <x>240</x>
+     <y>100</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -26,21 +26,11 @@
     <string>选择计价方式</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="coal_sell_price_content">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>170</y>
-     <width>71</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="coal_name_label">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>90</y>
+     <x>20</x>
+     <y>60</y>
      <width>91</width>
      <height>16</height>
     </rect>
@@ -49,21 +39,11 @@
     <string>输入煤种名称</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="coal_name_content">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>90</y>
-     <width>161</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QComboBox" name="sell_compute_way">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>170</y>
+     <x>320</x>
+     <y>140</y>
      <width>69</width>
      <height>22</height>
     </rect>
@@ -72,8 +52,8 @@
   <widget class="QComboBox" name="purchase_compute_way">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>130</y>
+     <x>320</x>
+     <y>100</y>
      <width>69</width>
      <height>22</height>
     </rect>
@@ -82,8 +62,8 @@
   <widget class="QLabel" name="ticket_price_label_4">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>170</y>
+     <x>240</x>
+     <y>140</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -95,8 +75,8 @@
   <widget class="QPushButton" name="select_date_btn">
    <property name="geometry">
     <rect>
-     <x>74</x>
-     <y>50</y>
+     <x>14</x>
+     <y>20</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -105,21 +85,11 @@
     <string>选择添加日期</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="coal_purchase_price_content">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>130</y>
-     <width>71</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="ticket_price_label">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>130</y>
+     <x>20</x>
+     <y>100</y>
      <width>91</width>
      <height>16</height>
     </rect>
@@ -131,8 +101,8 @@
   <widget class="QLabel" name="ticket_price_label_2">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>170</y>
+     <x>20</x>
+     <y>140</y>
      <width>91</width>
      <height>16</height>
     </rect>
@@ -141,34 +111,24 @@
     <string>输入煤种售价</string>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="date_value_display">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>50</y>
-     <width>161</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="confirm">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>250</y>
+     <x>110</x>
+     <y>230</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>确定</string>
+    <string>确定添加</string>
    </property>
   </widget>
   <widget class="QPushButton" name="cancel">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>250</y>
+     <x>230</x>
+     <y>230</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -177,18 +137,81 @@
     <string>取消</string>
    </property>
   </widget>
+  <widget class="QLineEdit" name="date_value_content">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>20</y>
+     <width>151</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="coal_sort_name">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>60</y>
+     <width>151</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="purchase_price">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>100</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="sell_price">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>140</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QListView" name="modify_detail_list">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>60</y>
+     <width>256</width>
+     <height>271</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="modify_label">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>30</y>
+     <width>191</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>最近添加项</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
   <connection>
    <sender>purchase_compute_way</sender>
    <signal>currentIndexChanged(int)</signal>
-   <receiver>Coal_Dialog</receiver>
+   <receiver>Coal_Sort_Manage</receiver>
    <slot>on_purchase_compute_way_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>416</x>
-     <y>132</y>
+     <x>356</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
      <x>441</x>
@@ -199,12 +222,12 @@
   <connection>
    <sender>sell_compute_way</sender>
    <signal>currentIndexChanged(int)</signal>
-   <receiver>Coal_Dialog</receiver>
+   <receiver>Coal_Sort_Manage</receiver>
    <slot>on_sell_compute_way_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>438</x>
-     <y>181</y>
+     <x>378</x>
+     <y>151</y>
     </hint>
     <hint type="destinationlabel">
      <x>470</x>
@@ -215,12 +238,12 @@
   <connection>
    <sender>select_date_btn</sender>
    <signal>clicked()</signal>
-   <receiver>Coal_Dialog</receiver>
+   <receiver>Coal_Sort_Manage</receiver>
    <slot>on_add_new_coal_date_selected()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>125</x>
-     <y>52</y>
+     <x>65</x>
+     <y>22</y>
     </hint>
     <hint type="destinationlabel">
      <x>175</x>
@@ -231,12 +254,12 @@
   <connection>
    <sender>confirm</sender>
    <signal>clicked()</signal>
-   <receiver>Coal_Dialog</receiver>
+   <receiver>Coal_Sort_Manage</receiver>
    <slot>add_new_coal()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>305</x>
-     <y>251</y>
+     <x>155</x>
+     <y>231</y>
     </hint>
     <hint type="destinationlabel">
      <x>244</x>
@@ -247,12 +270,12 @@
   <connection>
    <sender>cancel</sender>
    <signal>clicked()</signal>
-   <receiver>Coal_Dialog</receiver>
+   <receiver>Coal_Sort_Manage</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>392</x>
-     <y>258</y>
+     <x>242</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>360</x>

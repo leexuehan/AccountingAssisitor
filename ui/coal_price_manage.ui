@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>煤价管理窗口</string>
   </property>
   <widget class="QPushButton" name="selectDate">
    <property name="geometry">
@@ -232,58 +232,6 @@
     <string>变更为</string>
    </property>
   </widget>
-  <widget class="QLabel" name="change_price_success_tip">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>340</y>
-     <width>281</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>更改煤价成功，可以继续更改，也可以点击返回退出</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="select_date_error_tip">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>50</y>
-     <width>191</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>只能更改2017/08/15以后的价格</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="select_date_empty_hint">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>30</y>
-     <width>191</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>请选择日期</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="no_price_change_hint">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>320</y>
-     <width>271</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>价格没有变化，请确认是否修改进价/售价</string>
-   </property>
-  </widget>
   <widget class="QListView" name="modify_detail_list">
    <property name="geometry">
     <rect>
@@ -305,32 +253,6 @@
    </property>
    <property name="text">
     <string>修改项</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="new_purchase_price_empty_hint">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>130</y>
-     <width>101</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>请输入新的进价</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="new_sell_price_empty_hint">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>190</y>
-     <width>101</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>请输入新的售价</string>
    </property>
   </widget>
  </widget>

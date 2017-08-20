@@ -7,9 +7,9 @@ from ui.ticket import Ui_Ticket_Dialog
 from utils.sql.TickeDbtUtils import TicketDbUtils
 
 
-class TicketDialog(QDialog):
+class TicketSortDialog(QDialog):
     def __init__(self, parent=None):
-        super(TicketDialog, self).__init__(parent)
+        super(TicketSortDialog, self).__init__(parent)
         # init ui
         self.ui = Ui_Ticket_Dialog()
         self.ui.setupUi(self)

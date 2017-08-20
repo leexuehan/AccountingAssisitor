@@ -3,9 +3,9 @@ import logging
 
 from dialog.AccountDialog import AccountDialog
 from dialog.CalendarDialog import CalendarDialog
-from dialog.CoalDialog import CoalDialog
+from dialog.CoalSortDialog import CoalSortDialog
 from dialog.CoalPriceDialog import CoalPriceDialog
-from dialog.TicketDialog import TicketDialog
+from dialog.TicketSortDialog import TicketSortDialog
 from ui.main_window import Ui_MainWindow
 from utils.log.LogUtils import LogUtils
 from utils.sql.CoalDbUitls import CoalDbUtils
@@ -136,12 +136,13 @@ class MainWindow(QMainWindow):
             return
         # 数据库存一份，excel 存一份
         RecordDetailDbUtils().add_record_by_car_detail(self.select_date, self.person_name, self.car_id,
-                                            self.coal_sorts_selected,
-                                            self.weight_value, self.ticket_selected)
+                                                       self.coal_sorts_selected,
+                                                       self.weight_value, self.ticket_selected)
         QMessageBox.information(self, 'Success', '添加成功!', QMessageBox.Yes)
 
     def on_date_selected(self):
         calendarDialog = CalendarDialog()
+        calendarDialog.setModal(True)
         calendarDialog.show()
         if calendarDialog.exec_():
             date = calendarDialog.date_time
@@ -175,19 +176,22 @@ class MainWindow(QMainWindow):
         QMessageBox.information(self, 'invoke help', '帮助内容', QMessageBox.Yes)
 
     def on_add_new_ticket(self):
-        ticketDialog = TicketDialog()
+        ticketDialog = TicketSortDialog()
         ticketDialog.set_main_window_handler(self)
+        ticketDialog.setModal(True)
         ticketDialog.show()
         ticketDialog.exec_()
 
     def on_add_new_coal(self):
-        coalDialog = CoalDialog()
+        coalDialog = CoalSortDialog()
         coalDialog.set_main_window_handler(self)
+        coalDialog.setModal(True)
         coalDialog.show()
         coalDialog.exec_()
 
     def open_coal_price_manage_dialog(self):
         coalPriceDialog = CoalPriceDialog()
+        coalPriceDialog.setModal(True)
         coalPriceDialog.show()
         coalPriceDialog.exec_()
 
