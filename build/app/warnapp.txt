@@ -1,17 +1,17 @@
-missing module named resource - imported by posix, D:\AccountAssistor\dialog\app.py
-missing module named posix - imported by os, D:\AccountAssistor\dialog\app.py
-missing module named _posixsubprocess - imported by subprocess, D:\AccountAssistor\dialog\app.py
-missing module named 'org.python' - imported by pickle, D:\AccountAssistor\dialog\app.py, xml.sax
-missing module named ce - imported by os, D:\AccountAssistor\dialog\app.py
-missing module named readline - imported by cmd, code, pdb, D:\AccountAssistor\dialog\app.py
-excluded module named _frozen_importlib - imported by importlib, D:\AccountAssistor\dialog\app.py
-missing module named _winreg - imported by platform, D:\AccountAssistor\dialog\app.py
+missing module named resource - imported by posix, D:\AccountingAssisitor\dialog\app.py
+missing module named posix - imported by os, D:\AccountingAssisitor\dialog\app.py
+missing module named _posixsubprocess - imported by subprocess, D:\AccountingAssisitor\dialog\app.py
+missing module named 'org.python' - imported by pickle, D:\AccountingAssisitor\dialog\app.py, xml.sax
+missing module named ce - imported by os, D:\AccountingAssisitor\dialog\app.py
+missing module named readline - imported by cmd, code, pdb, D:\AccountingAssisitor\dialog\app.py
+excluded module named _frozen_importlib - imported by importlib, D:\AccountingAssisitor\dialog\app.py
+missing module named _winreg - imported by platform, D:\AccountingAssisitor\dialog\app.py
 missing module named _scproxy - imported by urllib.request
-missing module named java - imported by platform, D:\AccountAssistor\dialog\app.py
-missing module named 'java.lang' - imported by platform, D:\AccountAssistor\dialog\app.py, xml.sax._exceptions
-missing module named vms_lib - imported by platform, D:\AccountAssistor\dialog\app.py
-missing module named termios - imported by tty, D:\AccountAssistor\dialog\app.py, getpass
-missing module named _dummy_threading - imported by dummy_threading, D:\AccountAssistor\dialog\app.py
-missing module named grp - imported by tarfile, shutil, D:\AccountAssistor\dialog\app.py
-missing module named org - imported by copy, D:\AccountAssistor\dialog\app.py
-missing module named pwd - imported by posixpath, tarfile, shutil, http.server, webbrowser, D:\AccountAssistor\dialog\app.py, getpass
+missing module named java - imported by platform, D:\AccountingAssisitor\dialog\app.py
+missing module named 'java.lang' - imported by platform, D:\AccountingAssisitor\dialog\app.py, xml.sax._exceptions
+missing module named vms_lib - imported by platform, D:\AccountingAssisitor\dialog\app.py
+missing module named termios - imported by tty, D:\AccountingAssisitor\dialog\app.py, getpass
+missing module named _dummy_threading - imported by dummy_threading, D:\AccountingAssisitor\dialog\app.py
+missing module named grp - imported by tarfile, shutil, D:\AccountingAssisitor\dialog\app.py
+missing module named pwd - imported by posixpath, tarfile, shutil, http.server, webbrowser, D:\AccountingAssisitor\dialog\app.py, getpass
+missing module named org - imported by copy, D:\AccountingAssisitor\dialog\app.py

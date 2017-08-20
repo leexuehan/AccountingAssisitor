@@ -1,15 +1,40 @@
-2017-08-13 00:07:32,038 - SqlUtils.py[line:108] - INFO: execute sql:SELECT COAL_NAME FROM coals
-2017-08-13 00:07:32,038 - SqlUtils.py[line:111] - INFO: [('洗三',), ('黑莓',)]
-2017-08-13 00:07:32,038 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "洗三"
-2017-08-13 00:07:32,038 - SqlUtils.py[line:122] - INFO: [(321.0, '元/吨')]
-2017-08-13 00:07:32,038 - SqlUtils.py[line:97] - INFO: execute sql:SELECT TICKET_NAME FROM tickets
-2017-08-13 00:07:32,038 - SqlUtils.py[line:100] - INFO: [('example1',), ('我我',), ('大票',), ('小票',), ('kkk',), ('中国',), ('黑哥们',), ('名称',)]
-2017-08-13 00:07:36,054 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "黑莓"
-2017-08-13 00:07:36,054 - SqlUtils.py[line:122] - INFO: [(33.0, '元/吨')]
-2017-08-13 00:07:37,976 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "洗三"
-2017-08-13 00:07:37,976 - SqlUtils.py[line:122] - INFO: [(321.0, '元/吨')]
-2017-08-13 00:07:39,054 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "黑莓"
-2017-08-13 00:07:39,054 - SqlUtils.py[line:122] - INFO: [(33.0, '元/吨')]
-2017-08-13 00:07:53,226 - SqlUtils.py[line:119] - INFO: execute sql:SELECT SELL_PRICE,SELL_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "洗三"
-2017-08-13 00:07:53,226 - SqlUtils.py[line:122] - INFO: [(321.0, '元/吨')]
-2017-08-13 00:07:56,897 - App.py[line:112] - INFO: ready to add record to db
+2017-08-20 21:12:28,718 - SqlUtils.py[line:47] - INFO: CREATE TABLE IF NOT EXISTS coals 
+                                (DATE TEXT NOT NULL,
+                                 COAL_NAME TEXT NOT NULL,
+                                 PURCHASE_PRICE REAL,
+                                 PURCHASE_COMPUTE_WAY TEXT,
+                                 SELL_PRICE REAL,
+                                 SELL_COMPUTE_WAY TEXT)
+2017-08-20 21:12:28,718 - SqlUtils.py[line:36] - INFO: CREATE TABLE IF NOT EXISTS tickets
+                     (DATE TEXT NOT NULL,
+                      TICKET_NAME TEXT NOT NULL,
+                      PURCHASE_PRICE REAL, 
+                      PURCHASE_COMPUTE_WAY TEXT,
+                      SELL_PRICE REAL,
+                      SELL_COMPUTE_WAY TEXT)
+2017-08-20 21:12:28,718 - SqlUtils.py[line:58] - INFO: CREATE TABLE IF NOT EXISTS record_by_car_detail 
+                                (DATE TEXT NOT NULL,
+                                 PERSON_NAME TEXT NOT NULL,
+                                 CAR_ID TEXT,
+                                 COAL_NAME TEXT,
+                                 WEIGHT_VALUE REAL,
+                                 TICKET_NAME TEXT)
+2017-08-20 21:12:28,765 - CoalDbUitls.py[line:34] - INFO: execute sql:SELECT DISTINCT COAL_NAME FROM coals
+2017-08-20 21:12:28,765 - CoalDbUitls.py[line:37] - INFO: [('大块',), ('中块',), ('三三',), ('名字',), ('面煤',), ('洗煤',), ('散散',)]
+2017-08-20 21:12:28,765 - CoalDbUitls.py[line:12] - INFO: execute sql:
+SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY,PURCHASE_PRICE,PURCHASE_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "大块"
+2017-08-20 21:12:28,765 - CoalDbUitls.py[line:15] - INFO: [('2017/08/26', 222.0, '元/吨', 332.0, '元/吨')]
+2017-08-20 21:12:28,765 - TickeDbtUtils.py[line:23] - INFO: execute sql:SELECT TICKET_NAME FROM tickets
+2017-08-20 21:12:28,765 - TickeDbtUtils.py[line:26] - INFO: [('小票',), ('散票',), ('撒三',), ('撒三yi ',)]
+2017-08-20 21:12:28,765 - TickeDbtUtils.py[line:35] - INFO: execute sql:
+SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY FROM tickets WHERE TICKET_NAME IS "小票"
+2017-08-20 21:12:28,765 - TickeDbtUtils.py[line:38] - INFO: [('2017/08/20', 4343.0, '元/吨')]
+2017-08-20 21:12:30,375 - CoalDbUitls.py[line:34] - INFO: execute sql:SELECT DISTINCT COAL_NAME FROM coals
+2017-08-20 21:12:30,375 - CoalDbUitls.py[line:37] - INFO: [('大块',), ('中块',), ('三三',), ('名字',), ('面煤',), ('洗煤',), ('散散',)]
+2017-08-20 21:12:30,375 - CoalDbUitls.py[line:12] - INFO: execute sql:
+SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY,PURCHASE_PRICE,PURCHASE_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "大块"
+2017-08-20 21:12:30,375 - CoalDbUitls.py[line:15] - INFO: [('2017/08/26', 222.0, '元/吨', 332.0, '元/吨')]
+2017-08-20 21:12:58,359 - CoalDbUitls.py[line:25] - INFO: execute sql:INSERT INTO coals VALUES(?,?,?,?,?,?)
+2017-08-20 21:12:58,437 - CoalDbUitls.py[line:12] - INFO: execute sql:
+SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY,PURCHASE_PRICE,PURCHASE_COMPUTE_WAY FROM coals WHERE COAL_NAME IS "大块"
+2017-08-20 21:12:58,437 - CoalDbUitls.py[line:15] - INFO: [('2017/08/31', 222.0, '元/吨', 555.0, '元/吨')]

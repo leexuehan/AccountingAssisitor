@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['D:\\AccountAssistor\\dialog\\app.py'],
-             pathex=['G:\\Python34\\Lib\\site-packages\\PyQt5', 'D:\\AccountAssistor'],
+a = Analysis(['D:\\AccountingAssisitor\\dialog\\app.py'],
+             pathex=['G:\\Python34\\Lib\\site-packages\\PyQt5', 'D:\\AccountingAssisitor'],
              binaries=[],
              datas=[],
              hiddenimports=[],
