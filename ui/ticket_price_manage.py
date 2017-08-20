@@ -1,0 +1,93 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'ticket_price_manage.ui'
+#
+# Created by: PyQt5 UI code generator 5.5
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_Ticket_Price(object):
+    def setupUi(self, Ticket_Price):
+        Ticket_Price.setObjectName("Ticket_Price")
+        Ticket_Price.resize(558, 314)
+        self.date_value_content = QtWidgets.QLineEdit(Ticket_Price)
+        self.date_value_content.setGeometry(QtCore.QRect(140, 30, 151, 20))
+        self.date_value_content.setObjectName("date_value_content")
+        self.purchase_price_check_box = QtWidgets.QCheckBox(Ticket_Price)
+        self.purchase_price_check_box.setGeometry(QtCore.QRect(60, 140, 71, 16))
+        self.purchase_price_check_box.setObjectName("purchase_price_check_box")
+        self.selectDate = QtWidgets.QPushButton(Ticket_Price)
+        self.selectDate.setGeometry(QtCore.QRect(44, 30, 81, 23))
+        self.selectDate.setObjectName("selectDate")
+        self.cancel = QtWidgets.QPushButton(Ticket_Price)
+        self.cancel.setGeometry(QtCore.QRect(390, 270, 81, 23))
+        self.cancel.setObjectName("cancel")
+        self.purchase_price_change_label = QtWidgets.QLabel(Ticket_Price)
+        self.purchase_price_change_label.setGeometry(QtCore.QRect(230, 140, 41, 20))
+        self.purchase_price_change_label.setObjectName("purchase_price_change_label")
+        self.purchase_compute_unit = QtWidgets.QComboBox(Ticket_Price)
+        self.purchase_compute_unit.setGeometry(QtCore.QRect(395, 140, 69, 22))
+        self.purchase_compute_unit.setObjectName("purchase_compute_unit")
+        self.sell_compute_unit = QtWidgets.QComboBox(Ticket_Price)
+        self.sell_compute_unit.setGeometry(QtCore.QRect(400, 180, 69, 22))
+        self.sell_compute_unit.setObjectName("sell_compute_unit")
+        self.coal_purchase_price_label = QtWidgets.QLabel(Ticket_Price)
+        self.coal_purchase_price_label.setGeometry(QtCore.QRect(365, 140, 31, 16))
+        self.coal_purchase_price_label.setObjectName("coal_purchase_price_label")
+        self.ticket_sorts = QtWidgets.QComboBox(Ticket_Price)
+        self.ticket_sorts.setGeometry(QtCore.QRect(140, 70, 131, 21))
+        self.ticket_sorts.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToMinimumContentsLength)
+        self.ticket_sorts.setObjectName("ticket_sorts")
+        self.ticket_sell_price_display = QtWidgets.QLabel(Ticket_Price)
+        self.ticket_sell_price_display.setGeometry(QtCore.QRect(120, 180, 101, 20))
+        self.ticket_sell_price_display.setObjectName("ticket_sell_price_display")
+        self.ticket_purchase_price_display = QtWidgets.QLabel(Ticket_Price)
+        self.ticket_purchase_price_display.setGeometry(QtCore.QRect(120, 140, 101, 20))
+        self.ticket_purchase_price_display.setObjectName("ticket_purchase_price_display")
+        self.ok = QtWidgets.QPushButton(Ticket_Price)
+        self.ok.setGeometry(QtCore.QRect(280, 270, 81, 23))
+        self.ok.setObjectName("ok")
+        self.sell_price_change_label = QtWidgets.QLabel(Ticket_Price)
+        self.sell_price_change_label.setGeometry(QtCore.QRect(230, 180, 40, 20))
+        self.sell_price_change_label.setObjectName("sell_price_change_label")
+        self.ticket_sort_label = QtWidgets.QLabel(Ticket_Price)
+        self.ticket_sort_label.setGeometry(QtCore.QRect(70, 70, 59, 16))
+        self.ticket_sort_label.setObjectName("ticket_sort_label")
+        self.sell_price_check_box = QtWidgets.QCheckBox(Ticket_Price)
+        self.sell_price_check_box.setGeometry(QtCore.QRect(60, 180, 71, 16))
+        self.sell_price_check_box.setObjectName("sell_price_check_box")
+        self.coal_sell_price_label = QtWidgets.QLabel(Ticket_Price)
+        self.coal_sell_price_label.setGeometry(QtCore.QRect(370, 180, 31, 16))
+        self.coal_sell_price_label.setObjectName("coal_sell_price_label")
+        self.purchase_price_input = QtWidgets.QLineEdit(Ticket_Price)
+        self.purchase_price_input.setGeometry(QtCore.QRect(285, 140, 71, 20))
+        self.purchase_price_input.setObjectName("purchase_price_input")
+        self.sell_price_input = QtWidgets.QLineEdit(Ticket_Price)
+        self.sell_price_input.setGeometry(QtCore.QRect(290, 180, 71, 20))
+        self.sell_price_input.setObjectName("sell_price_input")
+        self.success_tip = QtWidgets.QLabel(Ticket_Price)
+        self.success_tip.setGeometry(QtCore.QRect(150, 240, 281, 20))
+        self.success_tip.setObjectName("success_tip")
+
+        self.retranslateUi(Ticket_Price)
+        QtCore.QMetaObject.connectSlotsByName(Ticket_Price)
+
+    def retranslateUi(self, Ticket_Price):
+        _translate = QtCore.QCoreApplication.translate
+        Ticket_Price.setWindowTitle(_translate("Ticket_Price", "Dialog"))
+        self.purchase_price_check_box.setText(_translate("Ticket_Price", "进价"))
+        self.selectDate.setText(_translate("Ticket_Price", "点击选择日期"))
+        self.cancel.setText(_translate("Ticket_Price", "返回"))
+        self.purchase_price_change_label.setText(_translate("Ticket_Price", "变更为"))
+        self.coal_purchase_price_label.setText(_translate("Ticket_Price", "单位"))
+        self.ticket_sell_price_display.setText(_translate("Ticket_Price", "这里动态显示售价"))
+        self.ticket_purchase_price_display.setText(_translate("Ticket_Price", "这里动态显示进价"))
+        self.ok.setText(_translate("Ticket_Price", "确定更改"))
+        self.sell_price_change_label.setText(_translate("Ticket_Price", "变更为"))
+        self.ticket_sort_label.setText(_translate("Ticket_Price", "选择票种"))
+        self.sell_price_check_box.setText(_translate("Ticket_Price", "售价"))
+        self.coal_sell_price_label.setText(_translate("Ticket_Price", "单位"))
+        self.success_tip.setText(_translate("Ticket_Price", "更改票价成功，可以继续更改，也可以点击返回退出"))
+
