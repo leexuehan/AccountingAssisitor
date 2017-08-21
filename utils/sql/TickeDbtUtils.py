@@ -27,10 +27,10 @@ class TicketDbUtils(SqlUtils):
         conn.close()
         return fetch_result
 
-    def query_latest_ticket_sell_price_by_name(self, ticket_name):
+    def query_latest_price_info_by_name(self, ticket_name):
         conn = self.get_connection()
         cursor = conn.cursor()
-        sql = 'SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY FROM %s WHERE TICKET_NAME IS "%s"' % (
+        sql = 'SELECT MAX(DATE),SELL_PRICE,SELL_COMPUTE_WAY,PURCHASE_PRICE,PURCHASE_COMPUTE_WAY FROM %s WHERE TICKET_NAME IS "%s"' % (
             self.ticket_table_name, ticket_name)
         logging.info("execute sql:\n" + sql)
         cursor.execute(sql)

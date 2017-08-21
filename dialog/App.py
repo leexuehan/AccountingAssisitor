@@ -7,6 +7,7 @@ from dialog.AccountDialog import AccountDialog
 from dialog.CalendarDialog import CalendarDialog
 from dialog.CoalSortDialog import CoalSortDialog
 from dialog.CoalPriceDialog import CoalPriceDialog
+from dialog.TicketPriceDialog import TicketPriceDialog
 from dialog.TicketSortDialog import TicketSortDialog
 from ui.main_window import Ui_MainWindow
 from utils.log.LogUtils import LogUtils
@@ -142,7 +143,7 @@ class MainWindow(QMainWindow):
     def on_ticket_selected(self, item):
         ticket_name = self.ticket_sorts[item]
         self.ticket_selected = ticket_name
-        query_result = TicketDbUtils().query_latest_ticket_sell_price_by_name(ticket_name)
+        query_result = TicketDbUtils().query_latest_price_info_by_name(ticket_name)
         price_info = str(query_result[0][1]) + str(query_result[0][2])
         self.ui.ticket_sell_price_display.setVisible(True)
         self.ui.ticket_sell_price_display.setText(price_info)
@@ -225,6 +226,12 @@ class MainWindow(QMainWindow):
         coalPriceDialog.setModal(True)
         coalPriceDialog.show()
         coalPriceDialog.exec_()
+
+    def open_ticket_price_manage_dialog(self):
+        ticketPriceDialog = TicketPriceDialog()
+        ticketPriceDialog.setModal(True)
+        ticketPriceDialog.show()
+        ticketPriceDialog.exec_()
 
 
 if __name__ == '__main__':

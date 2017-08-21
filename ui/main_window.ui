@@ -365,14 +365,9 @@
     <property name="title">
      <string>票种管理</string>
     </property>
-    <widget class="QMenu" name="menu_2">
-     <property name="title">
-      <string>票价管理</string>
-     </property>
-    </widget>
     <addaction name="add_new_ticket"/>
-    <addaction name="menu_2"/>
     <addaction name="query_ticket_info"/>
+    <addaction name="ticket_price_manage_2"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
@@ -471,6 +466,11 @@
   <action name="coal_price_management">
    <property name="text">
     <string>煤价管理</string>
+   </property>
+  </action>
+  <action name="ticket_price_manage_2">
+   <property name="text">
+    <string>票价管理</string>
    </property>
   </action>
  </widget>
@@ -668,6 +668,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ticket_price_manage_2</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open_ticket_price_manage_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>112</x>
+     <y>35</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>223</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>signal1()</signal>
@@ -690,5 +706,6 @@
   <slot>on_add_new_coal()</slot>
   <slot>on_compute_account()</slot>
   <slot>open_coal_price_manage_dialog()</slot>
+  <slot>open_ticket_price_manage_dialog()</slot>
  </slots>
 </ui>
