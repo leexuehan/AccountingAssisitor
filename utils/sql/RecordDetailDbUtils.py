@@ -4,16 +4,48 @@ from utils.sql.SqlUtils import SqlUtils
 
 
 class RecordDetailDbUtils(SqlUtils):
-    def add_record_by_car_detail(self, date, person_name, car_id, coal_name, weight_value, ticket_name):
+    def add_record_by_car_detail(self,
+                                 date,
+                                 person_name,
+                                 car_id,
+                                 coal_name,
+                                 coal_sell_price,
+                                 coal_sell_compute_way,
+                                 coal_fund,
+                                 weight_value,
+                                 ticket_name,
+                                 ticket_sell_price,
+                                 ticket_sell_compute_way,
+                                 ticket_sell_fund,
+                                 should_take_count,
+                                 profit):
         conn = self.get_connection()
         cursor = conn.cursor()
-        record_by_car = (date, person_name, car_id, coal_name, weight_value, ticket_name)
+        record_by_car = (date, person_name, car_id,
+                         coal_name, coal_sell_price, coal_sell_compute_way,
+                         coal_fund, weight_value, ticket_name,
+                         ticket_sell_price, ticket_sell_compute_way, ticket_sell_fund,
+                         should_take_count, profit)
         logging.info("record info is " + str(record_by_car))
-        sql = 'INSERT INTO %s VALUES(?,?,?,?,?,?)' % self.record_by_car_table_name
-        logging.info("execute sql:" + sql)
+        sql = 'INSERT INTO %s VALUES(?,?,?,?,?' \
+              ',?,?,?,?,?' \
+              ',?,?,?,?)' % self.record_by_car_table_name
+        logging.info("execute sql:\n" + sql)
+        print("execute sql:\n" + sql)
         cursor.execute(sql, record_by_car)
         conn.commit()
         conn.close()
+
+    def query_all_records(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        sql = 'SELECT * FROM %s' % self.record_by_car_table_name
+        logging.info("execute sql:\n" + sql)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        return results
 
     def query_all_person_names(self):
         conn = self.get_connection()
@@ -25,3 +57,8 @@ class RecordDetailDbUtils(SqlUtils):
         logging.info(results)
         conn.close()
         return results
+
+
+if __name__ == '__main__':
+    results = RecordDetailDbUtils().query_all_records()
+    print(results)

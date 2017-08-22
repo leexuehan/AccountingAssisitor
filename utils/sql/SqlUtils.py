@@ -53,8 +53,16 @@ class SqlUtils(object):
                                  PERSON_NAME TEXT NOT NULL,
                                  CAR_ID TEXT,
                                  COAL_NAME TEXT,
+                                 COAL_SELL_PRICE REAL,
+                                 COAL_SELL_COMPUTE_WAY TEXT,
+                                 COAL_FUND REAL,
                                  WEIGHT_VALUE REAL,
-                                 TICKET_NAME TEXT)''' % self.record_by_car_table_name
+                                 TICKET_NAME TEXT,
+                                 TICKET_SELL_PRICE REAL,
+                                 TICKET_SELL_COMPUTE_WAY TEXT,
+                                 TICKET_SELL_FUND REAL,
+                                 SHOULD_TAKE_COUNT REAL,
+                                 PROFIT REAL)''' % self.record_by_car_table_name
         logging.info(create_table_sql)
         cursor.execute(create_table_sql)
 

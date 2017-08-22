@@ -64,7 +64,7 @@ class TicketPriceDialog(QDialog):
         self.ui.ticket_purchase_price_display.setText(self.ticket_purchase_price)
         self.ui.purchase_price_input.setVisible(True)
         self.ui.purchase_compute_unit.setVisible(True)
-        self.ui.purchase_unit_label.setVisible(True)
+        self.ui.input_new_purchase_price_label.setVisible(True)
 
     def init_ticket_sorts_from_db(self):
         self.ui.ticket_sorts.clear()
