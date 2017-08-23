@@ -3,7 +3,10 @@ import os
 
 import xlrd
 import xlwt
+from PyQt5.QtWidgets import QMessageBox
 from xlutils.copy import copy
+
+from utils.sql.RecordDetailDbUtils import RecordDetailDbUtils
 
 
 class ExcelOps(object):
@@ -11,6 +14,50 @@ class ExcelOps(object):
         self.totalColumns = 0
         self.totalRows = 0
         self.sheet = None
+
+    def generate_record_detail_by_car_excel(self, records, start_date, end_date):
+        path = '账目'
+        file_name = '逐车明细' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
+        if os.path.exists(path + '\\' + file_name):
+            QMessageBox.critical(self, "Critical", self.tr('逐车明细账目已经存在，如想重新生成，请删除该文件后重试'))
+            return
+        workbook = xlwt.Workbook()
+        sheet = workbook.add_sheet('逐车明细', cell_overwrite_ok=True)
+        sheet.write(0, 0, '序号')
+        sheet.write(0, 1, '日期')
+        sheet.write(0, 2, '客户名称')
+        sheet.write(0, 3, '车号')
+        sheet.write(0, 4, '煤种')
+        sheet.write(0, 5, '煤种单价')
+        sheet.write(0, 6, '煤种计价方式')
+        sheet.write(0, 7, '煤款')
+        sheet.write(0, 8, '吨位')
+        sheet.write(0, 9, '票种')
+        sheet.write(0, 10, '票种单价')
+        sheet.write(0, 11, '票种计价方式')
+        sheet.write(0, 12, '票款')
+        sheet.write(0, 13, '应收')
+        sheet.write(0, 14, '利润')
+        row = 1
+        for record in records:
+            column = 1
+            sheet.write(row, 0, row)
+            for item in record:
+                sheet.write(row, column, item)
+                column += 1
+            row += 1
+        # 最后几行 写吨位合计、煤款合计、利润合计
+        results = RecordDetailDbUtils().query_total_tons_coalfunds_profit()
+        total_tons = results[0][0]
+        total_coal_funds = results[0][1]
+        total_profit = results[0][2]
+        sheet.write(row, 0, '吨位合计')
+        sheet.write(row, 1, total_tons)
+        sheet.write(row + 1, 0, '煤款合计')
+        sheet.write(row + 1, 1, total_coal_funds)
+        sheet.write(row + 2, 0, '利润合计')
+        sheet.write(row + 2, 1, total_profit)
+        workbook.save(path + '\\' + file_name)
 
     def generate_param_table(self):
         if os.path.exists('参数表.xls'):

@@ -163,44 +163,31 @@ class MainWindow(QMainWindow):
         if self.check_parmas_valid() is False:
             return
         # 数据库存一份，excel 存一份
-        if self.coal_sell_compute_way == '元/车':
-            coal_sell_fund = 1 * self.coal_sell_price
-        else:
-            coal_sell_fund = self.weight_value * self.coal_sell_price
+        coal_sell_fund = self.get_coal_sell_fund()
+        coal_purchase_fund = self.get_coal_purchase_fund()
+        ticket_sell_fund = self.get_ticket_sell_fund()
+        ticket_purchase_fund = self.get_ticket_purchase_fund()
 
-        if self.coal_purchase_compute_way == '元/车':
-            coal_purchase_fund = 1 * self.coal_purchase_price
-        else:
-            coal_purchase_fund = self.weight_value * self.coal_purchase_price
-
-        if self.ticket_sell_compute_way == '元/车':
-            ticket_sell_fund = 1 * self.coal_sell_price
-        else:
-            ticket_sell_fund = self.weight_value * self.ticket_sell_price
-
-        if self.ticket_purchase_compute_way == '元/车':
-            ticket_purchase_fund = 1 * self.ticket_purchase_price
-        else:
-            ticket_purchase_fund = self.weight_value * self.ticket_purchase_price
-
+        # 应收 = 煤售价 + 票售价
         should_take_count = coal_sell_fund + ticket_sell_fund
+        # 进价总和
         cost = coal_purchase_fund + ticket_purchase_fund
+        # 利润 = 应收 - 进价
         profit = should_take_count - cost
-        # add_info = '添加日期：' + str(self.select_date) \
-        #            + '，客户名称：' + self.person_name + \
-        #            '，车牌号：' + self.car_id \
-        #            + '，煤种：' + self.coal_sorts_selected \
-        #            + '，煤单价：' + self.coal_sell_price + \
-        #            '计价方式：' + self.coal_sell_compute_way + \
-        #            '，煤款：' + coal_sell_fund + \
-        #            '，吨位：' + str(self.weight_value) \
-        #            + '，票种：' + self.ticket_selected + \
-        #            '票单价：' + self.ticket_sell_price \
-        #            + '，票计价方式：' + self.ticket_sell_compute_way\
-        #            +'，票款：' + ticket_sell_fund \
-        #            + '，应收：' + str(should_take_count)\
-        #            +'，利润：' + str(profit)
-        # print(add_info)
+        add_info = '日期:%(date)s,客户名称:%(name)s,车牌号:%(car_id)s,煤种:%(coal)s,' \
+                   '煤售价:%(coal_sell_price)s,煤计价方式:%(coal_sell_compute_unit)s,煤款:%(coal_sell_fund)s' \
+                   ',吨位:%(weight_value)s,票种:%(ticket_sort)s,票售价:%(ticket_sell_price)s' \
+                   ',票计价方式:%(ticket_sell_compute_unit)s,票款:%(ticket_fund)s' \
+                   ',应收:%(should_take)s,利润:%(profit)s' % \
+                   {'date': str(self.select_date), 'name': str(self.person_name), 'car_id': self.car_id,
+                    'coal': self.coal_sorts_selected, 'coal_sell_price': self.coal_sell_price,
+                    'coal_sell_compute_unit': self.coal_sell_compute_way, 'coal_sell_fund': coal_sell_fund,
+                    'weight_value': str(self.weight_value), 'ticket_sort': self.ticket_selected,
+                    'ticket_sell_price': self.ticket_sell_price,
+                    'ticket_sell_compute_unit': self.ticket_sell_compute_way, 'ticket_fund': ticket_sell_fund,
+                    'should_take': str(should_take_count),
+                    'profit': str(profit)}
+        print(add_info)
         RecordDetailDbUtils().add_record_by_car_detail(self.select_date, self.person_name, self.car_id,
                                                        self.coal_sorts_selected, self.coal_sell_price,
                                                        self.coal_sell_compute_way,
@@ -208,8 +195,36 @@ class MainWindow(QMainWindow):
                                                        self.ticket_sell_price, self.ticket_sell_compute_way,
                                                        ticket_sell_fund, should_take_count, profit)
 
-        # self.add_item_to_list_view(add_info)
+        self.add_item_to_list_view(add_info)
         QMessageBox.information(self, 'Success', '添加成功!', QMessageBox.Yes)
+
+    def get_ticket_purchase_fund(self):
+        if self.ticket_purchase_compute_way == '元/车':
+            ticket_purchase_fund = 1 * self.ticket_purchase_price
+        else:
+            ticket_purchase_fund = self.weight_value * self.ticket_purchase_price
+        return ticket_purchase_fund
+
+    def get_ticket_sell_fund(self):
+        if self.ticket_sell_compute_way == '元/车':
+            ticket_sell_fund = 1 * self.coal_sell_price
+        else:
+            ticket_sell_fund = self.weight_value * self.ticket_sell_price
+        return ticket_sell_fund
+
+    def get_coal_purchase_fund(self):
+        if self.coal_purchase_compute_way == '元/车':
+            coal_purchase_fund = 1 * self.coal_purchase_price
+        else:
+            coal_purchase_fund = self.weight_value * self.coal_purchase_price
+        return coal_purchase_fund
+
+    def get_coal_sell_fund(self):
+        if self.coal_sell_compute_way == '元/车':
+            coal_sell_fund = 1 * self.coal_sell_price
+        else:
+            coal_sell_fund = self.weight_value * self.coal_sell_price
+        return coal_sell_fund
 
     def add_item_to_list_view(self, add_info):
         item = QStandardItem()

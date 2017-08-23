@@ -36,6 +36,17 @@ class RecordDetailDbUtils(SqlUtils):
         conn.commit()
         conn.close()
 
+    def query_total_tons_coalfunds_profit(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        sql = 'SELECT SUM(WEIGHT_VALUE),SUM(COAL_FUND),SUM(PROFIT) FROM %s' % self.record_by_car_table_name
+        logging.info("execute sql:\n" + sql)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        return results
+
     def query_all_records(self):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -60,5 +71,6 @@ class RecordDetailDbUtils(SqlUtils):
 
 
 if __name__ == '__main__':
-    results = RecordDetailDbUtils().query_all_records()
+    # results = RecordDetailDbUtils().query_all_records()
+    results = RecordDetailDbUtils().query_total_tons_coalfunds_profit()
     print(results)
