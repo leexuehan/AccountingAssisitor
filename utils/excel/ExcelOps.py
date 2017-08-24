@@ -46,18 +46,41 @@ class ExcelOps(object):
                 sheet.write(row, column, item)
                 column += 1
             row += 1
-        # 最后几行 写吨位合计、煤款合计、利润合计
+        # 最后几列 写吨位合计、煤款合计、利润合计
         results = RecordDetailDbUtils().query_total_tons_coalfunds_profit()
         total_tons = results[0][0]
         total_coal_funds = results[0][1]
         total_profit = results[0][2]
-        sheet.write(row, 0, '吨位合计')
-        sheet.write(row, 1, total_tons)
-        sheet.write(row + 1, 0, '煤款合计')
-        sheet.write(row + 1, 1, total_coal_funds)
-        sheet.write(row + 2, 0, '利润合计')
-        sheet.write(row + 2, 1, total_profit)
+        sheet.write(0, 15, '吨位合计')
+        sheet.write(1, 15, total_tons)
+        sheet.write(0, 16, '煤款合计')
+        sheet.write(1, 16, total_coal_funds)
+        sheet.write(0, 17, '利润合计')
+        sheet.write(1, 17, total_profit)
         workbook.save(path + '\\' + file_name)
+
+    def generate_coal_excel(self, start_date, end_date):
+        # file_name = '分煤种销量' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
+        file_name = 'test.xls'
+        # if os.path.exists(path + '\\' + file_name):
+        #     QMessageBox.critical(self, "Critical", self.tr('分煤种销量账目已经存在，如想重新生成，请删除该文件后重试'))
+        #     return
+        style = xlwt.XFStyle()
+        workbook = xlwt.Workbook()
+        sheet = workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
+        # 从逐车明细里面按照日期排序，找出最早的日期，之后遍历记录，动态添加列
+        # 横坐标按照（吨位，总价）形式出现，纵坐标以日期形式出现,考虑合并单元格
+
+        # sheet.write(0, 0, '序号')
+        # sheet.write(0, 1, '日期')
+        # sheet.write(0, 2, '吨位')
+        # sheet.write(0, 3, '总价')
+        sheet.write_merge(0, 1, 0, 1, '日期', xlwt.easyxf('align:wrap on,vert center, horiz center;'))
+        sheet.write_merge(0, 0, 2, 3, '工程煤', xlwt.easyxf('align:wrap on,vert center, horiz center;'))
+        sheet.write(1, 2, '吨位')
+        sheet.write(1, 3, '总价')
+
+        workbook.save(file_name)
 
     def generate_param_table(self):
         if os.path.exists('参数表.xls'):
@@ -167,3 +190,7 @@ class ExcelOps(object):
                 sheet_for_write.write(row_cursor, col_cursor, cell_value)
             row_cursor -= 1
         new_book.save('参数表.xls')
+
+
+if __name__ == '__main__':
+    ExcelOps().generate_coal_excel(None, None)

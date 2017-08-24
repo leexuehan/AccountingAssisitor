@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1085</width>
-    <height>662</height>
+    <width>723</width>
+    <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="return_to_main_window">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>570</y>
+     <x>330</x>
+     <y>330</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="compute_cmd_btn">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>330</y>
+     <x>250</x>
+     <y>240</y>
      <width>70</width>
      <height>30</height>
     </rect>
@@ -42,8 +42,8 @@
   <widget class="QPushButton" name="select_start_date_btn">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>250</y>
+     <x>160</x>
+     <y>160</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -55,8 +55,8 @@
   <widget class="QPushButton" name="select_end_date_btn">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>300</y>
+     <x>160</x>
+     <y>210</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -68,8 +68,8 @@
   <widget class="QCheckBox" name="count_small_change">
    <property name="geometry">
     <rect>
-     <x>440</x>
-     <y>330</y>
+     <x>340</x>
+     <y>240</y>
      <width>80</width>
      <height>30</height>
     </rect>
@@ -81,16 +81,16 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>130</y>
-     <width>821</width>
+     <x>40</x>
+     <y>40</y>
+     <width>581</width>
      <height>80</height>
     </rect>
    </property>
    <property name="title">
     <string>出账选项</string>
    </property>
-   <widget class="QCheckBox" name="checkBox_4">
+   <widget class="QCheckBox" name="record_by_car_check_box">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -103,7 +103,7 @@
      <string>按每日明细出账</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_2">
+   <widget class="QCheckBox" name="car_check_box">
     <property name="geometry">
      <rect>
       <x>310</x>
@@ -116,7 +116,7 @@
      <string>按车出账</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_3">
+   <widget class="QCheckBox" name="ticket_sort_check_box">
     <property name="geometry">
      <rect>
       <x>140</x>
@@ -129,7 +129,7 @@
      <string>按票种出账</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_5">
+   <widget class="QCheckBox" name="person_name_check_box">
     <property name="geometry">
      <rect>
       <x>380</x>
@@ -152,7 +152,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_6">
+   <widget class="QCheckBox" name="coal_sort_check_box">
     <property name="geometry">
      <rect>
       <x>230</x>
@@ -169,8 +169,8 @@
   <widget class="QProgressBar" name="progressBar">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>370</y>
+     <x>250</x>
+     <y>280</y>
      <width>118</width>
      <height>23</height>
     </rect>
@@ -182,8 +182,8 @@
   <widget class="QLineEdit" name="start_date_display">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>250</y>
+     <x>250</x>
+     <y>160</y>
      <width>151</width>
      <height>20</height>
     </rect>
@@ -192,8 +192,8 @@
   <widget class="QLineEdit" name="end_date_display">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>300</y>
+     <x>250</x>
+     <y>210</y>
      <width>151</width>
      <height>20</height>
     </rect>
@@ -209,12 +209,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>525</x>
-     <y>641</y>
+     <x>330</x>
+     <y>352</y>
     </hint>
     <hint type="destinationlabel">
      <x>482</x>
-     <y>630</y>
+     <y>518</y>
     </hint>
    </hints>
   </connection>
@@ -225,12 +225,12 @@
    <slot>on_start_compute_cmd()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>184</x>
-     <y>546</y>
+     <x>250</x>
+     <y>269</y>
     </hint>
     <hint type="destinationlabel">
      <x>218</x>
-     <y>599</y>
+     <y>518</y>
     </hint>
    </hints>
   </connection>
@@ -241,8 +241,8 @@
    <slot>on_select_begin_date()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>456</y>
+     <x>160</x>
+     <y>182</y>
     </hint>
     <hint type="destinationlabel">
      <x>27</x>
@@ -257,12 +257,12 @@
    <slot>on_select_end_date()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>515</y>
+     <x>160</x>
+     <y>232</y>
     </hint>
     <hint type="destinationlabel">
      <x>82</x>
-     <y>549</y>
+     <y>518</y>
     </hint>
    </hints>
   </connection>
@@ -273,12 +273,12 @@
    <slot>count_small_change()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>268</x>
-     <y>548</y>
+     <x>340</x>
+     <y>269</y>
     </hint>
     <hint type="destinationlabel">
      <x>309</x>
-     <y>563</y>
+     <y>518</y>
     </hint>
    </hints>
   </connection>
@@ -289,8 +289,8 @@
    <slot>on_person_name_select_finished()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>170</y>
+     <x>510</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
      <x>19</x>
@@ -299,18 +299,98 @@
    </hints>
   </connection>
   <connection>
-   <sender>checkBox_5</sender>
+   <sender>person_name_check_box</sender>
    <signal>stateChanged(int)</signal>
    <receiver>Account_Dialog</receiver>
    <slot>show_person_combox()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>160</x>
-     <y>189</y>
+     <x>420</x>
+     <y>89</y>
     </hint>
     <hint type="destinationlabel">
      <x>35</x>
      <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ticket_sort_check_box</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Account_Dialog</receiver>
+   <slot>accounting_by_ticket_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>184</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>223</x>
+     <y>16</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>coal_sort_check_box</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Account_Dialog</receiver>
+   <slot>accounting_by_coal_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>279</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>393</x>
+     <y>125</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>car_check_box</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Account_Dialog</receiver>
+   <slot>accounting_by_car_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>385</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>578</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>person_name_check_box</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Account_Dialog</receiver>
+   <slot>accounting_by_person_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>433</x>
+     <y>78</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>586</x>
+     <y>178</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>record_by_car_check_box</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Account_Dialog</receiver>
+   <slot>accounting_by_every_car_record_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>75</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>179</y>
     </hint>
    </hints>
   </connection>
@@ -323,5 +403,10 @@
   <slot>on_add_person()</slot>
   <slot>count_small_change()</slot>
   <slot>show_person_combox()</slot>
+  <slot>accounting_by_ticket_selected()</slot>
+  <slot>accounting_by_coal_selected()</slot>
+  <slot>accounting_by_car_id_selected()</slot>
+  <slot>accounting_by_person_selected()</slot>
+  <slot>accounting_by_every_car_record_selected()</slot>
  </slots>
 </ui>
