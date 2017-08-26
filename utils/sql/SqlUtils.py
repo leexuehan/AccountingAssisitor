@@ -4,8 +4,8 @@ import sqlite3
 
 class SqlUtils(object):
     def __init__(self):
-        self.db_path = '..\\db\\account.db'
-        # self.db_path = '..\\..\\db\\account.db'
+        # self.db_path = '..\\db\\account.db'
+        self.db_path = '..\\..\\db\\account.db'
         self.ticket_table_name = 'tickets'
         self.coal_table_name = 'coals'
         self.record_by_car_table_name = 'record_by_car_detail'

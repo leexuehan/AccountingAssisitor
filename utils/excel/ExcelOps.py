@@ -60,27 +60,86 @@ class ExcelOps(object):
         workbook.save(path + '\\' + file_name)
 
     def generate_coal_excel(self, start_date, end_date):
-        # file_name = '分煤种销量' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
-        file_name = 'test.xls'
-        # if os.path.exists(path + '\\' + file_name):
-        #     QMessageBox.critical(self, "Critical", self.tr('分煤种销量账目已经存在，如想重新生成，请删除该文件后重试'))
-        #     return
-        style = xlwt.XFStyle()
+        coal_column_dict = {}
+        date_position_dict = {}
+        xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
         workbook = xlwt.Workbook()
         sheet = workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
-        # 从逐车明细里面按照日期排序，找出最早的日期，之后遍历记录，动态添加列
-        # 横坐标按照（吨位，总价）形式出现，纵坐标以日期形式出现,考虑合并单元格
+        sheet.write_merge(0, 1, 0, 1, '日期', xf_style)
 
-        # sheet.write(0, 0, '序号')
-        # sheet.write(0, 1, '日期')
-        # sheet.write(0, 2, '吨位')
-        # sheet.write(0, 3, '总价')
-        sheet.write_merge(0, 1, 0, 1, '日期', xlwt.easyxf('align:wrap on,vert center, horiz center;'))
-        sheet.write_merge(0, 0, 2, 3, '工程煤', xlwt.easyxf('align:wrap on,vert center, horiz center;'))
-        sheet.write(1, 2, '吨位')
-        sheet.write(1, 3, '总价')
+        results = RecordDetailDbUtils().query_coal_info_group_by_coal_name(start_date, end_date)
+        record_count = 0
+        row_index = 2
+        next_col = 2
+        while record_count < len(results):
+            record = results[record_count]
+            date = record[0]
+            coal_name = record[1]
+            coal_fund_sum = record[2]
+            weight_value_sum = record[3]
+            if coal_name not in coal_column_dict:
+                sheet.write_merge(0, 0, next_col, next_col + 1, coal_name, xf_style)
+                # add title
+                sheet.write(1, next_col, '吨位', xf_style)
+                sheet.write(1, next_col + 1, '总价', xf_style)
+                # add position info into coal_column_dict
+                coal_column_dict[coal_name] = [next_col, next_col + 1]
 
+            if date not in date_position_dict:
+                # add date
+                date_position_dict[date] = row_index
+                sheet.write_merge(row_index, row_index, 0, 1, date, xf_style)
+                row_index += 1
+
+            # write data
+            weight_position = coal_column_dict[coal_name][0]
+            coal_fund_position = coal_column_dict[coal_name][1]
+            row_position = date_position_dict[date]
+            sheet.write(row_position, weight_position, weight_value_sum, xf_style)
+            sheet.write(row_position, coal_fund_position, coal_fund_sum, xf_style)
+            next_col += 2
+            record_count += 1
+
+        file_name = 'test.xls'
         workbook.save(file_name)
+        print(coal_column_dict)
+        print(date_position_dict)
+        # sheet_to_read = xlrd.open_workbook('test.xls').sheets()[0]
+        # book = xlrd.open_workbook('test.xls')
+        # new_book = copy(book)
+        # sheet_to_write = new_book.get_sheet(0)
+        # # init all the empty cells into 0
+        # for row in range(2, row_index):
+        #     for col in range(2, next_col):
+        #         if sheet_to_read.cell_value(row, col) is '':
+        #             print("!!!!!!!!!!")
+        #             sheet_to_write.write(row, col, 0)
+        #             new_book.save('test.xls')
+
+    def method_name(self, file_name, next_col, row_index):
+        sheet_to_read = xlrd.open_workbook('test.xls').sheets()[0]
+        book = xlrd.open_workbook('test.xls')
+        new_book = copy(book)
+        sheet_to_write = new_book.get_sheet(0)
+        # init all the empty cells into 0
+        if sheet_to_read.cell_value(3, 3) is '':
+            print("!!!!!!!!!!")
+            sheet_to_write.write(3, 3, 0)
+            new_book.save('test.xls')
+
+            # file_name = '分煤种销量' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
+            # if os.path.exists(path + '\\' + file_name):
+            #     QMessageBox.critical(self, "Critical", self.tr('分煤种销量账目已经存在，如想重新生成，请删除该文件后重试'))
+            #     return
+            # style = xlwt.XFStyle()
+
+            # 从逐车明细里面按照日期排序，找出最早的日期，之后遍历记录，动态添加列
+            # 横坐标按照（吨位，总价）形式出现，纵坐标以日期形式出现,考虑合并单元格
+
+            # sheet.write(0, 0, '序号')
+            # sheet.write(0, 1, '日期')
+            # sheet.write(0, 2, '吨位')
+            # sheet.write(0, 3, '总价')
 
     def generate_param_table(self):
         if os.path.exists('参数表.xls'):
@@ -193,4 +252,5 @@ class ExcelOps(object):
 
 
 if __name__ == '__main__':
-    ExcelOps().generate_coal_excel(None, None)
+    ExcelOps().generate_coal_excel('2017/08/22', '2017/08/24')
+    # ExcelOps().method_name('test.xls', 3, 3)
