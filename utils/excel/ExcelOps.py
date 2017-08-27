@@ -14,6 +14,8 @@ class ExcelOps(object):
         self.totalColumns = 0
         self.totalRows = 0
         self.sheet = None
+        self.MAX_COAL_SORT_NUM_EVERY_BLOCK = 3
+        self.BLOCK_INTERVAL = 1
 
     def generate_record_detail_by_car_excel(self, records, start_date, end_date):
         path = '账目'
@@ -60,8 +62,6 @@ class ExcelOps(object):
         workbook.save(path + '\\' + file_name)
 
     def generate_coal_excel(self, start_date, end_date):
-        MAX_COAL_SORT_NUM_EVERY_BLOCK = 6
-        BLOCK_INTERVAL = 1
         title_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
         borders = xlwt.Borders()
         borders.left = 1
@@ -76,23 +76,14 @@ class ExcelOps(object):
         # to decide if split to blocks
         record_sort_num_in_db = len(record_sorts)
         print('record sort num from db is', record_sort_num_in_db)
-        block_num = int(record_sort_num_in_db / MAX_COAL_SORT_NUM_EVERY_BLOCK)
-        tail_num = record_sort_num_in_db % MAX_COAL_SORT_NUM_EVERY_BLOCK
         # write and init columns dict in every block
         workbook = xlwt.Workbook()
         sheet = workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
-        column_dict = {}
-        end_column_index = 0
         # 填充吨位和总价的标题
-        cols_to_be_filled_with_data = self.fill_tons_and_fund_title(BLOCK_INTERVAL, MAX_COAL_SORT_NUM_EVERY_BLOCK,
-                                                                    block_num,
-                                                                    column_dict,
-                                                                    end_column_index, sheet, tail_num,
+        cols_to_be_filled_with_data = self.fill_tons_and_fund_title(record_sort_num_in_db, sheet,
                                                                     title_xf_style)  # fill in coal name and init dict
         # 填充煤种标题
-        fill_info = self.fill_coal_name(BLOCK_INTERVAL, MAX_COAL_SORT_NUM_EVERY_BLOCK, record_sort_num_in_db,
-                                        record_sorts,
-                                        sheet, title_xf_style)
+        fill_info = self.fill_coal_name(record_sort_num_in_db, record_sorts, sheet, title_xf_style)
         column_dict = fill_info[0]  # 填写数据
         cols_to_be_filled_with_date = fill_info[1]  # 可以填写日期的列
         self.fill_data(sheet, cols_to_be_filled_with_date, cols_to_be_filled_with_data, column_dict, end_date,
@@ -100,8 +91,7 @@ class ExcelOps(object):
         file_name = 'test.xls'
         workbook.save(file_name)
 
-    def fill_coal_name(self, BLOCK_INTERVAL, MAX_COAL_SORT_NUM_EVERY_BLOCK, record_sort_num_in_db,
-                       record_sorts, sheet, xf_style):
+    def fill_coal_name(self, record_sort_num_in_db, record_sorts, sheet, xf_style):
         column_dict = {}
         date_cols = [0]  # the column can be filled with date
         current_index = 2
@@ -111,10 +101,10 @@ class ExcelOps(object):
             column_dict[coal_name] = (current_index, current_index + 1)
             sheet.write_merge(0, 0, current_index, current_index + 1, coal_name, xf_style)
             # cross space when met border
-            if (MAX_COAL_SORT_NUM_EVERY_BLOCK - 1) == 0 or (
-                            index != 0 and (index + 1) % MAX_COAL_SORT_NUM_EVERY_BLOCK == 0):
+            if (self.MAX_COAL_SORT_NUM_EVERY_BLOCK - 1) == 0 or (
+                            index != 0 and (index + 1) % self.MAX_COAL_SORT_NUM_EVERY_BLOCK == 0):
                 print('met border,current index:', current_index)
-                current_index += 1 + BLOCK_INTERVAL + 3
+                current_index += 1 + self.BLOCK_INTERVAL + 3
                 if (index + 1) < record_sort_num_in_db:
                     date_cols.append(current_index - 2)
                 print('date_cols:::::::::', date_cols)
@@ -168,16 +158,17 @@ class ExcelOps(object):
             current_record_index += 1
 
     # 返回所有要填入数据的列
-    def fill_tons_and_fund_title(self, BLOCK_INTERVAL, MAX_COAL_SORT_NUM_EVERY_BLOCK, block_num, column_dict,
-                                 end_column_index, sheet, tail_num, xf_style):
+    def fill_tons_and_fund_title(self, record_sort_num_in_db, sheet, xf_style):
         data_col_set = []
+        end_column_index = 0
+        block_num = int(record_sort_num_in_db / self.MAX_COAL_SORT_NUM_EVERY_BLOCK)
+        tail_num = record_sort_num_in_db % self.MAX_COAL_SORT_NUM_EVERY_BLOCK
         for num in range(0, block_num):
-            start_column_index = 2 + (BLOCK_INTERVAL + MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 2) * num
-            end_column_index = start_column_index + MAX_COAL_SORT_NUM_EVERY_BLOCK * 2
+            start_column_index = 2 + (self.BLOCK_INTERVAL + self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 2) * num
+            end_column_index = start_column_index + self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2
             sheet.write_merge(0, 1, start_column_index - 2, start_column_index - 1, '日期', xf_style)
             print(start_column_index, end_column_index)
             for column_index in range(start_column_index, end_column_index, 2):
-                column_dict[num] = []
                 sheet.write(1, column_index, '吨位', xf_style)
                 sheet.write(1, column_index + 1, '总价', xf_style)
                 data_col_set.append([column_index, column_index + 1])
@@ -186,11 +177,10 @@ class ExcelOps(object):
             if block_num is 0:
                 start_column_index = end_column_index
             else:
-                start_column_index = end_column_index + BLOCK_INTERVAL
+                start_column_index = end_column_index + self.BLOCK_INTERVAL
             sheet.write_merge(0, 1, start_column_index, start_column_index + 1, '日期', xf_style)
             end_column_index = start_column_index + 2 + tail_num * 2
             for column_index in range(start_column_index + 2, end_column_index, 2):
-                column_dict[block_num + 1] = []
                 sheet.write(1, column_index, '吨位', xf_style)
                 sheet.write(1, column_index + 1, '总价', xf_style)
                 data_col_set.append([column_index, column_index + 1])
