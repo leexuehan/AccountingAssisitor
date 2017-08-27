@@ -322,7 +322,8 @@ class ExcelOps(object):
         pass
 
     def fill_in_all_total_value(self, sheet, cols_to_be_filled_with_date, start_row, column_dict, start_date, end_date):
-        records = RecordDetailDbUtils().query_weight_sum_and_fund_sum_by_coal(start_date, end_date)
+        utils = RecordDetailDbUtils()
+        records = utils.query_weight_sum_and_fund_sum_by_coal(start_date, end_date)
         for col in cols_to_be_filled_with_date:
             sheet.write_merge(start_row, start_row, col, col + 1, '合计', self.title_xf_style)
         for record in records:
@@ -333,8 +334,17 @@ class ExcelOps(object):
             weight_value_sum_position = column_dict[coal_name][0]
             coal_fund_sum_position = column_dict[coal_name][1]
             print('insert total num position', weight_value_sum_position, coal_fund_sum_position)
+            # 各煤种总吨位、总价款
             sheet.write(start_row, coal_fund_sum_position, coal_fund_sum, self.data_xf_style)
             sheet.write(start_row, weight_value_sum_position, weight_value_sum, self.data_xf_style)
+        # 所有煤种合计总吨位、总价款
+        results = utils.query_all_coal_weight_sum_and_fund_sum(start_date, end_date)
+        sheet.write_merge(start_row + 1, start_row + 1, 0, 1, '总销量', self.title_xf_style)
+        sheet.write_merge(start_row + 1, start_row + 1, 2, self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 1,
+                          str(results[0][0]) + '吨', self.title_xf_style)
+        sheet.write_merge(start_row + 2, start_row + 2, 0, 1, '总价款', self.title_xf_style)
+        sheet.write_merge(start_row + 2, start_row + 2, 2, self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 1,
+                          str(results[0][1]) + '元', self.title_xf_style)
 
 
 if __name__ == '__main__':
