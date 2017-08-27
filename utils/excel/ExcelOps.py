@@ -16,6 +16,30 @@ class ExcelOps(object):
         self.sheet = None
         self.MAX_COAL_SORT_NUM_EVERY_BLOCK = 3
         self.BLOCK_INTERVAL = 1
+        self.title_xf_style = self.init_title_xf_style()
+        self.data_xf_style = self.get_data_xf_style()
+
+    def init_title_xf_style(self):
+        title_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
+        borders = xlwt.Borders()
+        borders.left = 1
+        borders.right = 1
+        borders.top = 1
+        borders.bottom = 1
+        borders.bottom_colour = 0x3A
+        title_xf_style.borders = borders
+        return title_xf_style
+
+    def get_data_xf_style(self):
+        data_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz right;')
+        borders = xlwt.Borders()
+        borders.left = 1
+        borders.right = 1
+        borders.top = 1
+        borders.bottom = 1
+        borders.bottom_colour = 0x3A
+        data_xf_style.borders = borders
+        return data_xf_style
 
     def generate_record_detail_by_car_excel(self, records, start_date, end_date):
         path = '账目'
@@ -62,14 +86,6 @@ class ExcelOps(object):
         workbook.save(path + '\\' + file_name)
 
     def generate_coal_excel(self, start_date, end_date):
-        title_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
-        borders = xlwt.Borders()
-        borders.left = 1
-        borders.right = 1
-        borders.top = 1
-        borders.bottom = 1
-        borders.bottom_colour = 0x3A
-        title_xf_style.borders = borders
         # 先初始化标题栏
         utils = RecordDetailDbUtils()
         record_sorts = utils.query_all_coal_sorts(start_date, end_date)
@@ -80,10 +96,9 @@ class ExcelOps(object):
         workbook = xlwt.Workbook()
         sheet = workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
         # 填充吨位和总价的标题
-        cols_to_be_filled_with_data = self.fill_tons_and_fund_title(record_sort_num_in_db, sheet,
-                                                                    title_xf_style)  # fill in coal name and init dict
+        cols_to_be_filled_with_data = self.fill_tons_and_fund_title(record_sort_num_in_db, sheet)
         # 填充煤种标题
-        fill_info = self.fill_coal_name(record_sort_num_in_db, record_sorts, sheet, title_xf_style)
+        fill_info = self.fill_coal_name(record_sorts, sheet)
         column_dict = fill_info[0]  # 填写数据
         cols_to_be_filled_with_date = fill_info[1]  # 可以填写日期的列
         self.fill_data(sheet, cols_to_be_filled_with_date, cols_to_be_filled_with_data, column_dict, end_date,
@@ -91,9 +106,11 @@ class ExcelOps(object):
         file_name = 'test.xls'
         workbook.save(file_name)
 
-    def fill_coal_name(self, record_sort_num_in_db, record_sorts, sheet, xf_style):
+    def fill_coal_name(self, record_sorts, sheet):
+        record_sort_num_in_db = len(record_sorts)
         column_dict = {}
         date_cols = [0]  # the column can be filled with date
+        xf_style = self.title_xf_style
         current_index = 2
         print('record_sort_num_in_db is ::::::', record_sort_num_in_db)
         for index in range(0, record_sort_num_in_db):
@@ -115,14 +132,7 @@ class ExcelOps(object):
 
     def fill_data(self, sheet, cols_to_be_filled_with_date, cols_to_be_filled_with_data, column_dict, end_date,
                   start_date):
-        data_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz right;')
-        borders = xlwt.Borders()
-        borders.left = 1
-        borders.right = 1
-        borders.top = 1
-        borders.bottom = 1
-        borders.bottom_colour = 0x3A
-        data_xf_style.borders = borders
+        data_xf_style = self.data_xf_style
         # first query info from db
         coal_record_info = RecordDetailDbUtils().query_coal_info_group_by_coal_name(start_date, end_date)
         current_record_index = 0
@@ -157,21 +167,23 @@ class ExcelOps(object):
             sheet.write(insert_row_position, coal_fund_sum_col, coal_fund_sum, data_xf_style)
             current_record_index += 1
 
-    # 返回所有要填入数据的列
-    def fill_tons_and_fund_title(self, record_sort_num_in_db, sheet, xf_style):
+    # 填入日期、吨位、总价等标题，返回所有要填入数据的列
+    def fill_tons_and_fund_title(self, record_sort_num_in_db, sheet):
+        xf_style = self.title_xf_style
         data_col_set = []
         end_column_index = 0
+        # 填入整的整数块
         block_num = int(record_sort_num_in_db / self.MAX_COAL_SORT_NUM_EVERY_BLOCK)
         tail_num = record_sort_num_in_db % self.MAX_COAL_SORT_NUM_EVERY_BLOCK
         for num in range(0, block_num):
             start_column_index = 2 + (self.BLOCK_INTERVAL + self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 2) * num
             end_column_index = start_column_index + self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2
             sheet.write_merge(0, 1, start_column_index - 2, start_column_index - 1, '日期', xf_style)
-            print(start_column_index, end_column_index)
             for column_index in range(start_column_index, end_column_index, 2):
                 sheet.write(1, column_index, '吨位', xf_style)
                 sheet.write(1, column_index + 1, '总价', xf_style)
                 data_col_set.append([column_index, column_index + 1])
+        # 如果有零头的话，填入零头
         print('tail num is:', tail_num)
         if tail_num is not 0:
             if block_num is 0:
