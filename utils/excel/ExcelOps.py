@@ -134,7 +134,8 @@ class ExcelOps(object):
         column_dict = fill_info[0]  # 填写数据
         cols_to_be_filled_with_date = fill_info[1]  # 可以填写日期的列
         # first query info from db
-        coal_record_info = RecordDetailDbUtils().query_coal_info_group_by_coal_name(start_date, end_date)
+        utils = RecordDetailDbUtils()
+        coal_record_info = utils.query_coal_info_group_by_coal_name(start_date, end_date)
         current_record_index = 0
         last_date_inserted = None
         last_insert_row_cursor = 1
@@ -158,14 +159,17 @@ class ExcelOps(object):
             # according to result from db fill in the row
             last_insert_row_cursor = insert_row_position
             coal_name = record[1]
-            coal_fund_sum = record[2]
-            weight_value_sum = record[3]
+            weight_value_sum = record[2]
+            coal_fund_sum = record[3]
             weight_value_sum_col = column_dict[coal_name][0]
             coal_fund_sum_col = weight_value_sum_col + 1
 
             sheet.write(insert_row_position, weight_value_sum_col, weight_value_sum, data_xf_style)
             sheet.write(insert_row_position, coal_fund_sum_col, coal_fund_sum, data_xf_style)
             current_record_index += 1
+        # 最后填入各种煤的合计值
+        self.fill_in_all_total_value(sheet, cols_to_be_filled_with_date, last_insert_row_cursor + 1, column_dict,
+                                     start_date, end_date)
 
     # 填入日期、吨位、总价等标题，返回所有要填入数据的列
     def fill_tons_and_fund_title(self, record_sorts, sheet):
@@ -317,6 +321,20 @@ class ExcelOps(object):
     def get_weight_value_sum_position(self):
         pass
 
+    def fill_in_all_total_value(self, sheet, cols_to_be_filled_with_date, start_row, column_dict, start_date, end_date):
+        records = RecordDetailDbUtils().query_weight_sum_and_fund_sum_by_coal(start_date, end_date)
+        for col in cols_to_be_filled_with_date:
+            sheet.write_merge(start_row, start_row, col, col + 1, '合计', self.title_xf_style)
+        for record in records:
+            coal_name = record[0]
+            weight_value_sum = record[1]
+            coal_fund_sum = record[2]
+            print(coal_name, weight_value_sum, coal_fund_sum)
+            weight_value_sum_position = column_dict[coal_name][0]
+            coal_fund_sum_position = column_dict[coal_name][1]
+            print('insert total num position', weight_value_sum_position, coal_fund_sum_position)
+            sheet.write(start_row, coal_fund_sum_position, coal_fund_sum, self.data_xf_style)
+            sheet.write(start_row, weight_value_sum_position, weight_value_sum, self.data_xf_style)
 
 
 if __name__ == '__main__':
