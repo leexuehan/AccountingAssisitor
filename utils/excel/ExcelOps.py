@@ -95,10 +95,11 @@ class ExcelOps(object):
         # write and init columns dict in every block
         workbook = xlwt.Workbook()
         sheet = workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
-        # 填充吨位和总价的标题
+        # 填入日期、吨位、总价等标题，返回所有要填入数据的列
         cols_to_be_filled_with_data = self.fill_tons_and_fund_title(record_sorts, sheet)
-        # 填充煤种标题
+        # 在标题栏填充煤种标题
         fill_info = self.fill_coal_name(record_sorts, sheet)
+        # 填入煤种数据
         self.fill_data(sheet, cols_to_be_filled_with_data, fill_info, end_date,
                        start_date)
         file_name = 'test.xls'
@@ -316,12 +317,6 @@ class ExcelOps(object):
     def get_weight_value_sum_position(self):
         pass
 
-    def get_date_position(self, date, date_position_dict, coal_position_dict):
-        if date not in date_position_dict:
-            date_position_dict[date] = current_row_index
-            sheet.write_merge(current_row_index, current_row_index, 0, 1, date, xf_style)
-            current_row_index += 1
-        pass
 
 
 if __name__ == '__main__':
