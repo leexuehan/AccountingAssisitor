@@ -96,12 +96,10 @@ class ExcelOps(object):
         workbook = xlwt.Workbook()
         sheet = workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
         # 填充吨位和总价的标题
-        cols_to_be_filled_with_data = self.fill_tons_and_fund_title(record_sort_num_in_db, sheet)
+        cols_to_be_filled_with_data = self.fill_tons_and_fund_title(record_sorts, sheet)
         # 填充煤种标题
         fill_info = self.fill_coal_name(record_sorts, sheet)
-        column_dict = fill_info[0]  # 填写数据
-        cols_to_be_filled_with_date = fill_info[1]  # 可以填写日期的列
-        self.fill_data(sheet, cols_to_be_filled_with_date, cols_to_be_filled_with_data, column_dict, end_date,
+        self.fill_data(sheet, cols_to_be_filled_with_data, fill_info, end_date,
                        start_date)
         file_name = 'test.xls'
         workbook.save(file_name)
@@ -130,9 +128,10 @@ class ExcelOps(object):
                 current_index += 2
         return column_dict, date_cols
 
-    def fill_data(self, sheet, cols_to_be_filled_with_date, cols_to_be_filled_with_data, column_dict, end_date,
-                  start_date):
+    def fill_data(self, sheet, cols_to_be_filled_with_data, fill_info, end_date, start_date):
         data_xf_style = self.data_xf_style
+        column_dict = fill_info[0]  # 填写数据
+        cols_to_be_filled_with_date = fill_info[1]  # 可以填写日期的列
         # first query info from db
         coal_record_info = RecordDetailDbUtils().query_coal_info_group_by_coal_name(start_date, end_date)
         current_record_index = 0
@@ -168,7 +167,8 @@ class ExcelOps(object):
             current_record_index += 1
 
     # 填入日期、吨位、总价等标题，返回所有要填入数据的列
-    def fill_tons_and_fund_title(self, record_sort_num_in_db, sheet):
+    def fill_tons_and_fund_title(self, record_sorts, sheet):
+        record_sort_num_in_db = len(record_sorts)
         xf_style = self.title_xf_style
         data_col_set = []
         end_column_index = 0
