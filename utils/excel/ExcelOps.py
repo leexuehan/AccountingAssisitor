@@ -18,6 +18,7 @@ class ExcelOps(object):
         self.BLOCK_INTERVAL = 1
         self.title_xf_style = self.init_title_xf_style()
         self.data_xf_style = self.get_data_xf_style()
+        self.parent_dir = '账目'
 
     def init_title_xf_style(self):
         title_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
@@ -41,10 +42,12 @@ class ExcelOps(object):
         data_xf_style.borders = borders
         return data_xf_style
 
-    def generate_record_detail_by_car_excel(self, records, start_date, end_date):
-        path = '账目'
+    def generate_record_detail_by_car_excel(self, start_date, end_date):
+        start_date_for_sql = start_date.strftime('%Y/%m/%d')
+        end_date_for_sql = end_date.strftime('%Y/%m/%d')
+        records = RecordDetailDbUtils().query_all_records(start_date_for_sql, end_date_for_sql)
         file_name = '逐车明细' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
-        if os.path.exists(path + '\\' + file_name):
+        if os.path.exists(self.parent_dir + '\\' + file_name):
             QMessageBox.critical(self, "Critical", self.tr('逐车明细账目已经存在，如想重新生成，请删除该文件后重试'))
             return
         workbook = xlwt.Workbook()
@@ -83,12 +86,14 @@ class ExcelOps(object):
         sheet.write(1, 16, total_coal_funds)
         sheet.write(0, 17, '利润合计')
         sheet.write(1, 17, total_profit)
-        workbook.save(path + '\\' + file_name)
+        workbook.save(self.parent_dir + '\\' + file_name)
 
     def generate_coal_excel(self, start_date, end_date):
         # 先初始化标题栏
         utils = RecordDetailDbUtils()
-        record_sorts = utils.query_all_coal_sorts(start_date, end_date)
+        start_date_for_sql = start_date.strftime('%Y/%m/%d')
+        end_date_for_sql = end_date.strftime('%Y/%m/%d')
+        record_sorts = utils.query_all_coal_sorts(start_date_for_sql, end_date_for_sql)
         # to decide if split to blocks
         record_sort_num_in_db = len(record_sorts)
         print('record sort num from db is', record_sort_num_in_db)
@@ -100,10 +105,10 @@ class ExcelOps(object):
         # 在标题栏填充煤种标题
         fill_info = self.fill_coal_name(record_sorts, sheet)
         # 填入煤种数据
-        self.fill_data(sheet, cols_to_be_filled_with_data, fill_info, end_date,
-                       start_date)
-        file_name = 'test.xls'
-        workbook.save(file_name)
+        self.fill_data(sheet, cols_to_be_filled_with_data, fill_info, end_date_for_sql,
+                       start_date_for_sql)
+        file_name = '分煤种销量' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
+        workbook.save(self.parent_dir + '\\' + file_name)
 
     def fill_coal_name(self, record_sorts, sheet):
         record_sort_num_in_db = len(record_sorts)

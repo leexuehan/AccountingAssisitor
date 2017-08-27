@@ -118,8 +118,9 @@ class AccountDialog(QDialog):
             strategy = AccurateAccountingStrategy()
         else:
             strategy = RoughAccountingStrategy()
-        results = RecordDetailDbUtils().query_all_records()
-        ExcelOps().generate_record_detail_by_car_excel(results, self.compute_begin_date, self.compute_end_date)
+        excel_ops = ExcelOps()
+        excel_ops.generate_record_detail_by_car_excel(self.compute_begin_date, self.compute_end_date)
+        excel_ops.generate_coal_excel(self.compute_begin_date, self.compute_end_date)
         self.progress_bar()
         QMessageBox.information(self, "Success", self.tr('出账已完成'))
 
