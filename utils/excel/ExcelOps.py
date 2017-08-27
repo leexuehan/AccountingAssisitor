@@ -60,25 +60,117 @@ class ExcelOps(object):
         workbook.save(path + '\\' + file_name)
 
     def generate_coal_excel(self, start_date, end_date):
-        MAX_COAL_SORT_NUM_EVERY_BLOCK = 2
+        MAX_COAL_SORT_NUM_EVERY_BLOCK = 6
         BLOCK_INTERVAL = 1
-        xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
+        title_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
+        borders = xlwt.Borders()
+        borders.left = 1
+        borders.right = 1
+        borders.top = 1
+        borders.bottom = 1
+        borders.bottom_colour = 0x3A
+        title_xf_style.borders = borders
         # 先初始化标题栏
         utils = RecordDetailDbUtils()
         record_sorts = utils.query_all_coal_sorts(start_date, end_date)
         # to decide if split to blocks
         record_sort_num_in_db = len(record_sorts)
-        if record_sort_num_in_db > MAX_COAL_SORT_NUM_EVERY_BLOCK:
-            block_num = int(record_sort_num_in_db / MAX_COAL_SORT_NUM_EVERY_BLOCK)
-            tail_num = record_sort_num_in_db % MAX_COAL_SORT_NUM_EVERY_BLOCK
-            if tail_num != 0:
-                block_num = block_num + 1
-        else:
-            block_num = 1
+        print('record sort num from db is', record_sort_num_in_db)
+        block_num = int(record_sort_num_in_db / MAX_COAL_SORT_NUM_EVERY_BLOCK)
+        tail_num = record_sort_num_in_db % MAX_COAL_SORT_NUM_EVERY_BLOCK
         # write and init columns dict in every block
         workbook = xlwt.Workbook()
         sheet = workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
         column_dict = {}
+        end_column_index = 0
+        # 填充吨位和总价的标题
+        cols_to_be_filled_with_data = self.fill_tons_and_fund_title(BLOCK_INTERVAL, MAX_COAL_SORT_NUM_EVERY_BLOCK,
+                                                                    block_num,
+                                                                    column_dict,
+                                                                    end_column_index, sheet, tail_num,
+                                                                    title_xf_style)  # fill in coal name and init dict
+        # 填充煤种标题
+        fill_info = self.fill_coal_name(BLOCK_INTERVAL, MAX_COAL_SORT_NUM_EVERY_BLOCK, record_sort_num_in_db,
+                                        record_sorts,
+                                        sheet, title_xf_style)
+        column_dict = fill_info[0]  # 填写数据
+        cols_to_be_filled_with_date = fill_info[1]  # 可以填写日期的列
+        self.fill_data(sheet, cols_to_be_filled_with_date, cols_to_be_filled_with_data, column_dict, end_date,
+                       start_date)
+        file_name = 'test.xls'
+        workbook.save(file_name)
+
+    def fill_coal_name(self, BLOCK_INTERVAL, MAX_COAL_SORT_NUM_EVERY_BLOCK, record_sort_num_in_db,
+                       record_sorts, sheet, xf_style):
+        column_dict = {}
+        date_cols = [0]  # the column can be filled with date
+        current_index = 2
+        print('record_sort_num_in_db is ::::::', record_sort_num_in_db)
+        for index in range(0, record_sort_num_in_db):
+            coal_name = record_sorts[index][0]
+            column_dict[coal_name] = (current_index, current_index + 1)
+            sheet.write_merge(0, 0, current_index, current_index + 1, coal_name, xf_style)
+            # cross space when met border
+            if (MAX_COAL_SORT_NUM_EVERY_BLOCK - 1) == 0 or (
+                            index != 0 and (index + 1) % MAX_COAL_SORT_NUM_EVERY_BLOCK == 0):
+                print('met border,current index:', current_index)
+                current_index += 1 + BLOCK_INTERVAL + 3
+                if (index + 1) < record_sort_num_in_db:
+                    date_cols.append(current_index - 2)
+                print('date_cols:::::::::', date_cols)
+                print('met border and jump to next block,index will be', current_index)
+            else:
+                current_index += 2
+        return column_dict, date_cols
+
+    def fill_data(self, sheet, cols_to_be_filled_with_date, cols_to_be_filled_with_data, column_dict, end_date,
+                  start_date):
+        data_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz right;')
+        borders = xlwt.Borders()
+        borders.left = 1
+        borders.right = 1
+        borders.top = 1
+        borders.bottom = 1
+        borders.bottom_colour = 0x3A
+        data_xf_style.borders = borders
+        # first query info from db
+        coal_record_info = RecordDetailDbUtils().query_coal_info_group_by_coal_name(start_date, end_date)
+        current_record_index = 0
+        last_date_inserted = None
+        last_insert_row_cursor = 1
+        while current_record_index < len(coal_record_info):
+            record = coal_record_info[current_record_index]
+            date = record[0]
+            # because the record are already sorted so just compare with last row
+            if date != last_date_inserted:
+                insert_row_position = last_insert_row_cursor + 1
+            else:
+                insert_row_position = last_insert_row_cursor
+            # fill date
+            for col in cols_to_be_filled_with_date:
+                print('insert date:::::', insert_row_position, insert_row_position, col, col + 1)
+                sheet.write_merge(insert_row_position, insert_row_position, col, col + 1, date, data_xf_style)
+            # find all the valid columns and fill it with 0
+            print('init cols data to be 0:::::', cols_to_be_filled_with_data)
+            for col in cols_to_be_filled_with_data:
+                sheet.write(insert_row_position, col[0], 0, data_xf_style)
+                sheet.write(insert_row_position, col[1], 0, data_xf_style)
+            # according to result from db fill in the row
+            last_insert_row_cursor = insert_row_position
+            coal_name = record[1]
+            coal_fund_sum = record[2]
+            weight_value_sum = record[3]
+            weight_value_sum_col = column_dict[coal_name][0]
+            coal_fund_sum_col = weight_value_sum_col + 1
+
+            sheet.write(insert_row_position, weight_value_sum_col, weight_value_sum, data_xf_style)
+            sheet.write(insert_row_position, coal_fund_sum_col, coal_fund_sum, data_xf_style)
+            current_record_index += 1
+
+    # 返回所有要填入数据的列
+    def fill_tons_and_fund_title(self, BLOCK_INTERVAL, MAX_COAL_SORT_NUM_EVERY_BLOCK, block_num, column_dict,
+                                 end_column_index, sheet, tail_num, xf_style):
+        data_col_set = []
         for num in range(0, block_num):
             start_column_index = 2 + (BLOCK_INTERVAL + MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 2) * num
             end_column_index = start_column_index + MAX_COAL_SORT_NUM_EVERY_BLOCK * 2
@@ -88,77 +180,21 @@ class ExcelOps(object):
                 column_dict[num] = []
                 sheet.write(1, column_index, '吨位', xf_style)
                 sheet.write(1, column_index + 1, '总价', xf_style)
-
-        # fill in coal name and init dict
-        current_index = 0
-        for index in range(current_index, record_sort_num_in_db):
-            record_name = record_sorts[index][0]
-            column_dict[record_name] = (current_index + 2, current_index + 3)
-            sheet.write_merge(0, 0, current_index + 2, current_index + 3, record_name, xf_style)
-            if index == MAX_COAL_SORT_NUM_EVERY_BLOCK - 1:
-                current_index += BLOCK_INTERVAL + 4
+                data_col_set.append([column_index, column_index + 1])
+        print('tail num is:', tail_num)
+        if tail_num is not 0:
+            if block_num is 0:
+                start_column_index = end_column_index
             else:
-                current_index += 2
-
-        # 填写数据
-        # first query info from db
-        coal_record_info = utils.query_coal_info_group_by_coal_name(start_date, end_date)
-        current_record_index = 0
-        last_date_inserted = None
-        last_insert_row_index = 1
-        while current_record_index < len(coal_record_info):
-            record = coal_record_info[current_record_index]
-            date = record[0]
-            if date != last_date_inserted:
-                insert_row_position = last_insert_row_index + 1
-            date_col = [0]
-            for index in range(1, block_num):
-                new_col_ele = MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + BLOCK_INTERVAL + 2
-                date_col.append(new_col_ele)
-            print(date_col)
-            last_insert_row_index = insert_row_position
-            coal_name = record[1]
-            coal_fund_sum = record[2]
-            weight_value_sum = record[3]
-            weight_value_sum_col = column_dict[coal_name][0]
-            coal_fund_sum_col = weight_value_sum_col + 1
-            # write date and init default value to 0
-            for col in date_col:
-                sheet.write_merge(insert_row_position, insert_row_position, col, col + 1, date, xf_style)
-                print('col range', (col + 2, col + MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 2))
-                for col in range(col + 2, col + MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 2):
-                    print(insert_row_position, col)
-                    sheet.write(insert_row_position, col, 0, xf_style)
-            # sheet.write(insert_row_position, weight_value_sum_col, weight_value_sum, xf_style)
-            # sheet.write(insert_row_position, coal_fund_sum_col, coal_fund_sum, xf_style)
-            current_record_index += 1
-        file_name = 'test.xls'
-        workbook.save(file_name)
-
-    def method_name(self, file_name, next_col, row_index):
-        sheet_to_read = xlrd.open_workbook('test.xls').sheets()[0]
-        book = xlrd.open_workbook('test.xls')
-        new_book = copy(book)
-        sheet_to_write = new_book.get_sheet(0)
-        # init all the empty cells into 0
-        if sheet_to_read.cell_value(3, 3) is '':
-            print("!!!!!!!!!!")
-            sheet_to_write.write(3, 3, 0)
-            new_book.save('test.xls')
-
-            # file_name = '分煤种销量' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
-            # if os.path.exists(path + '\\' + file_name):
-            #     QMessageBox.critical(self, "Critical", self.tr('分煤种销量账目已经存在，如想重新生成，请删除该文件后重试'))
-            #     return
-            # style = xlwt.XFStyle()
-
-            # 从逐车明细里面按照日期排序，找出最早的日期，之后遍历记录，动态添加列
-            # 横坐标按照（吨位，总价）形式出现，纵坐标以日期形式出现,考虑合并单元格
-
-            # sheet.write(0, 0, '序号')
-            # sheet.write(0, 1, '日期')
-            # sheet.write(0, 2, '吨位')
-            # sheet.write(0, 3, '总价')
+                start_column_index = end_column_index + BLOCK_INTERVAL
+            sheet.write_merge(0, 1, start_column_index, start_column_index + 1, '日期', xf_style)
+            end_column_index = start_column_index + 2 + tail_num * 2
+            for column_index in range(start_column_index + 2, end_column_index, 2):
+                column_dict[block_num + 1] = []
+                sheet.write(1, column_index, '吨位', xf_style)
+                sheet.write(1, column_index + 1, '总价', xf_style)
+                data_col_set.append([column_index, column_index + 1])
+        return data_col_set
 
     def generate_param_table(self):
         if os.path.exists('参数表.xls'):
