@@ -64,7 +64,7 @@ class RecordDetailDbUtils(SqlUtils):
         cursor = conn.cursor()
         sql = 'SELECT date,coal_name,sum(weight_value),sum(coal_fund) FROM %(table_name)s  ' \
               'where DATE >= "%(begin_date)s" and DATE <= "%(end_date)s" group by date,coal_name order by DATE asc' % {
-            'table_name': self.record_by_car_table_name, 'begin_date': begin_date, 'end_date': end_date}
+                  'table_name': self.record_by_car_table_name, 'begin_date': begin_date, 'end_date': end_date}
         print("execute sql:\n" + sql)
         logging.info("execute sql:\n" + sql)
         cursor.execute(sql)
@@ -72,7 +72,6 @@ class RecordDetailDbUtils(SqlUtils):
         conn.commit()
         conn.close()
         return results
-
 
     def query_all_person_names(self):
         conn = self.get_connection()
@@ -82,6 +81,20 @@ class RecordDetailDbUtils(SqlUtils):
         cursor.execute(sql)
         results = cursor.fetchall()
         logging.info(results)
+        conn.close()
+        return results
+
+    def query_all_coal_sorts(self, begin_date, end_date):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        sql = 'SELECT distinct coal_name FROM %(table_name)s  ' \
+              'where DATE >= "%(begin_date)s" and DATE <= "%(end_date)s"' % {
+                  'table_name': self.record_by_car_table_name, 'begin_date': begin_date, 'end_date': end_date}
+        print("execute sql:\n" + sql)
+        logging.info("execute sql:\n" + sql)
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        conn.commit()
         conn.close()
         return results
 
