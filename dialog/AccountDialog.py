@@ -111,9 +111,9 @@ class AccountDialog(QDialog):
         if self.valid_params() is False:
             return
         excel_ops.generate_record_detail_by_car_excel(self.compute_begin_date, self.compute_end_date)
-        # excel_ops.generate_coal_excel(self.compute_begin_date, self.compute_end_date)
-        # excel_ops.generate_ticket_excel(self.compute_begin_date, self.compute_end_date)
-        # excel_ops.generate_person_excel(self.compute_begin_date, self.compute_end_date, self.selected_name)
+        excel_ops.generate_coal_excel(self.compute_begin_date, self.compute_end_date)
+        excel_ops.generate_ticket_excel(self.compute_begin_date, self.compute_end_date)
+        excel_ops.generate_person_excel(self.compute_begin_date, self.compute_end_date, self.selected_name)
         self.progress_bar()
         QMessageBox.information(self, "Success", self.tr('出账已完成'))
 

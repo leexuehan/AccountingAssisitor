@@ -16,6 +16,9 @@ class ExcelOps(object):
         self.title_xf_style = self.__init_title_xf_style()
         self.data_xf_style = self.__get_data_xf_style()
         self.parent_dir = '账目'
+        self.workbook = xlwt.Workbook()
+        self.__init_account_dir()
+        self.file_name = '账目表.xls'
 
     def __init_title_xf_style(self):
         title_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
@@ -44,13 +47,10 @@ class ExcelOps(object):
         end_date_for_sql = end_date.strftime('%Y/%m/%d')
         records = RecordDetailDbUtils().query_all_records(start_date_for_sql, end_date_for_sql)
         file_name = '逐车明细' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
-        if os.path.exists(self.parent_dir + '\\' + file_name):
-            QMessageBox.critical(self, "Critical", self.tr('逐车明细账目已经存在，如想重新生成，请删除该文件后重试'))
-            return
-        if os.path.exists(self.parent_dir) is False:
-            os.mkdir(self.parent_dir)
-        workbook = xlwt.Workbook()
-        sheet = workbook.add_sheet('逐车明细', cell_overwrite_ok=True)
+        # if os.path.exists(self.parent_dir + '\\' + file_name):
+        #     QMessageBox.critical(self, "Critical", self.tr('逐车明细账目已经存在，如想重新生成，请删除该文件后重试'))
+        #     return
+        sheet = self.workbook.add_sheet('逐车明细', cell_overwrite_ok=True)
         # 初始化标题
         start_col = 0
         sheet.write(0, start_col, '序号', self.title_xf_style)
@@ -103,7 +103,11 @@ class ExcelOps(object):
         sheet.write_merge(row + 1, row + 1, 4, 5, str(total_coal_funds) + '元', self.data_xf_style)
         sheet.write(row + 2, 3, '利润合计', self.title_xf_style)
         sheet.write_merge(row + 2, row + 2, 4, 5, str(total_profit) + '元', self.data_xf_style)
-        workbook.save(self.parent_dir + '\\' + file_name)
+        self.workbook.save(self.parent_dir + '\\' + self.file_name)
+
+    def __init_account_dir(self):
+        if os.path.exists(self.parent_dir) is False:
+            os.mkdir(self.parent_dir)
 
     def generate_coal_excel(self, start_date, end_date):
         # 先初始化标题栏
@@ -115,19 +119,19 @@ class ExcelOps(object):
         record_sort_num_in_db = len(record_sorts)
         print('record sort num from db is', record_sort_num_in_db)
         # write and init columns dict in every block
-        workbook = xlwt.Workbook()
-        sheet = workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
+        # workbook = xlwt.Workbook()
+        sheet = self.workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
         # 填入日期、吨位、总价等标题，返回所有要填入数据的列
-        cols_to_be_filled_with_data = self.fill_tons_and_fund_title(record_sorts, sheet)
+        cols_to_be_filled_with_data = self.__fill_tons_and_fund_title(record_sorts, sheet)
         # 在标题栏填充煤种标题
-        fill_info = self.fill_coal_name(record_sorts, sheet)
+        fill_info = self.__fill_coal_name(record_sorts, sheet)
         # 填入煤种数据
-        self.fill_data(sheet, cols_to_be_filled_with_data, fill_info, end_date_for_sql,
-                       start_date_for_sql)
+        self.__fill_data(sheet, cols_to_be_filled_with_data, fill_info, end_date_for_sql,
+                         start_date_for_sql)
         file_name = '分煤种销量' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
-        workbook.save(self.parent_dir + '\\' + file_name)
+        self.workbook.save(self.parent_dir + '\\' + file_name)
 
-    def fill_coal_name(self, record_sorts, sheet):
+    def __fill_coal_name(self, record_sorts, sheet):
         record_sort_num_in_db = len(record_sorts)
         column_dict = {}
         date_cols = [0]  # the column can be filled with date
@@ -151,7 +155,7 @@ class ExcelOps(object):
                 current_index += 2
         return column_dict, date_cols
 
-    def fill_data(self, sheet, cols_to_be_filled_with_data, fill_info, end_date, start_date):
+    def __fill_data(self, sheet, cols_to_be_filled_with_data, fill_info, end_date, start_date):
         data_xf_style = self.data_xf_style
         column_dict = fill_info[0]  # 填写数据
         cols_to_be_filled_with_date = fill_info[1]  # 可以填写日期的列
@@ -190,11 +194,11 @@ class ExcelOps(object):
             sheet.write(insert_row_position, coal_fund_sum_col, coal_fund_sum, data_xf_style)
             current_record_index += 1
         # 最后填入各种煤的合计值
-        self.fill_in_all_total_value(sheet, cols_to_be_filled_with_date, last_insert_row_cursor + 1, column_dict,
-                                     start_date, end_date)
+        self.__fill_in_all_total_value(sheet, cols_to_be_filled_with_date, last_insert_row_cursor + 1, column_dict,
+                                       start_date, end_date)
 
     # 填入日期、吨位、总价等标题，返回所有要填入数据的列
-    def fill_tons_and_fund_title(self, record_sorts, sheet):
+    def __fill_tons_and_fund_title(self, record_sorts, sheet):
         record_sort_num_in_db = len(record_sorts)
         xf_style = self.title_xf_style
         data_col_set = []
@@ -225,7 +229,8 @@ class ExcelOps(object):
                 data_col_set.append([column_index, column_index + 1])
         return data_col_set
 
-    def fill_in_all_total_value(self, sheet, cols_to_be_filled_with_date, start_row, column_dict, start_date, end_date):
+    def __fill_in_all_total_value(self, sheet, cols_to_be_filled_with_date, start_row, column_dict, start_date,
+                                  end_date):
         utils = RecordDetailDbUtils()
         records = utils.query_weight_sum_and_fund_sum_by_coal(start_date, end_date)
         for col in cols_to_be_filled_with_date:
@@ -258,13 +263,12 @@ class ExcelOps(object):
         file_name = '票统计' + compute_begin_date.strftime('%Y.%m.%d') + '-' + compute_end_date.strftime(
             '%Y.%m.%d') + '.xls'
         file_name = 'ticket.xls'
-        if os.path.exists(self.parent_dir + '\\' + file_name):
-            QMessageBox.critical(self, "Critical", self.tr('票统计账目已经存在，如想重新生成，请删除该文件后重试'))
-            return
+        # if os.path.exists(self.parent_dir + '\\' + file_name):
+        #     QMessageBox.critical(self, "Critical", self.tr('票统计账目已经存在，如想重新生成，请删除该文件后重试'))
+        #     return
         if os.path.exists(self.parent_dir) is False:
             os.mkdir(self.parent_dir)
-        workbook = xlwt.Workbook()
-        sheet = workbook.add_sheet('票统计', cell_overwrite_ok=True)
+        sheet = self.workbook.add_sheet('票统计', cell_overwrite_ok=True)
         utils = RecordDetailDbUtils()
         # 先写标题栏(日期、票种)
         records = utils.query_ticket_sorts(start_date_for_sql, end_date_for_sql)
@@ -306,7 +310,7 @@ class ExcelOps(object):
                           self.title_xf_style)
         sheet.write_merge(last_data_insert_row + 2, last_data_insert_row + 2, 2, 1 + ticket_sort_num, all_ticket_sum,
                           self.title_xf_style)
-        workbook.save(self.parent_dir + '\\' + file_name)
+        self.workbook.save(self.parent_dir + '\\' + self.file_name)
 
     def generate_person_excel(self, compute_begin_date, compute_end_date, person_name):
         start_date_for_sql = compute_begin_date.strftime('%Y/%m/%d')
@@ -321,8 +325,7 @@ class ExcelOps(object):
             return
         if os.path.exists(self.parent_dir) is False:
             os.mkdir(self.parent_dir)
-        workbook = xlwt.Workbook()
-        sheet = workbook.add_sheet(person_name + '个人应收', cell_overwrite_ok=True)
+        sheet = self.workbook.add_sheet(person_name + '个人应收', cell_overwrite_ok=True)
         utils = RecordDetailDbUtils()
         # 先写标题栏(日期、煤款合计、车数)
         records = utils.query_personal_account(start_date_for_sql, end_date_for_sql, person_name)
@@ -350,7 +353,7 @@ class ExcelOps(object):
         sheet.write_merge(last_data_insert_row + 1, last_data_insert_row + 1, 0, 1, '总计', self.title_xf_style)
         sheet.write(last_data_insert_row + 1, 2, total_funds, self.data_xf_style)
         sheet.write(last_data_insert_row + 1, 3, total_car_count, self.data_xf_style)
-        workbook.save(self.parent_dir + '\\' + file_name)
+        self.workbook.save(self.parent_dir + '\\' + self.file_name)
 
 
 if __name__ == '__main__':
