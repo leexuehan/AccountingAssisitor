@@ -1,14 +1,9 @@
-import os
-
-import xlwt
 from PyQt5.QtCore import Qt, QThread
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
 from dialog.CalendarDialog import CalendarDialog
 from ui.account_results import Ui_Account_Dialog
-from utils.account.AccurateAccountingStrategy import AccurateAccountingStrategy
-from utils.account.RoughAccountingStrategy import RoughAccountingStrategy
 from utils.excel.ExcelOps import ExcelOps
 from utils.sql.RecordDetailDbUtils import RecordDetailDbUtils
 
@@ -112,15 +107,13 @@ class AccountDialog(QDialog):
 
     def on_start_compute_cmd(self):
         print("begin to compute account......")
+        excel_ops = ExcelOps()
         if self.valid_params() is False:
             return
-        if self.count_small_change is True:
-            strategy = AccurateAccountingStrategy()
-        else:
-            strategy = RoughAccountingStrategy()
-        excel_ops = ExcelOps()
         excel_ops.generate_record_detail_by_car_excel(self.compute_begin_date, self.compute_end_date)
         excel_ops.generate_coal_excel(self.compute_begin_date, self.compute_end_date)
+        excel_ops.generate_ticket_excel(self.compute_begin_date, self.compute_end_date)
+        excel_ops.generate_person_excel(self.compute_begin_date, self.compute_end_date, self.selected_name)
         self.progress_bar()
         QMessageBox.information(self, "Success", self.tr('出账已完成'))
 

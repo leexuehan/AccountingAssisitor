@@ -1,10 +1,7 @@
-import datetime
 import os
 
-import xlrd
 import xlwt
 from PyQt5.QtWidgets import QMessageBox
-from xlutils.copy import copy
 
 from utils.sql.RecordDetailDbUtils import RecordDetailDbUtils
 
@@ -50,42 +47,44 @@ class ExcelOps(object):
         if os.path.exists(self.parent_dir + '\\' + file_name):
             QMessageBox.critical(self, "Critical", self.tr('逐车明细账目已经存在，如想重新生成，请删除该文件后重试'))
             return
+        if os.path.exists(self.parent_dir) is False:
+            os.mkdir(self.parent_dir)
         workbook = xlwt.Workbook()
         sheet = workbook.add_sheet('逐车明细', cell_overwrite_ok=True)
-        sheet.write(0, 0, '序号')
-        sheet.write(0, 1, '日期')
-        sheet.write(0, 2, '客户名称')
-        sheet.write(0, 3, '车号')
-        sheet.write(0, 4, '煤种')
-        sheet.write(0, 5, '煤种单价')
-        sheet.write(0, 6, '煤种计价方式')
-        sheet.write(0, 7, '煤款')
-        sheet.write(0, 8, '吨位')
-        sheet.write(0, 9, '票种')
-        sheet.write(0, 10, '票种单价')
-        sheet.write(0, 11, '票种计价方式')
-        sheet.write(0, 12, '票款')
-        sheet.write(0, 13, '应收')
-        sheet.write(0, 14, '利润')
+        sheet.write(0, 0, '序号', self.title_xf_style)
+        sheet.write(0, 1, '日期', self.title_xf_style)
+        sheet.write(0, 2, '客户名称', self.title_xf_style)
+        sheet.write(0, 3, '车号', self.title_xf_style)
+        sheet.write(0, 4, '煤种', self.title_xf_style)
+        sheet.write(0, 5, '煤种单价', self.title_xf_style)
+        sheet.write(0, 6, '煤种计价方式', self.title_xf_style)
+        sheet.write(0, 7, '煤款', self.title_xf_style)
+        sheet.write(0, 8, '吨位', self.title_xf_style)
+        sheet.write(0, 9, '票种', self.title_xf_style)
+        sheet.write(0, 10, '票种单价', self.title_xf_style)
+        sheet.write(0, 11, '票种计价方式', self.title_xf_style)
+        sheet.write(0, 12, '票款', self.title_xf_style)
+        sheet.write(0, 13, '应收', self.title_xf_style)
+        sheet.write(0, 14, '利润', self.title_xf_style)
         row = 1
         for record in records:
             column = 1
             sheet.write(row, 0, row)
             for item in record:
-                sheet.write(row, column, item)
+                sheet.write(row, column, item, self.data_xf_style)
                 column += 1
             row += 1
-        # 最后几列 写吨位合计、煤款合计、利润合计
+        # 最后几列 写吨位合计、煤款合计、利润合计??????时间段查询
         results = RecordDetailDbUtils().query_total_tons_coalfunds_profit()
         total_tons = results[0][0]
         total_coal_funds = results[0][1]
         total_profit = results[0][2]
-        sheet.write(0, 15, '吨位合计')
-        sheet.write(1, 15, total_tons)
-        sheet.write(0, 16, '煤款合计')
-        sheet.write(1, 16, total_coal_funds)
-        sheet.write(0, 17, '利润合计')
-        sheet.write(1, 17, total_profit)
+        sheet.write(0, 15, '吨位合计', self.title_xf_style)
+        sheet.write(1, 15, total_tons, self.data_xf_style)
+        sheet.write(0, 16, '煤款合计', self.title_xf_style)
+        sheet.write(1, 16, total_coal_funds, self.data_xf_style)
+        sheet.write(0, 17, '利润合计', self.title_xf_style)
+        sheet.write(1, 17, total_profit, self.data_xf_style)
         workbook.save(self.parent_dir + '\\' + file_name)
 
     def generate_coal_excel(self, start_date, end_date):
@@ -208,124 +207,6 @@ class ExcelOps(object):
                 data_col_set.append([column_index, column_index + 1])
         return data_col_set
 
-    def generate_param_table(self):
-        if os.path.exists('参数表.xls'):
-            workbook = xlrd.open_workbook('参数表.xls')
-            table = workbook.sheets()[0]
-            self.totalColumns = table.ncols
-            self.totalRows = table.nrows
-        else:
-            workbook = xlwt.Workbook()
-            self.sheet = workbook.add_sheet('参数表', cell_overwrite_ok=True)
-            self.init_param_table(self.sheet)
-            workbook.save('参数表.xls')
-        print("init param table successfully")
-
-    # 初始化参数表
-    def init_param_table(self, sheet):
-        # 初始化参数表中的煤种类
-        column = 1
-        with open('煤种列表.txt', 'r') as file:
-            for line in file:
-                sheet.write(0, column, line)
-                column += 1
-            self.totalColumns = column
-
-    # 在表格里更新煤种的价格
-    def update_param_table(self, item_selected, price_input, begin_date, end_date):
-        if begin_date > end_date:
-            return False
-        kind_index = self.find_index_of_kind(item_selected)
-        book = xlrd.open_workbook('参数表.xls')
-        new_book = copy(book)
-        sheet_to_write = new_book.get_sheet(0)
-        dates = self.date_range(begin_date, end_date)
-        print("dates length is : " + str(dates.__len__()))
-        for date in dates:
-            # 一行一行插入数据
-            sheet_to_read = xlrd.open_workbook('参数表.xls').sheets()[0]
-            position = self.find_position_to_insert(date)
-            # 从最后一行开始移动
-            print("insert position is : " + str(position))
-            # 防止将第一行的煤种拷贝下来
-            if position != 1:
-                row_cursor = self.totalRows
-                while row_cursor >= position:
-                    for col_cursor in range(0, self.totalColumns):
-                        cell_value = sheet_to_read.cell_value(row_cursor - 1, col_cursor)
-                        print("value to copy is : " + str(cell_value))
-                        sheet_to_write.write(row_cursor, col_cursor, cell_value)
-                    row_cursor -= 1
-            # 在该行写入数据
-            sheet_to_write.write(position, 0, date)
-            sheet_to_write.write(position, kind_index, price_input)
-            new_book.save('参数表.xls')
-            # 此时表的总行数已经增加 1 个单位
-            self.totalRows += 1
-        new_book.save('参数表.xls')
-        return True
-
-    @staticmethod
-    def date_range(beginDate, endDate):
-        dates = []
-        dt = datetime.datetime.strptime(beginDate, "%Y-%m-%d")
-        date = beginDate[:]
-        while date <= endDate:
-            dates.append(date)
-            dt = dt + datetime.timedelta(1)
-            date = dt.strftime("%Y-%m-%d")
-        return dates
-
-    def find_index_of_date(self, date):
-        sheet = xlrd.open_workbook('参数表.xls').sheets()[0]
-        for row in range(self.totalRows):
-            cell_value = sheet.cell_value(row, 0)
-            if cell_value == str(date):
-                return row
-
-    def find_index_of_kind(self, item_selected):
-        sheet = xlrd.open_workbook('参数表.xls').sheets()[0]
-        for column in range(1, self.totalColumns):
-            cell_value = sheet.cell_value(0, column)
-            if cell_value == str(item_selected + '\n'):
-                return column
-
-    def find_position_to_insert(self, insert_date):
-        sheet = xlrd.open_workbook('参数表.xls').sheets()[0]
-        position = 1
-        for row in range(1, self.totalRows):
-            cell_value = sheet.cell_value(row, 0)
-            if str(insert_date) <= cell_value:
-                position = row
-                break
-                # 如果比较完都没有比插入值大的,那么就以最后一行作为插入位置
-            if row == self.totalRows - 1:
-                position = self.totalRows
-        return position
-
-    def move_data_already_exists(self, position, cols):
-        book = xlrd.open_workbook('参数表.xls')
-        new_book = copy(book)
-        sheet_for_write = new_book.get_sheet(0)
-        sheet_for_read = xlrd.open_workbook('参数表.xls').sheets()[0]
-        # 从最后一行开始移动
-        row_cursor = self.totalRows
-        while row_cursor >= position:
-            for col_cursor in range(0, self.totalColumns):
-                cell_value = sheet_for_read.cell_value(row_cursor - 1, col_cursor)
-                sheet_for_write.write(row_cursor, col_cursor, cell_value)
-            row_cursor -= 1
-        new_book.save('参数表.xls')
-
-    def get_coal_name_position(self):
-        pass
-
-    def get_coal_fund_sum_position(self):
-        pass
-
-    def get_weight_value_sum_position(self):
-        pass
-
     def fill_in_all_total_value(self, sheet, cols_to_be_filled_with_date, start_row, column_dict, start_date, end_date):
         utils = RecordDetailDbUtils()
         records = utils.query_weight_sum_and_fund_sum_by_coal(start_date, end_date)
@@ -351,7 +232,109 @@ class ExcelOps(object):
         sheet.write_merge(start_row + 2, start_row + 2, 2, self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 1,
                           str(results[0][1]) + '元', self.title_xf_style)
 
+    def generate_ticket_excel(self, compute_begin_date, compute_end_date):
+        start_date_for_sql = compute_begin_date.strftime('%Y/%m/%d')
+        # start_date_for_sql = '2017/08/22'
+        end_date_for_sql = compute_end_date.strftime('%Y/%m/%d')
+        # end_date_for_sql = '2017/09/27'
+        file_name = '票统计' + compute_begin_date.strftime('%Y.%m.%d') + '-' + compute_end_date.strftime(
+            '%Y.%m.%d') + '.xls'
+        file_name = 'ticket.xls'
+        if os.path.exists(self.parent_dir + '\\' + file_name):
+            QMessageBox.critical(self, "Critical", self.tr('票统计账目已经存在，如想重新生成，请删除该文件后重试'))
+            return
+        if os.path.exists(self.parent_dir) is False:
+            os.mkdir(self.parent_dir)
+        workbook = xlwt.Workbook()
+        sheet = workbook.add_sheet('票统计', cell_overwrite_ok=True)
+        utils = RecordDetailDbUtils()
+        # 先写标题栏(日期、票种)
+        records = utils.query_ticket_sorts(start_date_for_sql, end_date_for_sql)
+        sheet.write_merge(0, 0, 0, 1, '日期', self.title_xf_style)
+        start_cols = 2
+        columns_dict = {}
+        for record in records:
+            ticket_name = record[0]
+            columns_dict[ticket_name] = start_cols
+            sheet.write(0, start_cols, ticket_name, self.title_xf_style)
+            start_cols += 1
+        ticket_sort_num = len(records)
+        # 再填写数据
+        records = utils.query_ticket_and_every_count(start_date_for_sql, end_date_for_sql)
+        last_data_insert_row = 0
+        last_date_inserted = None
+        for record in records:
+            date = record[0]
+            ticket_name = record[1]
+            ticket_num = record[2]
+            if date != last_date_inserted:
+                last_data_insert_row += 1
+            sheet.write_merge(last_data_insert_row, last_data_insert_row, 0, 1, date, self.title_xf_style)
+            # 先默认填写为 0
+            for index in range(2, ticket_sort_num + 2):
+                sheet.write(last_data_insert_row, index, 0, self.data_xf_style)
+            sheet.write(last_data_insert_row, columns_dict[ticket_name], ticket_num, self.data_xf_style)
+        # 填写各票种合计
+        records = utils.query_ticket_total_count(start_date_for_sql, end_date_for_sql)
+        sheet.write_merge(last_data_insert_row + 1, last_data_insert_row + 1, 0, 1, '合计', self.title_xf_style)
+        all_ticket_sum = 0
+        for record in records:
+            ticket_name = record[0]
+            every_ticket_sum_count = record[1]
+            all_ticket_sum += every_ticket_sum_count
+            sheet.write(last_data_insert_row + 1, columns_dict[ticket_name], every_ticket_sum_count, self.data_xf_style)
+        # 填写总票种合计
+        sheet.write_merge(last_data_insert_row + 2, last_data_insert_row + 2, 0, 1, '总票数合计',
+                          self.title_xf_style)
+        sheet.write_merge(last_data_insert_row + 2, last_data_insert_row + 2, 2, 1 + ticket_sort_num, all_ticket_sum,
+                          self.title_xf_style)
+        workbook.save(self.parent_dir + '\\' + file_name)
+
+    def generate_person_excel(self, compute_begin_date, compute_end_date, person_name):
+        start_date_for_sql = compute_begin_date.strftime('%Y/%m/%d')
+        # start_date_for_sql = '2017/08/22'
+        end_date_for_sql = compute_end_date.strftime('%Y/%m/%d')
+        # end_date_for_sql = '2017/09/27'
+        file_name = person_name + compute_begin_date.strftime('%Y.%m.%d') + '-' + compute_end_date.strftime(
+            '%Y.%m.%d') + '.xls'
+        # file_name = 'personal_account.xls'
+        if os.path.exists(self.parent_dir + '\\' + file_name):
+            QMessageBox.critical(self, "Critical", self.tr('个人应收账目已经存在，如想重新生成，请删除该文件后重试'))
+            return
+        if os.path.exists(self.parent_dir) is False:
+            os.mkdir(self.parent_dir)
+        workbook = xlwt.Workbook()
+        sheet = workbook.add_sheet(person_name + '个人应收', cell_overwrite_ok=True)
+        utils = RecordDetailDbUtils()
+        # 先写标题栏(日期、煤款合计、车数)
+        records = utils.query_personal_account(start_date_for_sql, end_date_for_sql, person_name)
+        sheet.write_merge(0, 0, 0, 1, '日期', self.title_xf_style)
+        sheet.write(0, 2, '煤款合计', self.title_xf_style)
+        sheet.write(0, 3, '车数', self.title_xf_style)
+        # 填入数据
+        last_data_insert_row = 0
+        last_date_inserted = None
+        total_funds = 0
+        total_car_count = 0
+        for record in records:
+            date = record[0]
+            total_funds_every_day = record[1]
+            car_count_every_day = record[2]
+            if date != last_date_inserted:
+                last_data_insert_row += 1
+            insert_row_position = last_data_insert_row
+            sheet.write_merge(insert_row_position, insert_row_position, 0, 1, date, self.title_xf_style)
+            sheet.write(insert_row_position, 2, total_funds_every_day, self.data_xf_style)
+            sheet.write(insert_row_position, 3, car_count_every_day, self.data_xf_style)
+            total_funds += total_funds_every_day
+            total_car_count += car_count_every_day
+        # 填入合计金额
+        sheet.write_merge(last_data_insert_row + 1, last_data_insert_row + 1, 0, 1, '总计', self.title_xf_style)
+        sheet.write(last_data_insert_row + 1, 2, total_funds, self.data_xf_style)
+        sheet.write(last_data_insert_row + 1, 3, total_car_count, self.data_xf_style)
+        workbook.save(self.parent_dir + '\\' + file_name)
+
 
 if __name__ == '__main__':
-    ExcelOps().generate_coal_excel('2017/08/22', '2017/09/27')
+    ExcelOps().generate_person_excel('2017/08/22', '2017/09/27', 'aaa')
     # ExcelOps().method_name('test.xls', 3, 3)
