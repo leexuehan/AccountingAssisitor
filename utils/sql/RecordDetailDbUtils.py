@@ -53,6 +53,7 @@ class RecordDetailDbUtils(SqlUtils):
         sql = 'SELECT * FROM %(table_name)s where DATE >= "%(begin_date)s" and DATE <= "%(end_date)s" order by DATE asc' % {
             'table_name': self.record_by_car_table_name, 'begin_date': begin_date, 'end_date': end_date}
         logging.info("execute sql:\n" + sql)
+        print("execute sql:\n" + sql)
         cursor.execute(sql)
         results = cursor.fetchall()
         conn.commit()

@@ -13,11 +13,11 @@ class ExcelOps(object):
         self.sheet = None
         self.MAX_COAL_SORT_NUM_EVERY_BLOCK = 3
         self.BLOCK_INTERVAL = 1
-        self.title_xf_style = self.init_title_xf_style()
-        self.data_xf_style = self.get_data_xf_style()
+        self.title_xf_style = self.__init_title_xf_style()
+        self.data_xf_style = self.__get_data_xf_style()
         self.parent_dir = '账目'
 
-    def init_title_xf_style(self):
+    def __init_title_xf_style(self):
         title_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz center;')
         borders = xlwt.Borders()
         borders.left = 1
@@ -28,7 +28,7 @@ class ExcelOps(object):
         title_xf_style.borders = borders
         return title_xf_style
 
-    def get_data_xf_style(self):
+    def __get_data_xf_style(self):
         data_xf_style = xlwt.easyxf('align:wrap on,vert center, horiz right;')
         borders = xlwt.Borders()
         borders.left = 1
@@ -51,26 +51,34 @@ class ExcelOps(object):
             os.mkdir(self.parent_dir)
         workbook = xlwt.Workbook()
         sheet = workbook.add_sheet('逐车明细', cell_overwrite_ok=True)
-        sheet.write(0, 0, '序号', self.title_xf_style)
-        sheet.write(0, 1, '日期', self.title_xf_style)
-        sheet.write(0, 2, '客户名称', self.title_xf_style)
-        sheet.write(0, 3, '车号', self.title_xf_style)
-        sheet.write(0, 4, '煤种', self.title_xf_style)
-        sheet.write(0, 5, '煤种单价', self.title_xf_style)
-        sheet.write(0, 6, '煤种计价方式', self.title_xf_style)
-        sheet.write(0, 7, '煤款', self.title_xf_style)
-        sheet.write(0, 8, '吨位', self.title_xf_style)
-        sheet.write(0, 9, '票种', self.title_xf_style)
-        sheet.write(0, 10, '票种单价', self.title_xf_style)
-        sheet.write(0, 11, '票种计价方式', self.title_xf_style)
-        sheet.write(0, 12, '票款', self.title_xf_style)
-        sheet.write(0, 13, '应收', self.title_xf_style)
-        sheet.write(0, 14, '利润', self.title_xf_style)
+        # 初始化标题
+        start_col = 0
+        sheet.write(0, start_col, '序号', self.title_xf_style)
+        sheet.write_merge(0, 0, start_col + 1, start_col + 2, '日期', self.title_xf_style)
+        sheet.write(0, start_col + 3, '客户名称', self.title_xf_style)
+        sheet.write(0, start_col + 4, '车号', self.title_xf_style)
+        sheet.write(0, start_col + 5, '煤种', self.title_xf_style)
+        sheet.write(0, start_col + 6, '煤种单价', self.title_xf_style)
+        sheet.write(0, start_col + 7, '煤种计价方式', self.title_xf_style)
+        sheet.write(0, start_col + 8, '煤款', self.title_xf_style)
+        sheet.write(0, start_col + 9, '吨位', self.title_xf_style)
+        sheet.write(0, start_col + 10, '票种', self.title_xf_style)
+        sheet.write(0, start_col + 11, '票种单价', self.title_xf_style)
+        sheet.write(0, start_col + 12, '票种计价方式', self.title_xf_style)
+        sheet.write(0, start_col + 13, '票款', self.title_xf_style)
+        sheet.write(0, start_col + 14, '应收', self.title_xf_style)
+        sheet.write(0, start_col + 15, '利润', self.title_xf_style)
+        # 填入数据
         row = 1
         for record in records:
             column = 1
-            sheet.write(row, 0, row)
+            sheet.write(row, 0, row, self.title_xf_style)
             for item in record:
+                if column == 1:
+                    # 对日期一列特殊处理
+                    sheet.write_merge(row, row, column, column + 1, item, self.data_xf_style)
+                    column += 2
+                    continue
                 sheet.write(row, column, item, self.data_xf_style)
                 column += 1
             row += 1
@@ -79,12 +87,12 @@ class ExcelOps(object):
         total_tons = results[0][0]
         total_coal_funds = results[0][1]
         total_profit = results[0][2]
-        sheet.write(0, 15, '吨位合计', self.title_xf_style)
-        sheet.write(1, 15, total_tons, self.data_xf_style)
-        sheet.write(0, 16, '煤款合计', self.title_xf_style)
-        sheet.write(1, 16, total_coal_funds, self.data_xf_style)
-        sheet.write(0, 17, '利润合计', self.title_xf_style)
-        sheet.write(1, 17, total_profit, self.data_xf_style)
+        sheet.write(row, 3, '吨位合计', self.title_xf_style)
+        sheet.write_merge(row, row, 4, 5, str(total_tons) + '吨', self.data_xf_style)
+        sheet.write(row + 1, 3, '煤款合计', self.title_xf_style)
+        sheet.write_merge(row + 1, row + 1, 4, 5, str(total_coal_funds) + '元', self.data_xf_style)
+        sheet.write(row + 2, 3, '利润合计', self.title_xf_style)
+        sheet.write_merge(row + 2, row + 2, 4, 5, str(total_profit) + '元', self.data_xf_style)
         workbook.save(self.parent_dir + '\\' + file_name)
 
     def generate_coal_excel(self, start_date, end_date):
