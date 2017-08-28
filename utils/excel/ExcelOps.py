@@ -62,27 +62,37 @@ class ExcelOps(object):
         sheet.write(0, start_col + 7, '煤种计价方式', self.title_xf_style)
         sheet.write(0, start_col + 8, '煤款', self.title_xf_style)
         sheet.write(0, start_col + 9, '吨位', self.title_xf_style)
-        sheet.write(0, start_col + 10, '票种', self.title_xf_style)
-        sheet.write(0, start_col + 11, '票种单价', self.title_xf_style)
-        sheet.write(0, start_col + 12, '票种计价方式', self.title_xf_style)
-        sheet.write(0, start_col + 13, '票款', self.title_xf_style)
-        sheet.write(0, start_col + 14, '应收', self.title_xf_style)
-        sheet.write(0, start_col + 15, '利润', self.title_xf_style)
+
+        sheet.write(0, start_col + 11, '序号', self.title_xf_style)
+        sheet.write_merge(0, 0, start_col + 12, start_col + 13, '日期', self.title_xf_style)
+        sheet.write(0, start_col + 14, '票种', self.title_xf_style)
+        sheet.write(0, start_col + 15, '票种单价', self.title_xf_style)
+        sheet.write(0, start_col + 16, '票种计价方式', self.title_xf_style)
+        sheet.write(0, start_col + 17, '票款', self.title_xf_style)
+        sheet.write(0, start_col + 18, '应收', self.title_xf_style)
+        sheet.write(0, start_col + 19, '利润', self.title_xf_style)
         # 填入数据
         row = 1
         for record in records:
             column = 1
             sheet.write(row, 0, row, self.title_xf_style)
+            sheet.write(row, 11, row, self.title_xf_style)
             for item in record:
                 if column == 1:
-                    # 对日期一列特殊处理
+                    # 对日期一列特殊处理,同时写两块的两列
                     sheet.write_merge(row, row, column, column + 1, item, self.data_xf_style)
+                    sheet.write_merge(row, row, column + 11, column + 12, item, self.data_xf_style)
                     column += 2
+                    continue
+                if column == 9:
+                    sheet.write(row, column, item, self.data_xf_style)
+                    # 进入下一块
+                    column += 5
                     continue
                 sheet.write(row, column, item, self.data_xf_style)
                 column += 1
             row += 1
-        # 最后几列 写吨位合计、煤款合计、利润合计??????时间段查询
+        # 最后几行 写吨位合计、煤款合计、利润合计??????时间段查询
         results = RecordDetailDbUtils().query_total_tons_coalfunds_profit()
         total_tons = results[0][0]
         total_coal_funds = results[0][1]
