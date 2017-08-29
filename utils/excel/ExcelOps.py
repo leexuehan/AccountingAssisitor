@@ -11,7 +11,7 @@ class ExcelOps(object):
         self.totalColumns = 0
         self.totalRows = 0
         self.sheet = None
-        self.MAX_COAL_SORT_NUM_EVERY_BLOCK = 3
+        self.MAX_COAL_SORT_NUM_EVERY_BLOCK = 6
         self.BLOCK_INTERVAL = 1
         self.title_xf_style = self.__init_title_xf_style()
         self.data_xf_style = self.__get_data_xf_style()
@@ -46,7 +46,6 @@ class ExcelOps(object):
         start_date_for_sql = start_date.strftime('%Y/%m/%d')
         end_date_for_sql = end_date.strftime('%Y/%m/%d')
         records = RecordDetailDbUtils().query_all_records(start_date_for_sql, end_date_for_sql)
-        file_name = '逐车明细' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
         # if os.path.exists(self.parent_dir + '\\' + file_name):
         #     QMessageBox.critical(self, "Critical", self.tr('逐车明细账目已经存在，如想重新生成，请删除该文件后重试'))
         #     return
@@ -92,8 +91,8 @@ class ExcelOps(object):
                 sheet.write(row, column, item, self.data_xf_style)
                 column += 1
             row += 1
-        # 最后几行 写吨位合计、煤款合计、利润合计??????时间段查询
-        results = RecordDetailDbUtils().query_total_tons_coalfunds_profit()
+        # 最后几行 写吨位合计、煤款合计、利润合计
+        results = RecordDetailDbUtils().query_total_tons_coalfunds_profit(start_date_for_sql, end_date_for_sql)
         total_tons = results[0][0]
         total_coal_funds = results[0][1]
         total_profit = results[0][2]
@@ -119,7 +118,6 @@ class ExcelOps(object):
         record_sort_num_in_db = len(record_sorts)
         print('record sort num from db is', record_sort_num_in_db)
         # write and init columns dict in every block
-        # workbook = xlwt.Workbook()
         sheet = self.workbook.add_sheet('分煤种销量', cell_overwrite_ok=True)
         # 填入日期、吨位、总价等标题，返回所有要填入数据的列
         cols_to_be_filled_with_data = self.__fill_tons_and_fund_title(record_sorts, sheet)
@@ -128,8 +126,7 @@ class ExcelOps(object):
         # 填入煤种数据
         self.__fill_data(sheet, cols_to_be_filled_with_data, fill_info, end_date_for_sql,
                          start_date_for_sql)
-        file_name = '分煤种销量' + start_date.strftime('%Y.%m.%d') + '-' + end_date.strftime('%Y.%m.%d') + '.xls'
-        self.workbook.save(self.parent_dir + '\\' + file_name)
+        self.workbook.save(self.parent_dir + '\\' + self.file_name)
 
     def __fill_coal_name(self, record_sorts, sheet):
         record_sort_num_in_db = len(record_sorts)
@@ -249,10 +246,10 @@ class ExcelOps(object):
         # 所有煤种合计总吨位、总价款
         results = utils.query_all_coal_weight_sum_and_fund_sum(start_date, end_date)
         sheet.write_merge(start_row + 1, start_row + 1, 0, 1, '总销量', self.title_xf_style)
-        sheet.write_merge(start_row + 1, start_row + 1, 2, self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 1,
+        sheet.write_merge(start_row + 1, start_row + 1, 2, 3,
                           str(results[0][0]) + '吨', self.title_xf_style)
         sheet.write_merge(start_row + 2, start_row + 2, 0, 1, '总价款', self.title_xf_style)
-        sheet.write_merge(start_row + 2, start_row + 2, 2, self.MAX_COAL_SORT_NUM_EVERY_BLOCK * 2 + 1,
+        sheet.write_merge(start_row + 2, start_row + 2, 2, 3,
                           str(results[0][1]) + '元', self.title_xf_style)
 
     def generate_ticket_excel(self, compute_begin_date, compute_end_date):
@@ -260,9 +257,6 @@ class ExcelOps(object):
         # start_date_for_sql = '2017/08/22'
         end_date_for_sql = compute_end_date.strftime('%Y/%m/%d')
         # end_date_for_sql = '2017/09/27'
-        file_name = '票统计' + compute_begin_date.strftime('%Y.%m.%d') + '-' + compute_end_date.strftime(
-            '%Y.%m.%d') + '.xls'
-        file_name = 'ticket.xls'
         # if os.path.exists(self.parent_dir + '\\' + file_name):
         #     QMessageBox.critical(self, "Critical", self.tr('票统计账目已经存在，如想重新生成，请删除该文件后重试'))
         #     return

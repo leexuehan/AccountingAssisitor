@@ -36,11 +36,14 @@ class RecordDetailDbUtils(SqlUtils):
         conn.commit()
         conn.close()
 
-    def query_total_tons_coalfunds_profit(self):
+    def query_total_tons_coalfunds_profit(self, start_date, end_date):
         conn = self.get_connection()
         cursor = conn.cursor()
-        sql = 'SELECT SUM(WEIGHT_VALUE),SUM(COAL_FUND),SUM(PROFIT) FROM %s' % self.record_by_car_table_name
+        sql = 'SELECT SUM(WEIGHT_VALUE),SUM(COAL_FUND),SUM(PROFIT) FROM %(table_name)s where date >= "%(start_date)s" and' \
+              ' date <= "%(end_date)s"' % {'table_name': self.record_by_car_table_name, 'start_date': start_date,
+                                         'end_date': end_date}
         logging.info("execute sql:\n" + sql)
+        print("execute sql:\n" + sql)
         cursor.execute(sql)
         results = cursor.fetchall()
         conn.commit()
@@ -189,5 +192,5 @@ class RecordDetailDbUtils(SqlUtils):
 
 if __name__ == '__main__':
     # results = RecordDetailDbUtils().query_all_records()
-    results = RecordDetailDbUtils().query_personal_account('2017/08/22', '2017/09/27', 'aaa')
+    results = RecordDetailDbUtils().query_all_coal_weight_sum_and_fund_sum('2017/08/22', '2017/09/27', 'aaa')
     print(results)

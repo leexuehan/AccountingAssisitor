@@ -1,6 +1,8 @@
 import logging
 import sqlite3
 
+from PyQt5.QtWidgets import QMessageBox
+
 
 class SqlUtils(object):
     def __init__(self):
@@ -11,7 +13,11 @@ class SqlUtils(object):
         self.record_by_car_table_name = 'record_by_car_detail'
 
     def get_connection(self):
-        conn = sqlite3.connect(self.db_path)
+        try:
+            conn = sqlite3.connect(self.db_path)
+        except:
+            QMessageBox.critical(self, "Error", self.tr('连接数据库错误'))
+            raise Exception
         return conn
 
     def close_connection(self, conn):

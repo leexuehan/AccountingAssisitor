@@ -110,10 +110,14 @@ class AccountDialog(QDialog):
         excel_ops = ExcelOps()
         if self.valid_params() is False:
             return
-        excel_ops.generate_record_detail_by_car_excel(self.compute_begin_date, self.compute_end_date)
-        excel_ops.generate_coal_excel(self.compute_begin_date, self.compute_end_date)
-        excel_ops.generate_ticket_excel(self.compute_begin_date, self.compute_end_date)
-        excel_ops.generate_person_excel(self.compute_begin_date, self.compute_end_date, self.selected_name)
+        if self.accounting_by_person is True:
+            excel_ops.generate_person_excel(self.compute_begin_date, self.compute_end_date, self.selected_name)
+        if self.accounting_by_car is True:
+            excel_ops.generate_record_detail_by_car_excel(self.compute_begin_date, self.compute_end_date)
+        if self.accounting_by_coal is True:
+            excel_ops.generate_coal_excel(self.compute_begin_date, self.compute_end_date)
+        if self.accounting_by_ticket is True:
+            excel_ops.generate_ticket_excel(self.compute_begin_date, self.compute_end_date)
         self.progress_bar()
         QMessageBox.information(self, "Success", self.tr('出账已完成'))
 
@@ -140,6 +144,11 @@ class AccountDialog(QDialog):
             return False
         if self.compute_end_date < self.compute_begin_date:
             QMessageBox.critical(self, "Critical", self.tr('开始日期不能大于结束日期'))
+            return False
+
+        if self.accounting_by_person is False and self.accounting_by_car is False and self.accounting_by_coal is False \
+                and self.accounting_by_ticket is False:
+            QMessageBox.critical(self, "Critical", self.tr('至少选择一个出账选项'))
             return False
         return True
 
